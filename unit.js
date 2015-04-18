@@ -191,13 +191,6 @@ Unit.TypeData = [
         against: {'land': -1, 'air': -1}
     },
     {
-        name: 'Weaponized Transphobia',
-        tier: 2,
-        researchTime: 4,
-        riskFactor: 0.1,
-        against: {'animals': -1}
-    },
-    {
         name: 'Flaming pigs',
         codename: 'Operation Bacon',
         projectId: 3036,
@@ -222,8 +215,8 @@ Unit.TypeData = [
         against: {'armor': 1, 'air': -1}
     },
     {
-        name: 'Acoustic kitty',
-        codename: 'Acoustic kitty',
+        name: 'Acoustic Kitty',
+        codename: 'Acoustic Kitty',
         projectId: 1038,
         description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
         scientist: 'Dr. Bartholomew Fussiebootes',
@@ -236,8 +229,8 @@ Unit.TypeData = [
         name: 'Soup Bowl War Ship',
         codename: 'Floating Soup Bowl',
         projectId: 7039,
-        description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
-        scientist: 'Dr. Bartholomew Fussiebootes',
+        description: 'An innovative naval vessel with a circular hull. The design allows this war ship to carry a massive amount of weapons. May fall prey to laws of physics.',
+        scientist: 'Dr. B. Owler',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
@@ -245,6 +238,10 @@ Unit.TypeData = [
     },
     {
         name: 'Space spyglass',
+        codename: 'Ant Killer',
+        projectId: 6604,
+        description: 'We propose setting up a giant mirror in space, which would have the capacity to focus solar rays on enemy cities and burn them.',
+        scientist: 'Dr. Yes',
         tier: 3,
         researchTime: 6,
         instantVictory: true,
@@ -253,6 +250,10 @@ Unit.TypeData = [
     },
     {
         name: 'Chicken-warmed nuclear landmines',
+        codename: 'Feeling Clucky',
+        projectId: 9076,
+        description: 'In order to protect our most strategically valuable cities, we can surround them with nuclear landmines. We will bury the mine with live chickens, which will keep the mechanisms warm through the winter.',
+        scientist: 'Dr. Rusty Cogscomb',
         tier: 3,
         researchTime: 6,
         perfectDefense: true,
