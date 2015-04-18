@@ -58,12 +58,16 @@ Faction.prototype.addToReserve = function(unitType) {
 };
 
 Faction.prototype.startRandomResearch = function() {
-    if (this.currentResearch.length < this.researchSlots) {
+    if (this.researchSlotAvailable()) {
         var potentials = this.getPotentialResearch();
         if (potentials.length > 0) {
             this.startResearch(potentials[0]);
         }
     }
+};
+
+Faction.prototype.researchSlotAvailable = function() {
+    return this.currentResearch.length < this.researchSlots;
 };
 
 Faction.prototype.removeReserve = function(reserveUnit) {

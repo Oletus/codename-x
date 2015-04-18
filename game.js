@@ -124,6 +124,36 @@ Game.prototype.createUI = function() {
         addLocationUI(this.locations[i]);
     }
 
+    var addPotentialResearchButton = function(j) {
+        var x = 1560;
+        var y = 700;
+        var button = new CanvasButton({
+            label: 'Potential research ' + j,
+            centerX: x + j * 130,
+            centerY: y,
+            width: 60,
+            height: 60,
+            renderFunc: function(ctx, cursorOn, buttonDown, button) {
+                if (j < that.potentialResearch.length) {
+                    Unit.renderIcon(
+                        ctx, cursorOn, buttonDown, Side.Sides[that.currentTurnSide],
+                        button.visualX(), button.visualY(), that.potentialResearch[j], button);
+                }
+            },
+            clickCallback: function() {
+                if (j < that.potentialResearch.length) {
+                    that.factions[that.currentTurnSide].startResearch(that.potentialResearch[j]);
+                    that.potentialResearch = [];
+                }
+            }
+        });
+        that.uiButtons.push(button);
+        that.playingUI.push(button);
+    }
+    for (var i = 0; i < 3; ++i) {
+        addPotentialResearchButton(i);
+    }
+
     var addFactionUI = function(faction) {
         var x = 1000;
         var y = 942;
@@ -270,7 +300,13 @@ Game.prototype.render = function() {
 
 Game.prototype.nextTurn = function() {
     if (this.state == Game.State.PRE_TURN) {
-        this.factions[this.currentTurnSide].showUI(true);
+        var currentFaction = this.factions[this.currentTurnSide];
+        this.potentialResearch = [];
+        currentFaction.showUI(true);
+        var potentialResearch = currentFaction.getPotentialResearch();
+        if (currentFaction.researchSlotAvailable() && potentialResearch.length > 0) {
+            this.potentialResearch = potentialResearch;
+        }
         this.state = Game.State.PLAYING;
         this.setPlayingUIActive(true);
         this.sidebar.setUnit(null);
@@ -299,9 +335,6 @@ Game.prototype.resolveTurn = function() {
     }
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].advanceResearch();
-
-        // TODO: This is just for debug, remove this.
-        this.factions[i].startRandomResearch();
     }
     if (this.isGameOver()) {
         this.state = Game.State.FINISHED;
