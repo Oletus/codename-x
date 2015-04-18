@@ -40,11 +40,11 @@ var Faction = function(options) {
 };
 
 Faction.prototype.startResearch = function(unitType) {
-    this.currentResearch.push_back(unitType);
+    this.currentResearch.push(unitType);
 };
 
 Faction.prototype.addToReserve = function(unitType) {
-    this.reserve.push_back(unitType);
+    this.reserve.push(unitType);
 };
 
 Faction.prototype.advanceResearch = function() {
@@ -53,7 +53,7 @@ Faction.prototype.advanceResearch = function() {
         var completed = res.advanceResearch();
         if (completed) {
             this.completedResearch.push(res.unitType);
-            this.reserve.push(res.unitType);
+            this.addToReserve(res.unitType);
             this.messageLog.push('Completed research on ' + res.unitType.name);
             this.currentResearch.splice(i, 1);
         } else {
