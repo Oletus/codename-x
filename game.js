@@ -72,7 +72,7 @@ Game.prototype.createUI = function() {
     var that = this;
     this.uiButtons.push(new CanvasButton({
         label: 'Next turn',
-        centerX: 1800,
+        centerX: 1680,
         centerY: 1000,
         clickCallback: function() {
             that.nextTurn();
@@ -102,48 +102,48 @@ Game.LocationParameters = [
 {
     name: 'Britain',
     unit: new Unit(Unit.Types[0]),
-    x: 520,
-    y: 600,
+    x: 330,
+    y: 260,
     side: Side.Sides[1],
     terrain: ['wet']
 },
 {
     name: 'Germany',
     unit: new Unit(Unit.Types[0]),
-    x: 750,
-    y: 660,
+    x: 500,
+    y: 400,
     side: Side.Sides[0],
     terrain: ['wet']
 },
 {
     name: 'Russia',
     unit: new Unit(Unit.Types[0]),
-    x: 1350,
-    y: 400,
+    x: 1080,
+    y: 120,
     side: Side.Sides[1],
     terrain: ['cold']
 },
 {
     name: 'Baltics',
     unit: new Unit(Unit.Types[0]),
-    x: 1100,
-    y: 500,
+    x: 860,
+    y: 230,
     side: Side.Sides[0],
     terrain: ['cold']
 },
 {
     name: 'Greece',
     unit: new Unit(Unit.Types[0]),
-    x: 970,
-    y: 920,
+    x: 1080,
+    y: 580,
     side: Side.Sides[1],
     terrain: ['warm']
 },
 {
     name: 'Italy',
     unit: new Unit(Unit.Types[0]),
-    x: 780,
-    y: 850,
+    x: 850,
+    y: 500,
     side: Side.Sides[0],
     terrain: ['warm']
 }
@@ -172,7 +172,7 @@ Game.prototype.render = function() {
     } else if (this.state === Game.State.PLAYING) {
         header = 'Turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
     }
-    this.ctx.fillText(header, 20, 30);
+    this.ctx.fillText(header, 1450, 800);
     return this.ctx;
 };
 
