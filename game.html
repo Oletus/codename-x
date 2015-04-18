@@ -18,20 +18,27 @@
 
 <script src="mainloop.js"></script>
 <script src="util2d.js"></script>
-<script src="map.js"></script>
+
+<!-- game specific -->
+<script src="unit.js"></script>
+<script src="location.js"></script>
 <script src="game.js"></script>
 <script>
 'use strict';
 
 var start = function() {
-    var resizer = new CanvasResizer({});
+    var resizer = new CanvasResizer({
+        mode: CanvasResizer.Mode.FIXED_RESOLUTION_INTERPOLATED,
+        width: 1920,
+        height: 1080
+    });
     var game = new Game(resizer.getCanvas());
     startMainLoop([resizer, game, new LoadingBar()]);
 };
 </script>
 </head>
 
-<body onload="start()">
+<body onload="start()" style="background: #000">
 </body>
 
 </html>
