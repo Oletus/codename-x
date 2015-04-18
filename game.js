@@ -48,6 +48,7 @@ var Game = function(canvas) {
     this.currentTurnSide = 0; // Index to Side.Sides
     this.state = Game.State.PRE_TURN;
     
+    this.downButton = null;
     this.createUI();
 
     var that = this;
@@ -67,9 +68,6 @@ var Game = function(canvas) {
         that.release(resizer.getCanvasPosition(event));
     });
     this.setCursorPosition({x: 0, y: 0});
-    
-    this.dragged = null;
-    this.downButton = null;
 };
 
 Game.State = {
@@ -295,24 +293,28 @@ Game.prototype.update = function(deltaTime) {
 Game.prototype.setCursorPosition = function(vec) {
     this.cursorX = vec.x;
     this.cursorY = vec.y;
-};
-
-Game.prototype.click = function(vec) {
-    this.setCursorPosition(vec);
-    for (var i = 0; i < this.uiButtons.length; ++i) {
-        if (this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
-            this.downButton = this.uiButtons[i];
-            this.dragged = this.uiButtons[i];
-            this.downButton.dragged = true;
-        }
+    if (this.downButton !== null) {
+        this.downButton.draggedX = this.downButton.centerX + (this.cursorX - this.dragStartX);
+        this.downButton.draggedY = this.downButton.centerY + (this.cursorY - this.dragStartY);
     }
 };
 
-Game.prototype.release = function(vec) {
+Game.prototype.click = function(vec) {
+    for (var i = 0; i < this.uiButtons.length; ++i) {
+        if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
+            this.downButton = this.uiButtons[i];
+            this.downButton.dragged = true;
+            this.dragStartX = this.cursorX;
+            this.dragStartY = this.cursorY;
+        }
+    }
     this.setCursorPosition(vec);
+};
+
+Game.prototype.release = function(vec) {
     if (this.downButton !== null) {
         for (var i = 0; i < this.uiButtons.length; ++i) {
-            if (this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
+            if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
                 if (this.downButton === this.uiButtons[i]) {
                     this.uiButtons[i].click();
                 }
@@ -322,4 +324,5 @@ Game.prototype.release = function(vec) {
         this.downButton = null;
     }
     console.log(vec.x, vec.y);
+    this.setCursorPosition(vec);
 };

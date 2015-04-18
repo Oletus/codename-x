@@ -19,6 +19,8 @@ var CanvasButton = function(options) {
             this[key] = options[key];
         }
     }
+    this.draggedX = this.centerX;
+    this.draggedY = this.centerY;
 };
 
 CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
@@ -51,6 +53,22 @@ CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
     ctx.fillStyle = '#fff';
     ctx.font = '20px sans-serif';
     ctx.fillText(this.label, this.centerX, this.centerY + 7);
+};
+
+CanvasButton.prototype.visualX = function() {
+    if (this.dragged) {
+        return this.draggedX;
+    } else {
+        return this.centerX;
+    }
+};
+
+CanvasButton.prototype.visualY = function() {
+    if (this.dragged) {
+        return this.draggedY;
+    } else {
+        return this.centerY;
+    }
 };
 
 CanvasButton.prototype.hitTest = function(x, y) {

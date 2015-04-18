@@ -75,13 +75,13 @@ Faction.prototype.advanceResearch = function() {
 
 Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.currentResearch.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.centerX, button.centerY, this.currentResearch[i].unitType);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.currentResearch[i].unitType);
     }
 };
 
 Faction.prototype.renderReserveButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.reserve.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.centerX, button.centerY, this.reserve[i]);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.reserve[i]);
     }
 };
 
