@@ -37,6 +37,7 @@ var Faction = function(options) {
             this[key] = options[key];
         }
     }
+    this.ui = [];
 };
 
 Faction.prototype.startResearch = function(unitType) {
@@ -69,6 +70,20 @@ Faction.prototype.advanceResearch = function() {
         } else {
             ++i;
         }
+    }
+};
+
+Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.centerX, button.centerY);
+};
+
+Faction.prototype.addUI = function(button) {
+    this.ui.push(button);
+};
+
+Faction.prototype.showUI = function(show) {
+    for (var i = 0; i < this.ui.length; ++i) {
+        this.ui[i].active = show;
     }
 };
 

@@ -99,6 +99,31 @@ Game.prototype.createUI = function() {
     for (var i = 0; i < this.locations.length; ++i) {
         addLocationUI(this.locations[i]);
     }
+
+    var addFactionUI = function(faction) {
+        var x = 100;
+        var y = 800;
+        for (var i = 0; i < faction.researchSlots; ++i) {
+            var button = (function(j) {
+                return new CanvasButton({
+                    label: 'research ' + j,
+                    centerX: x,
+                    centerY: y + i * 100,
+                    width: 60,
+                    height: 60,
+                    active: false,
+                    renderFunc: function(ctx, cursorOn, buttonDown, button) {
+                        faction.renderResearchButton(ctx, cursorOn, buttonDown, j, button);
+                    }
+                });
+            })(i);
+            that.uiButtons.push(button);
+            faction.addUI(button);
+        }
+    };
+    for (var i = 0; i < this.factions.length; ++i) {
+        addFactionUI(this.factions[i]);
+    }
     this.setPlayingUIActive(false);
 };
 
@@ -186,9 +211,11 @@ Game.prototype.render = function() {
 
 Game.prototype.nextTurn = function() {
     if (this.state == Game.State.PRE_TURN) {
+        this.factions[this.currentTurnSide].showUI(true);
         this.state = Game.State.PLAYING;
         this.setPlayingUIActive(true);
     } else if (this.state == Game.State.PLAYING) {
+        this.factions[this.currentTurnSide].showUI(false);
         ++this.currentTurnSide;
         if (this.currentTurnSide === Side.Sides.length) {
             this.currentTurnSide = 0;
