@@ -307,6 +307,10 @@ function filterByTier(types, maximumTier) {
     var projects = [];
 
     for ( var i = 0; i < types.length; i++ ) {
+        if ( types[i].tier < 1 ) {
+            continue;
+        }
+
         if ( types[i].tier <= maximumTier ) {
             projects.push(types[i]);
         }
