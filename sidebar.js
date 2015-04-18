@@ -19,7 +19,6 @@ var UnitField = function(options) {
 var SideBar = function(game, canvas) {
     this.height = 800;
     this.width = 450;
-    this.active = false;
 
     this.game = game;
     this.canvas = canvas;
@@ -50,7 +49,6 @@ SideBar.prototype.createUI = function() {
 };
 
 SideBar.prototype.render = function() {
-    if (!this.active) {return;}
     this.ctx.fillStyle = '#000';
     var guiLeft = this.ctx.canvas.width-this.width;
     var guiTop = 0;
