@@ -18,6 +18,19 @@ var Location = function(options) {
     }
 };
 
+Location.prototype.render = function(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
+    
+    ctx.fillStyle = this.side.color;
+    ctx.globalAlpha = 0.5;
+    ctx.fill();
+    
+    ctx.strokeStyle = this.side.color;
+    ctx.globalAlpha = 1.0;
+    ctx.stroke();
+};
+
 var Connection = function(options) {
     var defaults = {
         locationA: null,
@@ -46,7 +59,12 @@ Connection.prototype.resolveCombat = function() {
 Connection.prototype.render = function(ctx) {
     ctx.fillStyle = this.locationA.side.color;
     for (var i = 0; i < this.steps; ++i) {
-        var t = (i + 1) / (this.steps + 1);
+        var locA = new Vec2(this.locationA.x, this.locationA.y);
+        var locB = new Vec2(this.locationB.x, this.locationB.y);
+        var dist = locA.distance(locB);
+        var arrowLength = dist - 80;
+        var stepLength = arrowLength / (this.steps - 1);
+        var t = (40 + stepLength * i) / dist;
         var x = mathUtil.mix(this.locationA.x, this.locationB.x, t);
         var y = mathUtil.mix(this.locationA.y, this.locationB.y, t);
         if (i == this.sideAAdvantage) {

@@ -84,6 +84,9 @@ Game.prototype.render = function() {
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].render(this.ctx);
     }
+    for (var i = 0; i < this.locations.length; ++i) {
+        this.locations[i].render(this.ctx);
+    }
     return this.ctx;
 };
 
