@@ -209,19 +209,12 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
     return effectiveness;
 };
 
-function filterByTier(types, minimumTier, includeHigher) {
+function filterByTier(types, maximumTier) {
     var projects = [];
 
     for ( var i = 0; i < types.length; i++ ) {
-        if ( includeHigher ) {
-            if ( types[i].tier >= minimumTier ) {
-                projects.push(types[i]);
-            }
-        }
-        else {
-            if ( types[i].tier == minimumTier ) {
-                projects.push(types[i]);
-            }    
+        if ( types[i].tier <= maximumTier ) {
+            projects.push(types[i]);
         }
     }
 

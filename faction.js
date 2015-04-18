@@ -105,14 +105,14 @@ Faction.prototype.getPotentialResearch = function() {
     // Start by cloning the full set
     var possibleResearch = [];
 
-    if ( this.currentResearch.length >= 6 ) {
-        possibleResearch = filterByTier(Unit.Types, 3, true);
+    if ( this.completedResearch.length >= 6 ) {
+        possibleResearch = filterByTier(Unit.Types, 3);
     }
-    else if ( this.currentResearch.length >= 3 ) {
-        possibleResearch = filterByTier(Unit.Types, 2, true);
+    else if ( this.completedResearch.length >= 3 ) {
+        possibleResearch = filterByTier(Unit.Types, 2);
     }
     else {
-        possibleResearch = filterByTier(Unit.Types, 1, true);
+        possibleResearch = filterByTier(Unit.Types, 1);
     }
 
     // Remove all found in current or completed projects
