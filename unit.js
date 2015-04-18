@@ -64,6 +64,8 @@ Unit.Properties = [
 Unit.TypeData = [
     {
         name: 'Conventional army',
+        codename: 'Conventional army',
+        description: 'These brave men and women are sadly quite useless. At this rate we will be fighting the war forever.',
         properties: ['land'],
         tier: 0
     },
