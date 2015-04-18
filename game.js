@@ -120,6 +120,9 @@ Game.prototype.createUI = function() {
                     active: false,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
                         faction.renderResearchButton(ctx, cursorOn, buttonDown, j, button);
+                    },
+                    clickCallback: function() {
+                        that.sidebar.setUnit(faction.currentResearch[j].unitType);
                     }
                 });
             })(i);
