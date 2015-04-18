@@ -39,6 +39,8 @@ var Connection = function(options) {
     }
     this.locationA.connections.push(this);
     this.locationB.connections.push(this);
+    this.lastTurnAEffectiveness = 0;
+    this.lastTurnBEffectiveness = 0;
 };
 
 Connection.prototype.resolveCombat = function() {
@@ -51,8 +53,10 @@ Connection.prototype.resolveCombat = function() {
         return;
     }
 
-    sideAAdvances += locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain);
-    sideAAdvances -= locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain);
+    this.lastTurnAEffectiveness = locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain);
+    sideAAdvances += this.lastTurnAEffectiveness;
+    this.lastTurnBEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain);
+    sideAAdvances -= this.lastTurnBEffectiveness;
 
     this.sideAAdvantage += sideAAdvances;
     if (this.sideAAdvantage < 0) {
@@ -66,6 +70,9 @@ Connection.prototype.resolveCombat = function() {
 Connection.prototype.isBattleOver = function() {
     // Return true if one side has beaten the other
     return this.sideAAdvantage == 0 || this.sideAAdvantage == this.steps;
+};
+
+Connection.prototype.update = function(deltaTime) {
 };
 
 Connection.prototype.render = function(ctx) {
@@ -96,4 +103,12 @@ Connection.prototype.render = function(ctx) {
         ctx.translate(-x, -y);
     }
     ctx.restore();
+    
+    if (!this.isBattleOver()) {
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Last turn: ' + this.lastTurnAEffectiveness, locA.x, locA.y - 40);
+        ctx.fillText('Last turn: ' + this.lastTurnBEffectiveness, locB.x, locB.y - 40);
+    }
 };
