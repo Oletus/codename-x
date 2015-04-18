@@ -10,7 +10,8 @@ var CanvasButton = function(options) {
         clickCallback: null,
         renderFunc: null,
         lastClick: Date.now() - 1000,
-        active: true
+        active: true,
+        draggable: false
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {

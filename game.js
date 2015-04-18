@@ -148,6 +148,7 @@ Game.prototype.createUI = function() {
                     width: 60,
                     height: 60,
                     active: false,
+                    draggable: true,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
                         faction.renderReserveButton(ctx, cursorOn, buttonDown, j, button);
                     },
@@ -293,7 +294,7 @@ Game.prototype.update = function(deltaTime) {
 Game.prototype.setCursorPosition = function(vec) {
     this.cursorX = vec.x;
     this.cursorY = vec.y;
-    if (this.downButton !== null) {
+    if (this.downButton !== null && this.downButton.draggable) {
         this.downButton.draggedX = this.downButton.centerX + (this.cursorX - this.dragStartX);
         this.downButton.draggedY = this.downButton.centerY + (this.cursorY - this.dragStartY);
     }
@@ -303,9 +304,11 @@ Game.prototype.click = function(vec) {
     for (var i = 0; i < this.uiButtons.length; ++i) {
         if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
             this.downButton = this.uiButtons[i];
-            this.downButton.dragged = true;
-            this.dragStartX = this.cursorX;
-            this.dragStartY = this.cursorY;
+            if (this.uiButtons[i].draggable) {
+                this.downButton.dragged = true;
+                this.dragStartX = this.cursorX;
+                this.dragStartY = this.cursorY;
+            }
         }
     }
     this.setCursorPosition(vec);
