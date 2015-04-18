@@ -60,7 +60,16 @@ var Game = function(canvas) {
     this.canvas.addEventListener('touchstart', function(event) {
         that.click(resizer.getCanvasPosition(event));
     });
+    this.canvas.addEventListener('mouseup', function(event) {
+        that.release(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('touchend', function(event) {
+        that.release(resizer.getCanvasPosition(event));
+    });
     this.setCursorPosition({x: 0, y: 0});
+    
+    this.dragged = null;
+    this.downButton = null;
 };
 
 Game.State = {
@@ -292,8 +301,25 @@ Game.prototype.click = function(vec) {
     this.setCursorPosition(vec);
     for (var i = 0; i < this.uiButtons.length; ++i) {
         if (this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
-            this.uiButtons[i].click();
+            this.downButton = this.uiButtons[i];
+            this.dragged = this.uiButtons[i];
+            this.downButton.dragged = true;
         }
+    }
+};
+
+Game.prototype.release = function(vec) {
+    this.setCursorPosition(vec);
+    if (this.downButton !== null) {
+        for (var i = 0; i < this.uiButtons.length; ++i) {
+            if (this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
+                if (this.downButton === this.uiButtons[i]) {
+                    this.uiButtons[i].click();
+                }
+            }
+        }
+        this.downButton.dragged = false;
+        this.downButton = null;
     }
     console.log(vec.x, vec.y);
 };
