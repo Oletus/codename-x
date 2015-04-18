@@ -1,9 +1,23 @@
 'use strict';
 
+var UnitInstance = function() {
+    var defaults = {
+        turnsResearched: 0,
+        unitType: null
+    };
+    for(var key in defaults) {
+        if (!options.hasOwnProperty(key)) {
+            this[key] = defaults[key];
+        } else {
+            this[key] = options[key];
+        }
+    }
+};
+
 var Faction = function(options) {
     var defaults = {
         side: null,
-        currentResearch: [],   // Array of unit types being researched
+        currentResearch: [],   // Array of unit instances
         completedResearch: [], // Array of unit types that have been researched
         reserve: [],           // Array of unit types available for use
         researchIntel: [],     // List of unit types the opponent is probably (?) researching
