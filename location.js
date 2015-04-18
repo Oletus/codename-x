@@ -19,7 +19,7 @@ var Location = function(options) {
     }
 };
 
-Location.prototype.render = function(ctx) {
+Location.prototype.render = function(ctx, cursorOn, buttonDown) {
     ctx.beginPath();
     ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
     
@@ -28,7 +28,11 @@ Location.prototype.render = function(ctx) {
     ctx.fill();
     
     ctx.lineWidth = 3;
-    ctx.strokeStyle = this.side.color;
+    if (cursorOn && !buttonDown) {
+        ctx.strokeStyle = '#fff';
+    } else {
+        ctx.strokeStyle = this.side.color;
+    }
     ctx.globalAlpha = 1.0;
     ctx.stroke();
 };

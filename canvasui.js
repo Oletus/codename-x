@@ -8,6 +8,7 @@ var CanvasButton = function(options) {
         width: 100,
         height: 50,
         clickCallback: null,
+        renderFunc: null,
         lastClick: Date.now() - 1000
     };
     for(var key in defaults) {
@@ -22,9 +23,16 @@ var CanvasButton = function(options) {
 CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
     var sinceClicked = Date.now() - this.lastClick;
     var drawAsDown = sinceClicked < 1000;
+    var cursorOn = this.hitTest(cursorX, cursorY);
+
+    if (this.renderFunc !== null) {
+        this.renderFunc(ctx, cursorOn, drawAsDown, this);
+        return;
+    }
+
     var rect = this.getRect();
     ctx.fillStyle = '#000';
-    if (this.hitTest(cursorX, cursorY) && !drawAsDown) {
+    if (cursorOn && !drawAsDown) {
         ctx.globalAlpha = 1.0;
     } else {
         ctx.globalAlpha = 0.5;

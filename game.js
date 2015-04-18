@@ -40,6 +40,22 @@ var Game = function(canvas) {
         this.connections.push(new Connection({locationA: this.locations[i], locationB: this.locations[i + 1]}));
     }
     
+    this.createUI();
+
+    var that = this;
+    this.canvas.addEventListener('mousemove', function(event) {
+        that.setCursorPosition(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('mousedown', function(event) {
+        that.click(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('touchstart', function(event) {
+        that.click(resizer.getCanvasPosition(event));
+    });
+    this.setCursorPosition({x: 0, y: 0});
+};
+
+Game.prototype.createUI = function() {
     this.uiButtons = [];
 
     var that = this;
@@ -51,17 +67,21 @@ var Game = function(canvas) {
             that.resolveTurn();
         }
     }));
-
-    this.canvas.addEventListener('mousemove', function(event) {
-        that.setCursorPosition(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('mousedown', function(event) {
-        that.click(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchstart', function(event) {
-        that.click(resizer.getCanvasPosition(event));
-    });
-    this.setCursorPosition({x: 0, y: 0});
+    var addLocationUI = function(location) {
+        that.uiButtons.push(new CanvasButton({
+            label: location.name,
+            centerX: location.x,
+            centerY: location.y,
+            width: 60,
+            height: 60,
+            renderFunc: function(ctx, cursorOn, buttonDown, button) {
+                location.render(ctx, cursorOn, buttonDown, button);
+            }
+        }));
+    };
+    for (var i = 0; i < this.locations.length; ++i) {
+        addLocationUI(this.locations[i]);
+    }
 };
 
 Game.LocationParameters = [
@@ -119,9 +139,6 @@ Game.prototype.render = function() {
     this.bgSprite.fillCanvas(this.ctx);
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].render(this.ctx);
-    }
-    for (var i = 0; i < this.locations.length; ++i) {
-        this.locations[i].render(this.ctx);
     }
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
