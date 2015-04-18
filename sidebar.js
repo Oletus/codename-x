@@ -1,5 +1,21 @@
 'use strict';
 
+var UnitField = function(options) {
+    var defaults = {
+        property: 'name',
+        x: 0,
+        y: 0,
+        align: 'left'
+    };
+    for(var key in defaults) {
+        if (!options.hasOwnProperty(key)) {
+            this[key] = defaults[key];
+        } else {
+            this[key] = options[key];
+        }
+    }
+};
+
 var SideBar = function(game, canvas) {
     this.height = 800;
     this.width = 450;
@@ -8,6 +24,7 @@ var SideBar = function(game, canvas) {
     this.game = game;
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
+    this.unit = null;
 
     this.createUI();
 
@@ -25,22 +42,39 @@ var SideBar = function(game, canvas) {
 };
 
 SideBar.prototype.createUI = function() {
-    this.uiButtons = [];
-
+    this.uiElems = [];
+    this.unitprops = [];
+    this.unitprops.push(new UnitField({'property':'codename',     'x':10,         'y':  0,  'align':'left'}));
+    this.unitprops.push(new UnitField({'property':'description',  'x':10,         'y':100,  'align':'left'}));
     var sbthis = this;
 };
 
 SideBar.prototype.render = function() {
     if (!this.active) {return;}
     this.ctx.fillStyle = '#000';
-    this.ctx.fillRect(this.ctx.canvas.width-this.width, 0, this.width, this.height);
+    var guiLeft = this.ctx.canvas.width-this.width;
+    var guiTop = 0;
 
-    for (var i = 0; i < this.uiButtons.length; ++i) {
-        this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
+    this.ctx.fillRect(guiLeft, guiTop, this.width, this.height);
+
+    for (var i = 0; i < this.uiElems.length; ++i) {
+        this.uiElems[i].render(this.ctx, this.cursorX, this.cursorY);
     }
-    //TODO: Get active side? var side = Side.Sides[this.currentTurnSide];
+
+    this.renderUnitStats(guiLeft, guiTop)
     return this.ctx;
 };
+
+SideBar.prototype.renderUnitStats = function(guiLeft, guiTop) {
+    if (this.unit === null) {return;}
+    this.ctx.fillStyle = '#060';
+    for (var i = 0; i < this.unitprops.length; ++i) {
+        var field = this.unitprops[i];
+        var text = this.unit[field.property];
+        this.ctx.textAlign = field.align;
+        this.ctx.fillText(text, guiLeft+field.x, guiTop+field.y+20, this.width-20);
+    }
+}
 
 SideBar.prototype.hitTest = function(x, y) {
     return false;
@@ -61,9 +95,9 @@ SideBar.prototype.setCursorPosition = function(vec) {
 
 SideBar.prototype.click = function(vec) {
     this.setCursorPosition(vec);
-    for (var i = 0; i < this.uiButtons.length; ++i) {
-        if (this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
-            this.uiButtons[i].click();
+    for (var i = 0; i < this.uiElems.length; ++i) {
+        if (this.uiElems[i].hitTest(this.cursorX, this.cursorY)) {
+            this.uiElems[i].click();
         }
     }
 };
