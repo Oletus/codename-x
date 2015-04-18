@@ -80,7 +80,7 @@ Unit.Types = [
         properties: ['single use']
     },
     {
-        name: 'Psychic Dogs'
+        name: 'Psychic Dogs',
         properties: ['animal']
     },
     {
