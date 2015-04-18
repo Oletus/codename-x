@@ -296,7 +296,7 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
 
     for (i = 0; i < unitB.properties.length; ++i) {
         property = unitB.properties[i];
-        if (this.against.hasOwnProperty(unitB[property])) {
+        if (this.against.hasOwnProperty(property)) {
             effectiveness += this.against[property];
         }
     }
