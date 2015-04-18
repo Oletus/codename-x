@@ -173,7 +173,7 @@ Game.LocationParameters = [
 {
     name: 'Britain',
     unit: new Unit(Unit.Types[0]),
-    x: 330,
+    x: 325,
     y: 260,
     side: Side.Sides[1],
     terrain: ['wet']
@@ -181,16 +181,16 @@ Game.LocationParameters = [
 {
     name: 'Germany',
     unit: new Unit(Unit.Types[0]),
-    x: 500,
-    y: 400,
+    x: 520,
+    y: 395,
     side: Side.Sides[0],
     terrain: ['wet']
 },
 {
     name: 'Russia',
     unit: new Unit(Unit.Types[0]),
-    x: 1080,
-    y: 120,
+    x: 1095,
+    y: 100,
     side: Side.Sides[1],
     terrain: ['cold']
 },
@@ -198,14 +198,14 @@ Game.LocationParameters = [
     name: 'Baltics',
     unit: new Unit(Unit.Types[0]),
     x: 860,
-    y: 230,
+    y: 210,
     side: Side.Sides[0],
     terrain: ['cold']
 },
 {
     name: 'Greece',
     unit: new Unit(Unit.Types[0]),
-    x: 1080,
+    x: 1095,
     y: 580,
     side: Side.Sides[1],
     terrain: ['warm']
@@ -213,8 +213,8 @@ Game.LocationParameters = [
 {
     name: 'Italy',
     unit: new Unit(Unit.Types[0]),
-    x: 850,
-    y: 500,
+    x: 855,
+    y: 505,
     side: Side.Sides[0],
     terrain: ['warm']
 }
