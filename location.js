@@ -63,19 +63,31 @@ Connection.prototype.isBattleOver = function() {
 };
 
 Connection.prototype.render = function(ctx) {
+    ctx.save();
     ctx.fillStyle = this.locationA.side.color;
+
+    var locA = new Vec2(this.locationA.x, this.locationA.y);
+    var locB = new Vec2(this.locationB.x, this.locationB.y);
+    var dist = locA.distance(locB);
+    var arrowLength = dist - 80;
+    var stepLength = arrowLength / (this.steps - 1);
+    var angle = locA.slope(locB);
+
     for (var i = 0; i < this.steps; ++i) {
-        var locA = new Vec2(this.locationA.x, this.locationA.y);
-        var locB = new Vec2(this.locationB.x, this.locationB.y);
-        var dist = locA.distance(locB);
-        var arrowLength = dist - 80;
-        var stepLength = arrowLength / (this.steps - 1);
         var t = (40 + stepLength * i) / dist;
         var x = mathUtil.mix(this.locationA.x, this.locationB.x, t);
         var y = mathUtil.mix(this.locationA.y, this.locationB.y, t);
+
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+
         if (i == this.sideAAdvantage) {
             ctx.fillStyle = this.locationB.side.color;
         }
-        ctx.fillRect(x - 5, y - 5, 10, 10);
+        ctx.fillRect(-6, -6, 12, 12);
+
+        ctx.rotate(-angle);
+        ctx.translate(-x, -y);
     }
+    ctx.restore();
 };
