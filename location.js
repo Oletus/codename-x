@@ -4,7 +4,7 @@ var Location = function(options) {
     var defaults = {
         unit: null, // Unit object
         terrain: null, // an array of strings
-        color: null,
+        side: null,
         connections: [],
         x: 0,
         y: 0
@@ -44,13 +44,13 @@ Connection.prototype.resolveCombat = function() {
 };
 
 Connection.prototype.render = function(ctx) {
-    ctx.fillStyle = this.locationA.color;
+    ctx.fillStyle = this.locationA.side.color;
     for (var i = 0; i < this.steps; ++i) {
         var t = (i + 1) / (this.steps + 1);
         var x = mathUtil.mix(this.locationA.x, this.locationB.x, t);
         var y = mathUtil.mix(this.locationA.y, this.locationB.y, t);
         if (i == this.sideAAdvantage) {
-            ctx.fillStyle = this.locationB.color;
+            ctx.fillStyle = this.locationB.side.color;
         }
         ctx.fillRect(x - 5, y - 5, 10, 10);
     }

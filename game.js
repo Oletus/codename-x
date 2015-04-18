@@ -1,6 +1,32 @@
 'use strict';
 
+var Side = function(options) {
+    var defaults = {
+        name: '',
+        color: '#000',
+    };
+    for(var key in defaults) {
+        if (!options.hasOwnProperty(key)) {
+            this[key] = defaults[key];
+        } else {
+            this[key] = options[key];
+        }
+    }
+};
+
+Side.Sides = [
+    {
+        name: 'axis',
+        color: '#a00'
+    },
+    {
+        name: 'allies',
+        color: '#46f'
+    }
+];
+
 var Game = function(canvas) {
+    this.bgSprite = new Sprite('background.jpg');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
     this.locations = [];
@@ -17,21 +43,44 @@ var Game = function(canvas) {
 Game.LocationParameters = [
 {
     unit: new Unit(Unit.Types[0]),
-    x: 100,
-    y: 200,
-    color: '#00f'
+    x: 520,
+    y: 600,
+    side: Side.Sides[1]
 },
 {
     unit: new Unit(Unit.Types[0]),
-    x: 100,
+    x: 650,
+    y: 700,
+    side: Side.Sides[0]
+},
+{
+    unit: new Unit(Unit.Types[0]),
+    x: 1350,
     y: 400,
-    color: '#f00'
+    side: Side.Sides[1]
+},
+{
+    unit: new Unit(Unit.Types[0]),
+    x: 1100,
+    y: 500,
+    side: Side.Sides[0]
+},
+{
+    unit: new Unit(Unit.Types[0]),
+    x: 1150,
+    y: 950,
+    side: Side.Sides[1]
+},
+{
+    unit: new Unit(Unit.Types[0]),
+    x: 950,
+    y: 850,
+    side: Side.Sides[0]
 }
 ];
 
 Game.prototype.render = function() {
-    this.ctx.fillStyle = cssUtil.rgbString([100, 200, 255]);
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.bgSprite.fillCanvas(this.ctx);
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].render(this.ctx);
     }
