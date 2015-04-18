@@ -56,10 +56,24 @@ var Connection = function(options) {
 };
 
 Connection.prototype.resolveCombat = function() {
+    var locationA = this.locationA,
+        locationB = this.locationB;
+
     var sideAAdvances = 0;
-    sideAAdvances += this.locationA.unit.getEffectivenessAgainst(this.locationB.unit, this.locationB.terrain);
-    sideAAdvances -= this.locationB.unit.getEffectivenessAgainst(this.locationA.unit, this.locationA.terrain);
+
+    if (this.isBattleOver()) {
+        return;
+    }
+
+    sideAAdvances += locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain);
+    sideAAdvances -= locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain);
+
     this.sideAAdvantage += sideAAdvances;
+};
+
+Connection.prototype.isBattleOver = function() {
+    // Return true if one side has beaten the other
+    return this.sideAAdvantage == 0 || this.sideAAdvantage == 10;
 };
 
 Connection.prototype.render = function(ctx) {
