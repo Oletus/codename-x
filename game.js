@@ -270,6 +270,7 @@ Game.prototype.nextTurn = function() {
         this.factions[this.currentTurnSide].showUI(true);
         this.state = Game.State.PLAYING;
         this.setPlayingUIActive(true);
+        this.sidebar.setUnit(null);
     } else if (this.state == Game.State.PLAYING) {
         this.factions[this.currentTurnSide].showUI(false);
         ++this.currentTurnSide;
