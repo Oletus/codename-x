@@ -175,7 +175,7 @@ Unit.TypeData = [
         scientist: 'Dr. I. P. Pavlov',
         tier: 2,
         researchTime: 4,
-        riskFactor: 0.1,
+        riskFactor: 0.05,
         properties: ['animal']
     },
     {
@@ -233,7 +233,7 @@ Unit.TypeData = [
         scientist: 'Dr. B. Owler',
         tier: 2,
         researchTime: 4,
-        riskFactor: 0.1,
+        riskFactor: 0.15,
         properties: ['sea']
     },
     {
@@ -245,7 +245,7 @@ Unit.TypeData = [
         tier: 3,
         researchTime: 6,
         instantVictory: true,
-        riskFactor: 0.1,
+        riskFactor: 0.25,
         properties: ['space']
     },
     {
@@ -257,7 +257,7 @@ Unit.TypeData = [
         tier: 3,
         researchTime: 6,
         perfectDefense: true,
-        riskFactor: 0.1,
+        riskFactor: 0.25,
         properties: ['animal', 'land']
     }
 ];
@@ -275,16 +275,16 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
 
     var effectiveness = this.tier;
 
+    if ( Math.random() <= this.riskFactor ) {
+        return -1;
+    }
+
     if (this.instantVictory) {
         return 10;
     }
 
     if (unitB.perfectDefense) {
         return 0;
-    }
-
-    if ( Math.random() <= this.riskFactor ) {
-        return -1;
     }
 
     for (i = 0; i < unitB.properties.length; ++i) {
