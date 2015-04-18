@@ -97,13 +97,25 @@ Faction.prototype.render = function(ctx) {
  */
 Faction.prototype.getPotentialResearch = function() {
     // Start by cloning the full set
-    var possibleResearch = Unit.Types.slice(0);
+    var possibleResearch = [];
+
+    if ( this.currentResearch.length >= 6 ) {
+        possibleResearch = filterByTier(Unit.Types, 3, true);
+    }
+    else if ( this.currentResearch.length >= 3 ) {
+        possibleResearch = filterByTier(Unit.Types, 2, true);
+    }
+    else {
+        possibleResearch = filterByTier(Unit.Types, 1, true);
+    }
 
     // Remove all found in current or completed projects
     var currentResearchUnits = [];
+
     for (var i = 0; i < this.currentResearch.length; ++i) {
         currentResearchUnits.push(this.currentResearch[i].unitType);
     }
+
     filter(possibleResearch, currentResearchUnits);
     filter(possibleResearch, this.completedResearch);
 
