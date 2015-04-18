@@ -126,7 +126,7 @@ Game.prototype.createUI = function() {
 
     var addFactionUI = function(faction) {
         var x = 1000;
-        var y = 920;
+        var y = 942;
         for (var i = 0; i < faction.researchSlots; ++i) {
             var button = (function(j) {
                 return new CanvasButton({
@@ -150,12 +150,13 @@ Game.prototype.createUI = function() {
             faction.addUI(button);
         }
         x = 60;
+        var perRow = 9;
         for (var i = 0; i < Unit.Types.length; ++i) {
             var button = (function(j) {
                 return new CanvasButton({
                     label: 'reserve ' + j,
-                    centerX: x + (j % 10) * 70,
-                    centerY: y + Math.floor(j / 10) * 80 + (j % 2) * 30 - 15,
+                    centerX: x + (j % perRow) * 63,
+                    centerY: y + Math.floor(j / perRow) * 80 + ((j % perRow) % 2) * 30 - 15,
                     width: 60,
                     height: 60,
                     active: false,
