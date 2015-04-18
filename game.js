@@ -112,6 +112,9 @@ Game.prototype.createUI = function() {
             },
             renderFunc: function(ctx, cursorOn, buttonDown, button) {
                 location.render(ctx, cursorOn, buttonDown, button);
+            },
+            clickCallback: function() {
+                that.sidebar.setUnit(location.unit);
             }
         });
         that.uiButtons.push(button);
