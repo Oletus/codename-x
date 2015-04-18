@@ -295,6 +295,9 @@ Game.prototype.resolveTurn = function() {
 
 Game.prototype.update = function(deltaTime) {
     this.time += deltaTime;
+    for (var i = 0; i < this.uiButtons.length; ++i) {
+        this.uiButtons[i].update(deltaTime);
+    }
 };
 
 Game.prototype.setCursorPosition = function(vec) {

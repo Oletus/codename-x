@@ -11,7 +11,6 @@ var CanvasButton = function(options) {
         renderFunc: null,
         dragTargetFunc: null,
         draggedObject: null,
-        lastClick: Date.now() - 1000,
         active: true,
         draggable: false
     };
@@ -24,6 +23,12 @@ var CanvasButton = function(options) {
     }
     this.draggedX = this.centerX;
     this.draggedY = this.centerY;
+    this.time = 0.5;
+    this.lastClick = 0;
+};
+
+CanvasButton.prototype.update = function(deltaTime) {
+    this.time += deltaTime;
 };
 
 CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
@@ -79,8 +84,8 @@ CanvasButton.prototype.hitTest = function(x, y) {
 };
 
 CanvasButton.prototype.isDown = function() {
-    var sinceClicked = Date.now() - this.lastClick;
-    return sinceClicked < 500;
+    var sinceClicked = this.time - this.lastClick;
+    return sinceClicked < 0.5;
 };
 
 CanvasButton.prototype.getRect = function() {
@@ -96,7 +101,7 @@ CanvasButton.prototype.click = function() {
     if (this.isDown()) {
         return;
     }
-    this.lastClick = Date.now();
+    this.lastClick = this.time;
     if (this.clickCallback !== null) {
         this.clickCallback();
     }
