@@ -77,13 +77,15 @@ Game.State = {
 };
 
 Game.BackgroundMusic = new Audio('Codename_X_theme');
+Game.VictoryMusic = new Audio('Victory_fanfare');
 
 Game.prototype.createUI = function() {
     this.uiButtons = [];
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
 
     this.sidebar = new SideBar(this, this.canvas);
-    Game.BackgroundMusic.playSingular();
+
+    Game.BackgroundMusic.playSingular(true);
 
     var that = this;
     this.uiButtons.push(this.sidebar);
@@ -294,6 +296,22 @@ Game.prototype.resolveTurn = function() {
         // TODO: This is just for debug, remove this.
         this.factions[i].startRandomResearch();
     }
+    if (this.isGameOver()) {
+        this.state = Game.State.FINISHED;
+        Game.BackgroundMusic.stop();
+        Game.VictoryMusic.playSingular();
+    }
+};
+
+Game.prototype.isGameOver = function() {
+    // Return true if the game is over
+    var completedBattles = 0;
+    for (var i = 0; i < this.connections.length; ++i) {
+        if (this.connections[i].isBattleOver()) {
+            completedBattles++;
+        }
+    }
+    return completedBattles >= 2;
 };
 
 Game.prototype.update = function(deltaTime) {
