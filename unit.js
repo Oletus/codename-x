@@ -64,7 +64,8 @@ Unit.Properties = [
 Unit.TypeData = [
     {
         name: 'Conventional army',
-        properties: ['land']
+        properties: ['land'],
+        tier: 0
     },
     {
         name: 'Fruit bat firebombs',
