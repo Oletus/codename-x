@@ -150,15 +150,27 @@ Unit.Types = [
 ];
 
 Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
+    // Define helper variables
+    var i, property;
+
     var effectiveness = this.tier;
-    for (var i = 0; i < unitB.properties.length; ++i) {
-        var property = unitB.properties[i];
+
+    if (this.instantVictory) {
+        return 10;
+    }
+
+    if (unitB.perfectDefense) {
+        return 0;
+    }
+
+    for (i = 0; i < unitB.properties.length; ++i) {
+        property = unitB.properties[i];
         if (this.against.hasOwnProperty(unitB[property])) {
             effectiveness += this.against[property];
         }
     }
-    for (var i = 0; i < terrain.length; ++i) {
-        var property = terrain[i];
+    for (i = 0; i < terrain.length; ++i) {
+        property = terrain[i];
         if (this.against.hasOwnProperty(property)) {
             effectiveness += this.against[property];
         }
