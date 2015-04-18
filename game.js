@@ -40,6 +40,10 @@ var Game = function(canvas) {
         this.connections.push(new Connection({locationA: this.locations[i], locationB: this.locations[i + 1]}));
     }
     
+    this.turnNumber = 1; // How many turns have passed (for both players)
+    this.currentTurnSide = 0; // Index to Side.Sides
+    this.state = Game.State.PRE_TURN;
+    
     this.createUI();
 
     var that = this;
@@ -55,8 +59,15 @@ var Game = function(canvas) {
     this.setCursorPosition({x: 0, y: 0});
 };
 
+Game.State = {
+    PRE_TURN: 0, // blank screen so that the players don't see each other's intel
+    PLAYING: 1,
+    FINISHED: 2
+};
+
 Game.prototype.createUI = function() {
     this.uiButtons = [];
+    this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
 
     var that = this;
     this.uiButtons.push(new CanvasButton({
@@ -64,11 +75,11 @@ Game.prototype.createUI = function() {
         centerX: 1800,
         centerY: 1000,
         clickCallback: function() {
-            that.resolveTurn();
+            that.nextTurn();
         }
     }));
     var addLocationUI = function(location) {
-        that.uiButtons.push(new CanvasButton({
+        var button = new CanvasButton({
             label: location.name,
             centerX: location.x,
             centerY: location.y,
@@ -77,11 +88,14 @@ Game.prototype.createUI = function() {
             renderFunc: function(ctx, cursorOn, buttonDown, button) {
                 location.render(ctx, cursorOn, buttonDown, button);
             }
-        }));
+        });
+        that.uiButtons.push(button);
+        that.playingUI.push(button);
     };
     for (var i = 0; i < this.locations.length; ++i) {
         addLocationUI(this.locations[i]);
     }
+    this.setPlayingUIActive(false);
 };
 
 Game.LocationParameters = [
@@ -136,17 +150,55 @@ Game.LocationParameters = [
 ];
 
 Game.prototype.render = function() {
-    this.bgSprite.fillCanvas(this.ctx);
-    for (var i = 0; i < this.connections.length; ++i) {
-        this.connections[i].render(this.ctx);
+    if (this.state === Game.State.PLAYING) {
+        this.bgSprite.fillCanvas(this.ctx);
+        for (var i = 0; i < this.connections.length; ++i) {
+            this.connections[i].render(this.ctx);
+        }
+    } else {
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
+    
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
     }
+    var side = Side.Sides[this.currentTurnSide];
+    this.ctx.textAlign = 'left';
+    this.ctx.fillStyle = side.color;
+    var header;
+    if (this.state === Game.State.PRE_TURN) {
+        header = 'Get prepared for turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
+    } else if (this.state === Game.State.PLAYING) {
+        header = 'Turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
+    }
+    this.ctx.fillText(header, 20, 30);
     return this.ctx;
 };
 
+Game.prototype.nextTurn = function() {
+    if (this.state == Game.State.PRE_TURN) {
+        this.state = Game.State.PLAYING;
+        this.setPlayingUIActive(true);
+    } else if (this.state == Game.State.PLAYING) {
+        ++this.currentTurnSide;
+        if (this.currentTurnSide === Side.Sides.length) {
+            this.currentTurnSide = 0;
+            this.resolveTurn();
+        }
+        this.state = Game.State.PRE_TURN;
+        this.setPlayingUIActive(false);
+    }
+};
+
+Game.prototype.setPlayingUIActive = function(active) {
+    for (var i = 0; i < this.playingUI.length; ++i) {
+        this.playingUI[i].active = active;
+    }
+};
+
 Game.prototype.resolveTurn = function() {
+    ++this.turnNumber;
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].resolveCombat();
     }

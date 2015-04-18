@@ -9,7 +9,8 @@ var CanvasButton = function(options) {
         height: 50,
         clickCallback: null,
         renderFunc: null,
-        lastClick: Date.now() - 1000
+        lastClick: Date.now() - 1000,
+        active: true
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -21,8 +22,10 @@ var CanvasButton = function(options) {
 };
 
 CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
-    var sinceClicked = Date.now() - this.lastClick;
-    var drawAsDown = sinceClicked < 1000;
+    if (!this.active) {
+        return;
+    }
+    var drawAsDown = this.isDown();
     var cursorOn = this.hitTest(cursorX, cursorY);
 
     if (this.renderFunc !== null) {
@@ -54,6 +57,11 @@ CanvasButton.prototype.hitTest = function(x, y) {
     return this.getRect().mightIntersectCircleRoundedOut(x, y, 1);
 };
 
+CanvasButton.prototype.isDown = function() {
+    var sinceClicked = Date.now() - this.lastClick;
+    return sinceClicked < 500;
+};
+
 CanvasButton.prototype.getRect = function() {
     return new Rect(
         this.centerX - this.width * 0.5,
@@ -64,6 +72,9 @@ CanvasButton.prototype.getRect = function() {
 };
 
 CanvasButton.prototype.click = function() {
+    if (this.isDown()) {
+        return;
+    }
     this.lastClick = Date.now();
     if (this.clickCallback !== null) {
         this.clickCallback();
