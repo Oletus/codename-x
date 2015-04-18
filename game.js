@@ -41,9 +41,17 @@ var Game = function(canvas) {
     }
     
     this.uiButtons = [];
-    this.uiButtons.push(new CanvasButton({label: 'Next turn', centerX: 1800, centerY: 1000}));
 
     var that = this;
+    this.uiButtons.push(new CanvasButton({
+        label: 'Next turn',
+        centerX: 1800,
+        centerY: 1000,
+        clickCallback: function() {
+            that.resolveTurn();
+        }
+    }));
+
     this.canvas.addEventListener('mousemove', function(event) {
         that.setCursorPosition(resizer.getCanvasPosition(event));
     });
@@ -58,40 +66,52 @@ var Game = function(canvas) {
 
 Game.LocationParameters = [
 {
+    name: 'Britain',
     unit: new Unit(Unit.Types[0]),
     x: 520,
     y: 600,
-    side: Side.Sides[1]
+    side: Side.Sides[1],
+    terrain: ['wet']
 },
 {
+    name: 'Germany',
     unit: new Unit(Unit.Types[0]),
-    x: 650,
-    y: 700,
-    side: Side.Sides[0]
+    x: 750,
+    y: 660,
+    side: Side.Sides[0],
+    terrain: ['wet']
 },
 {
+    name: 'Russia',
     unit: new Unit(Unit.Types[0]),
     x: 1350,
     y: 400,
-    side: Side.Sides[1]
+    side: Side.Sides[1],
+    terrain: ['cold']
 },
 {
+    name: 'Baltics',
     unit: new Unit(Unit.Types[0]),
     x: 1100,
     y: 500,
-    side: Side.Sides[0]
+    side: Side.Sides[0],
+    terrain: ['cold']
 },
 {
+    name: 'Greece',
     unit: new Unit(Unit.Types[0]),
-    x: 1150,
-    y: 950,
-    side: Side.Sides[1]
+    x: 970,
+    y: 920,
+    side: Side.Sides[1],
+    terrain: ['warm']
 },
 {
+    name: 'Italy',
     unit: new Unit(Unit.Types[0]),
-    x: 950,
+    x: 780,
     y: 850,
-    side: Side.Sides[0]
+    side: Side.Sides[0],
+    terrain: ['warm']
 }
 ];
 

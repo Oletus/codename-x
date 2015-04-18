@@ -2,6 +2,7 @@
 
 var Location = function(options) {
     var defaults = {
+        name: '',
         unit: null, // Unit object
         terrain: null, // an array of strings
         side: null,
