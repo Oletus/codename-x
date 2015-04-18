@@ -27,7 +27,9 @@ Unit.Properties = [
     'space',
     'conventional',
     'infantry',
-    'armor'
+    'armor',
+    'animal',
+    'espionage'
 ];
 
 Unit.Types = [
@@ -73,23 +75,74 @@ Unit.Types = [
     },
     {
         name: 'Pheromone gas',
+        tier: 2,
+        researchTime: 4,
         against: {'animal': 1}
     },
     {
         name: 'Panjandrum',
-        properties: ['single use']
+        tier: 2,
+        researchTime: 4,
+        properties: ['land', 'single use']
     },
     {
         name: 'Psychic Dogs',
+        tier: 2,
+        researchTime: 4,
         properties: ['animal']
     },
     {
         name: 'Kamikaze Dolphins',
-        properties: ['single use'],
+        tier: 2,
+        researchTime: 4,
+        properties: ['animal', 'single use'],
         against: {'land': -1, 'air': -1}
     },
     {
-        name: 'Weaponized Transphobia'
+        name: 'Weaponized Transphobia',
+        tier: 2,
+        researchTime: 4,
+        against: {'animals': -1}
+    },
+    {
+        name: 'Flaming pigs',
+        tier: 2,
+        researchTime: 4,
+        singleUse: true,
+        properties: ['land'],
+        against: {'wet': -1}
+    },
+    {
+        name: '"Who? Me?" stench weapon',
+        tier: 2,
+        researchTime: 4,
+        against: {'armor': 1, 'air': -1}
+    },
+    {
+        name: 'Acoustic kitty',
+        tier: 2,
+        researchTime: 4,
+        properties: ['land', 'animal', 'espionage']
+    },
+    {
+        name: 'Soup Bowl War Ship',
+        tier: 2,
+        researchTime: 4,
+        properties: ['sea']
+    },
+    {
+        name: 'Space spyglass',
+        tier: 3,
+        researchTime: 6,
+        instantVictory: true,
+        properties: ['space']
+    },
+    {
+        name: 'Chicken-warmed nuclear landmines',
+        tier: 3,
+        researchTime: 6,
+        perfectDefense: true,
+        properties: ['animal', 'land']
     }
 ];
 
