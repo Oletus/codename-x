@@ -106,13 +106,13 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
         ctx.textAlign = 'right';
         ctx.fillText('Turns left : ' + this.currentResearch[i].getTurnsLeft(), x + 50 + barWidth, y - 10);
 
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.currentResearch[i].unitType);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.currentResearch[i].unitType, button);
     }
 };
 
 Faction.prototype.renderReserveButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.reserve.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.reserve[i]);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.reserve[i], button);
     }
 };
 

@@ -23,6 +23,7 @@ var CanvasButton = function(options) {
     }
     this.draggedX = this.centerX;
     this.draggedY = this.centerY;
+    this.dragged = false;
     this.time = 0.5;
     this.lastClick = 0;
 };

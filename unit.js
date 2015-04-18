@@ -25,7 +25,7 @@ var Unit = function(options) {
     }
 };
 
-Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType) {
+Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType, button) {
     ctx.beginPath();
     ctx.arc(x, y, 30, 0, Math.PI * 2);
     
@@ -34,7 +34,7 @@ Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType) {
     ctx.fill();
     
     ctx.lineWidth = 3;
-    if (cursorOn && !buttonDown) {
+    if ((cursorOn || button.dragged) && !buttonDown) {
         ctx.strokeStyle = '#fff';
     } else {
         ctx.strokeStyle = side.color;
