@@ -212,6 +212,9 @@ Game.prototype.resolveTurn = function() {
     }
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].advanceResearch();
+
+        // TODO: This is just for debug, remove this.
+        this.factions[i].startRandomResearch();
     }
 };
 

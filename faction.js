@@ -40,11 +40,21 @@ var Faction = function(options) {
 };
 
 Faction.prototype.startResearch = function(unitType) {
-    this.currentResearch.push(unitType);
+    this.currentResearch.push(new UnitInstance({unitType: unitType}));
+    this.messageLog.push('Started research on ' + unitType.name);
 };
 
 Faction.prototype.addToReserve = function(unitType) {
     this.reserve.push(unitType);
+};
+
+Faction.prototype.startRandomResearch = function() {
+    if (this.currentResearch.length < this.researchSlots) {
+        var potentials = this.getPotentialResearch();
+        if (potentials.length > 0) {
+            this.startResearch(potentials[0]);
+        }
+    }
 };
 
 Faction.prototype.advanceResearch = function() {
