@@ -32,23 +32,6 @@ Unit.Properties = [
     'espionage'
 ];
 
-var getProposals = function() {
-    // Start with full set
-    var all = [];
-    var possibleResearch = all;
-    var current = [];
-    var completed = [];
-    // Remove all found in current or completed projects
-    filter(possibleResearch, current);
-    filter(possibleResearch, completed);
-
-    // Randomize three projects from remaining set
-    shuffle(possibleResearch);
-
-    // Return set of three (0-3 to be exact)
-    return possibleResearch.splice(0, 3);
-};
-
 Unit.Types = [
     {
         name: 'Conventional army',
