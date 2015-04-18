@@ -19,6 +19,14 @@ UnitInstance.prototype.advanceResearch = function() {
     return this.turnsResearched >= this.unitType.researchTime;
 };
 
+UnitInstance.prototype.getCompletion = function() {
+    return this.turnsResearched / this.unitType.researchTime;
+};
+
+UnitInstance.prototype.getTurnsLeft = function() {
+    return this.unitType.researchTime - this.turnsResearched;
+};
+
 var Faction = function(options) {
     var defaults = {
         side: null,
@@ -84,7 +92,21 @@ Faction.prototype.advanceResearch = function() {
 
 Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.currentResearch.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.currentResearch[i].unitType);
+        var x = button.visualX();
+        var y = button.visualY();
+        ctx.fillStyle = this.side.color;
+        var completion = this.currentResearch[i].getCompletion();
+        console.log(completion);
+        var barWidth = 200;
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(x + 50, y, barWidth, 20);
+        ctx.globalAlpha = 1;
+        ctx.fillRect(x + 50, y, completion * barWidth, 20);
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'right';
+        ctx.fillText('Turns left : ' + this.currentResearch[i].getTurnsLeft(), x + 50 + barWidth, y - 10);
+
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.currentResearch[i].unitType);
     }
 };
 
