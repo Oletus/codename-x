@@ -1,11 +1,20 @@
 'use strict';
 
 function filter(resultArray, arrayToRemove) {
-    for ( var i = 0; i < resultArray.length; i++ ) {
+    var cellRemoved = false;
+
+    for ( var i = 0; i < resultArray.length; ) {
+        cellRemoved = false;
+
         for ( var j = 0; j < arrayToRemove.length; j++ ) {
             if ( resultArray[i] == arrayToRemove[j] ) {
                 resultArray.splice(i, 1);
+                cellRemoved = true;
             }
+        }
+
+        if ( cellRemoved == false ) {
+          i++;
         }
     }
 }
