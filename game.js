@@ -29,6 +29,7 @@ var Game = function(canvas) {
     this.bgSprite = new Sprite('background.jpg');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
+
     this.locations = [];
     this.connections = [];
     for (var i = 0; i < Game.LocationParameters.length; ++i) {
@@ -38,6 +39,15 @@ var Game = function(canvas) {
     for (var i = 0; i < Game.LocationParameters.length; i += 2) {
         this.connections.push(new Connection({locationA: this.locations[i], locationB: this.locations[i + 1]}));
     }
+    
+    this.uiButtons = [];
+    this.uiButtons.push(new CanvasButton({label: 'Next turn', centerX: 1800, centerY: 1000}));
+
+    var that = this;
+    this.canvas.addEventListener('mousemove', function(event) {
+        that.setCursorPosition(resizer.getCanvasPosition(event));
+    });
+    this.setCursorPosition({x: 0, y: 0});
 };
 
 Game.LocationParameters = [
@@ -87,9 +97,23 @@ Game.prototype.render = function() {
     for (var i = 0; i < this.locations.length; ++i) {
         this.locations[i].render(this.ctx);
     }
+    for (var i = 0; i < this.uiButtons.length; ++i) {
+        this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
+    }
     return this.ctx;
+};
+
+Game.prototype.resolveTurn = function() {
+    for (var i = 0; i < this.connections.length; ++i) {
+        this.connections[i].resolveCombat();
+    }
 };
 
 Game.prototype.update = function(deltaTime) {
     this.time += deltaTime;
+};
+
+Game.prototype.setCursorPosition = function(vec) {
+    this.cursorX = vec.x;
+    this.cursorY = vec.y;
 };

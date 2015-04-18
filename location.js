@@ -26,6 +26,7 @@ Location.prototype.render = function(ctx) {
     ctx.globalAlpha = 0.5;
     ctx.fill();
     
+    ctx.lineWidth = 3;
     ctx.strokeStyle = this.side.color;
     ctx.globalAlpha = 1.0;
     ctx.stroke();
