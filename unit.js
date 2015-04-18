@@ -20,6 +20,24 @@ var Unit = function(options) {
     }
 };
 
+Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, icon) {
+    ctx.beginPath();
+    ctx.arc(x, y, 30, 0, Math.PI * 2);
+    
+    ctx.fillStyle = side.color;
+    ctx.globalAlpha = 0.5;
+    ctx.fill();
+    
+    ctx.lineWidth = 3;
+    if (cursorOn && !buttonDown) {
+        ctx.strokeStyle = '#fff';
+    } else {
+        ctx.strokeStyle = side.color;
+    }
+    ctx.globalAlpha = 1.0;
+    ctx.stroke();
+};
+
 Unit.Properties = [
     'air',
     'land',

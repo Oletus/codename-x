@@ -19,22 +19,8 @@ var Location = function(options) {
     }
 };
 
-Location.prototype.render = function(ctx, cursorOn, buttonDown) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
-    
-    ctx.fillStyle = this.side.color;
-    ctx.globalAlpha = 0.5;
-    ctx.fill();
-    
-    ctx.lineWidth = 3;
-    if (cursorOn && !buttonDown) {
-        ctx.strokeStyle = '#fff';
-    } else {
-        ctx.strokeStyle = this.side.color;
-    }
-    ctx.globalAlpha = 1.0;
-    ctx.stroke();
+Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, this.x, this.y);
 };
 
 var Connection = function(options) {
