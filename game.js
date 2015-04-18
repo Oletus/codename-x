@@ -73,7 +73,7 @@ Game.prototype.createUI = function() {
     this.uiButtons = [];
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
 
-    this.sidebar = new SideBar(this.canvas);
+    this.sidebar = new SideBar(this, this.canvas);
 
     var that = this;
     this.uiButtons.push(this.sidebar);
