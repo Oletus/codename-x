@@ -59,11 +59,13 @@ Connection.prototype.resolveCombat = function() {
     sideAAdvances -= this.lastTurnBEffectiveness;
 
     this.sideAAdvantage += sideAAdvances;
-    if (this.sideAAdvantage < 0) {
+    if (this.sideAAdvantage <= 0) {
         this.sideAAdvantage = 0;
+        this.locationA.side = this.locationB.side;
     }
-    if (this.sideAAdvantage > this.steps) {
+    if (this.sideAAdvantage >= this.steps) {
         this.sideAAdvantage = this.steps;
+        this.locationB.side = this.locationA.side;
     }
 };
 
