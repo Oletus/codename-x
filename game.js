@@ -334,7 +334,7 @@ Game.prototype.setCursorPosition = function(vec) {
 };
 
 Game.prototype.dragToLocation = function(location) {
-    if (location.side === Side.Sides[this.currentTurnSide]) {
+    if (location.side === Side.Sides[this.currentTurnSide] && this.downButton.draggedObject !== null) {
         var draggedObject = this.downButton.draggedObject();
         this.factions[this.currentTurnSide].reserve.push(location.unit);
         this.factions[this.currentTurnSide].removeReserve(draggedObject);
