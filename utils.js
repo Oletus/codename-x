@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 function filter(resultArray, arrayToRemove) {
     for ( var i = 0; i < resultArray.length; i++ ) {
