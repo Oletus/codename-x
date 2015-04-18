@@ -36,6 +36,10 @@ Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType) {
     }
     ctx.globalAlpha = 1.0;
     ctx.stroke();
+    
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.fillText(unitType.name, x, y);
 };
 
 Unit.Properties = [

@@ -20,7 +20,7 @@ var Location = function(options) {
 };
 
 Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
-    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, this.x, this.y);
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, this.x, this.y, this.unit);
 };
 
 var Connection = function(options) {
