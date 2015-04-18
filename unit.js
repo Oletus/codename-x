@@ -282,6 +282,10 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
         return 0;
     }
 
+    if ( Math.random() <= this.riskFactor ) {
+        return -1;
+    }
+
     for (i = 0; i < unitB.properties.length; ++i) {
         property = unitB.properties[i];
         if (this.against.hasOwnProperty(unitB[property])) {
