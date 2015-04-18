@@ -4,7 +4,7 @@ var Unit = function(options) {
     var defaults = {
         name: '',
         tier: 1,
-        researchTime: 1,
+        researchTime: 2,
         singleUse: false,
         instantVictory: false,
         perfectDefense: false,
