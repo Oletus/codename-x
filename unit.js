@@ -37,18 +37,21 @@ Unit.Types = [
     },
     {
         name: 'Fruit bat firebombs',
+        properties: ['animal'],
         against: {'conventional': 1}
     },
     {
         name: 'Anti-tank dogs',
-        properties: ['land'],
+        properties: ['animal', 'land'],
         against: {'armor': 1}
     },
     {
-        name: 'Pigeon guided missiles'
+        name: 'Pigeon guided missiles',
+        properties: ['animal']
     },
     {
         name: 'Malaria mosquitoes',
+        properties: ['animal', 'single use'],
         against: {'infantry': 1, 'cold': -1}
     },
     {
@@ -69,13 +72,16 @@ Unit.Types = [
         properties: ['land', 'infantry']
     },
     {
-        name: 'Pheromone gas'
+        name: 'Pheromone gas',
+        against: {'animal': 1}
     },
     {
-        name: 'Panjandrum'
+        name: 'Panjandrum',
+        properties: ['single use']
     },
     {
         name: 'Psychic Dogs'
+        properties: ['animal']
     },
     {
         name: 'Kamikaze Dolphins',
