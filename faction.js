@@ -1,6 +1,6 @@
 'use strict';
 
-var UnitInstance = function() {
+var UnitInstance = function(options) {
     var defaults = {
         turnsResearched: 0,
         unitType: null
@@ -16,7 +16,7 @@ var UnitInstance = function() {
 
 UnitInstance.prototype.advanceResearch = function() {
     ++this.turnsResearched;
-    return this.turnsResearched >= unitType.researchTime;
+    return this.turnsResearched >= this.unitType.researchTime;
 };
 
 var Faction = function(options) {
@@ -79,11 +79,15 @@ Faction.prototype.render = function(ctx) {
  * @return {Array} Array of unit types that are potential research subjects.
  */
 Faction.prototype.getPotentialResearch = function() {
-    // Start with full set
-    var possibleResearch = Unit.Types;
+    // Start by cloning the full set
+    var possibleResearch = Unit.Types.slice(0);
 
     // Remove all found in current or completed projects
-    filter(possibleResearch, this.currentResearch);
+    var currentResearchUnits = [];
+    for (var i = 0; i < this.currentResearch.length; ++i) {
+        currentResearchUnits.push(this.currentResearch[i].unitType);
+    }
+    filter(possibleResearch, currentResearchUnits);
     filter(possibleResearch, this.completedResearch);
 
     // Randomize three projects from remaining set
