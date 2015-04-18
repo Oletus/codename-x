@@ -79,6 +79,12 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
     }
 };
 
+Faction.prototype.renderReserveButton = function(ctx, cursorOn, buttonDown, i, button) {
+    if (this.reserve.length > i) {
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.centerX, button.centerY, this.reserve[i]);
+    }
+};
+
 Faction.prototype.addUI = function(button) {
     this.ui.push(button);
 };

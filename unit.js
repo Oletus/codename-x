@@ -37,6 +37,7 @@ Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType) {
     ctx.globalAlpha = 1.0;
     ctx.stroke();
     
+    ctx.font = '12px sans-serif';
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
     ctx.fillText(unitType.name, x, y);

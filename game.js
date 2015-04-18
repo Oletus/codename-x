@@ -108,13 +108,13 @@ Game.prototype.createUI = function() {
 
     var addFactionUI = function(faction) {
         var x = 1000;
-        var y = 950;
+        var y = 920;
         for (var i = 0; i < faction.researchSlots; ++i) {
             var button = (function(j) {
                 return new CanvasButton({
                     label: 'research ' + j,
                     centerX: x,
-                    centerY: y + i * 90,
+                    centerY: y + j * 80,
                     width: 60,
                     height: 60,
                     active: false,
@@ -124,6 +124,29 @@ Game.prototype.createUI = function() {
                     clickCallback: function() {
                         if (j < faction.currentResearch.length) {
                             that.sidebar.setUnit(faction.currentResearch[j].unitType);
+                        }
+                    }
+                });
+            })(i);
+            that.uiButtons.push(button);
+            faction.addUI(button);
+        }
+        x = 60;
+        for (var i = 0; i < Unit.Types.length; ++i) {
+            var button = (function(j) {
+                return new CanvasButton({
+                    label: 'reserve ' + j,
+                    centerX: x + (j % 10) * 70,
+                    centerY: y + Math.floor(j / 10) * 80 + (j % 2) * 30 - 15,
+                    width: 60,
+                    height: 60,
+                    active: false,
+                    renderFunc: function(ctx, cursorOn, buttonDown, button) {
+                        faction.renderReserveButton(ctx, cursorOn, buttonDown, j, button);
+                    },
+                    clickCallback: function() {
+                        if (j < faction.reserve.length) {
+                            that.sidebar.setUnit(faction.reserve[j]);
                         }
                     }
                 });

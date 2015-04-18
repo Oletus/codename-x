@@ -39,7 +39,7 @@ var start = function() {
         height: 1080
     });
     var game = new Game(resizer.getCanvas());
-    startMainLoop([resizer, game, new LoadingBar()]);
+    startMainLoop([resizer, game, new LoadingBar()], {debugMode: true});
 };
 </script>
 </head>
