@@ -69,4 +69,16 @@ Faction.prototype.render = function(ctx) {
  * @return {Array} Array of unit types that are potential research subjects.
  */
 Faction.prototype.getPotentialResearch = function() {
+    // Start with full set
+    var possibleResearch = Unit.Types;
+
+    // Remove all found in current or completed projects
+    filter(possibleResearch, this.currentResearch);
+    filter(possibleResearch, this.completedResearch);
+
+    // Randomize three projects from remaining set
+    shuffle(possibleResearch);
+
+    // Return set of three (0-3 to be exact)
+    return possibleResearch.splice(0, 3);
 };
