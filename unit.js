@@ -67,6 +67,23 @@ Unit.Types = [
     {
         name: 'Meth-fueled infantry',
         properties: ['land', 'infantry']
+    },
+    {
+        name: 'Pheromone gas'
+    },
+    {
+        name: 'Panjandrum'
+    },
+    {
+        name: 'Psychic Dogs'
+    },
+    {
+        name: 'Kamikaze Dolphins',
+        properties: ['single use'],
+        against: {'land': -1, 'air': -1}
+    },
+    {
+        name: 'Weaponized Transphobia'
     }
 ];
 
