@@ -27,6 +27,7 @@ Side.Sides = [
 
 var Game = function(canvas) {
     this.bgSprite = new Sprite('background.jpg');
+    this.turnPanelSprite = new Sprite('turn_panel.png');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
 
@@ -244,6 +245,7 @@ Game.prototype.render = function() {
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
+    this.turnPanelSprite.draw(this.ctx, this.ctx.canvas.width - this.turnPanelSprite.width, this.ctx.canvas.height - this.turnPanelSprite.height);
 
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].render(this.ctx);
