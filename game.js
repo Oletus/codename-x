@@ -47,6 +47,12 @@ var Game = function(canvas) {
     this.canvas.addEventListener('mousemove', function(event) {
         that.setCursorPosition(resizer.getCanvasPosition(event));
     });
+    this.canvas.addEventListener('mousedown', function(event) {
+        that.click(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('touchstart', function(event) {
+        that.click(resizer.getCanvasPosition(event));
+    });
     this.setCursorPosition({x: 0, y: 0});
 };
 
@@ -116,4 +122,13 @@ Game.prototype.update = function(deltaTime) {
 Game.prototype.setCursorPosition = function(vec) {
     this.cursorX = vec.x;
     this.cursorY = vec.y;
+};
+
+Game.prototype.click = function(vec) {
+    this.setCursorPosition(vec);
+    for (var i = 0; i < this.uiButtons.length; ++i) {
+        if (this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
+            this.uiButtons[i].click();
+        }
+    }
 };

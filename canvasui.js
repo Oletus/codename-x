@@ -6,7 +6,9 @@ var CanvasButton = function(options) {
         centerX: 0,
         centerY: 0,
         width: 100,
-        height: 50
+        height: 50,
+        clickCallback: null,
+        lastClick: Date.now() - 1000
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -18,18 +20,21 @@ var CanvasButton = function(options) {
 };
 
 CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
+    var sinceClicked = Date.now() - this.lastClick;
+    var drawAsDown = sinceClicked < 1000;
     var rect = this.getRect();
     ctx.fillStyle = '#000';
-    if (this.hitTest(cursorX, cursorY))
-    {
+    if (this.hitTest(cursorX, cursorY) && !drawAsDown) {
         ctx.globalAlpha = 1.0;
     } else {
         ctx.globalAlpha = 0.5;
     }
     ctx.fillRect(rect.left, rect.top, rect.width(), rect.height());
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = '#fff';
-    ctx.strokeRect(rect.left, rect.top, rect.width(), rect.height());
+    if (!drawAsDown) {
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#fff';
+        ctx.strokeRect(rect.left, rect.top, rect.width(), rect.height());
+    }
     ctx.globalAlpha = 1.0;
     ctx.textAlign = 'center';
     ctx.fillStyle = '#fff';
@@ -48,4 +53,11 @@ CanvasButton.prototype.getRect = function() {
         this.centerY - this.height * 0.5,
         this.centerY + this.height * 0.5
     );
+};
+
+CanvasButton.prototype.click = function() {
+    this.lastClick = Date.now();
+    if (this.clickCallback !== null) {
+        this.clickCallback();
+    }
 };
