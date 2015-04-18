@@ -102,6 +102,9 @@ Game.prototype.createUI = function() {
             centerY: location.y,
             width: 60,
             height: 60,
+            dragTargetFunc: function() {
+                that.dragToLocation(location);
+            },
             renderFunc: function(ctx, cursorOn, buttonDown, button) {
                 location.render(ctx, cursorOn, buttonDown, button);
             }
@@ -156,6 +159,9 @@ Game.prototype.createUI = function() {
                         if (j < faction.reserve.length) {
                             that.sidebar.setUnit(faction.reserve[j]);
                         }
+                    },
+                    draggedObject: function() {
+                        return faction.reserve[j];
                     }
                 });
             })(i);
@@ -300,6 +306,13 @@ Game.prototype.setCursorPosition = function(vec) {
     }
 };
 
+Game.prototype.dragToLocation = function(location) {
+    var draggedObject = this.downButton.draggedObject();
+    this.factions[this.currentTurnSide].reserve.push(location.unit);
+    this.factions[this.currentTurnSide].removeReserve(draggedObject);
+    location.unit = draggedObject;
+};
+
 Game.prototype.click = function(vec) {
     for (var i = 0; i < this.uiButtons.length; ++i) {
         if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
@@ -320,6 +333,8 @@ Game.prototype.release = function(vec) {
             if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
                 if (this.downButton === this.uiButtons[i]) {
                     this.uiButtons[i].click();
+                } else if (this.uiButtons[i].dragTargetFunc !== null) {
+                    this.uiButtons[i].dragTargetFunc();
                 }
             }
         }

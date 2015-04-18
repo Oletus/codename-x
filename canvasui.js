@@ -9,6 +9,8 @@ var CanvasButton = function(options) {
         height: 50,
         clickCallback: null,
         renderFunc: null,
+        dragTargetFunc: null,
+        draggedObject: null,
         lastClick: Date.now() - 1000,
         active: true,
         draggable: false

@@ -58,6 +58,15 @@ Faction.prototype.startRandomResearch = function() {
     }
 };
 
+Faction.prototype.removeReserve = function(reserveUnit) {
+    for (var i = 0; i < this.reserve.length; i++) {
+        if (this.reserve[i] === reserveUnit) {
+            this.reserve.splice(i, 1);
+            return;
+        }
+    }
+};
+
 Faction.prototype.advanceResearch = function() {
     for (var i = 0; i < this.currentResearch.length;) {
         var res = this.currentResearch[i];
