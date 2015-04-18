@@ -275,9 +275,9 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
 
     var effectiveness = this.tier;
 
-    if ( Math.random() <= this.riskFactor ) {
-        return -1;
-    }
+    //if ( Math.random() <= this.riskFactor ) {
+    //    return -1;
+    //}
 
     if (this.instantVictory) {
         return 10;
