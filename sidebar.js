@@ -1,9 +1,10 @@
 'use strict';
 
 var SideBar = function(canvas) {
-    this.height = 700;
-    this.width = 500;
+    this.height = 800;
+    this.width = 450;
 
+    this.active = false;
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
 
@@ -29,6 +30,7 @@ SideBar.prototype.createUI = function() {
 };
 
 SideBar.prototype.render = function() {
+    if (!this.active) {return;}
     this.ctx.fillStyle = '#040';
     this.ctx.fillRect(this.ctx.canvas.width-this.width, 0, this.width, this.height);
 
