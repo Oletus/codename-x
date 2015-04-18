@@ -79,9 +79,11 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(this.sidebar);
     this.playingUI.push(this.sidebar);
     this.uiButtons.push(new CanvasButton({
-        label: 'Next turn',
-        centerX: 1680,
-        centerY: 1000,
+        label: '',
+        centerX: 1840,
+        centerY: 970,
+        width: 60,
+        height: 70,
         clickCallback: function() {
             that.nextTurn();
         }
