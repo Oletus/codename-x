@@ -14,6 +14,11 @@ var UnitInstance = function() {
     }
 };
 
+UnitInstance.prototype.advanceResearch = function() {
+    ++this.turnsResearched;
+    return this.turnsResearched >= unitType.researchTime;
+};
+
 var Faction = function(options) {
     var defaults = {
         side: null,
@@ -21,7 +26,8 @@ var Faction = function(options) {
         completedResearch: [], // Array of unit types that have been researched
         reserve: [],           // Array of unit types available for use
         researchIntel: [],     // List of unit types the opponent is probably (?) researching
-        intelPower: 1
+        intelPower: 1,
+        messageLog: []
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -41,6 +47,18 @@ Faction.prototype.addToReserve = function(unitType) {
 };
 
 Faction.prototype.advanceResearch = function() {
+    for (var i = 0; i < this.currentResearch.length;) {
+        var res = this.currentResearch[i];
+        var completed = res.advanceResearch();
+        if (completed) {
+            this.completedResearch.push(res.unitType);
+            this.reserve.push(res.unitType);
+            this.messageLog.push('Completed research on ' + res.unitType.name);
+            this.currentResearch.splice(i, 1);
+        } else {
+            ++i;
+        }
+    }
 };
 
 Faction.prototype.render = function(ctx) {
