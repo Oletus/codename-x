@@ -39,21 +39,24 @@ Unit.Types = [
     },
     {
         name: 'Fruit bat firebombs',
+        singleUse: true,
         properties: ['animal'],
         against: {'conventional': 1}
     },
     {
         name: 'Anti-tank dogs',
+        singleUse: true,
         properties: ['animal', 'land'],
         against: {'armor': 1}
     },
     {
         name: 'Pigeon guided missiles',
+        singleUse: true,
         properties: ['animal']
     },
     {
         name: 'Malaria mosquitoes',
-        properties: ['animal', 'single use'],
+        properties: ['animal'],
         against: {'infantry': 1, 'cold': -1}
     },
     {
@@ -83,7 +86,7 @@ Unit.Types = [
         name: 'Panjandrum',
         tier: 2,
         researchTime: 4,
-        properties: ['land', 'single use']
+        properties: ['land']
     },
     {
         name: 'Psychic Dogs',
@@ -95,7 +98,7 @@ Unit.Types = [
         name: 'Kamikaze Dolphins',
         tier: 2,
         researchTime: 4,
-        properties: ['animal', 'single use'],
+        properties: ['animal'],
         against: {'land': -1, 'air': -1}
     },
     {
