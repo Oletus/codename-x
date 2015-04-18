@@ -310,10 +310,12 @@ Game.prototype.setCursorPosition = function(vec) {
 };
 
 Game.prototype.dragToLocation = function(location) {
-    var draggedObject = this.downButton.draggedObject();
-    this.factions[this.currentTurnSide].reserve.push(location.unit);
-    this.factions[this.currentTurnSide].removeReserve(draggedObject);
-    location.unit = draggedObject;
+    if (location.side === Side.Sides[this.currentTurnSide]) {
+        var draggedObject = this.downButton.draggedObject();
+        this.factions[this.currentTurnSide].reserve.push(location.unit);
+        this.factions[this.currentTurnSide].removeReserve(draggedObject);
+        location.unit = draggedObject;
+    }
 };
 
 Game.prototype.click = function(vec) {
