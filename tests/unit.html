@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine-2.2.0/jasmine_favicon.png">
+<link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-2.2.0/jasmine.css">
+
+<script type="text/javascript" src="jasmine/lib/jasmine-2.2.0/jasmine.js"></script>
+<script type="text/javascript" src="jasmine/lib/jasmine-2.2.0/jasmine-html.js"></script>
+<script type="text/javascript" src="jasmine/lib/jasmine-2.2.0/boot.js"></script>
+</head>
+<body>
+    <script src="../unit.js"></script>
+    <script>
+        var standardUnit = new Unit({});
+        var spyglassUnit = new Unit({instantVictory: true});
+        var chickensUnit = new Unit({perfectDefense: true});
+
+        describe("A standard unit", function() {
+            var effectiveness;
+
+            it("has a single effectiveness", function () {
+                effectiveness = standardUnit.getEffectivenessAgainst(standardUnit, {});
+                expect(effectiveness).toEqual(1);
+            });
+
+            it("is has no net effectiveness against itself", function() {
+                effectiveness = standardUnit.getEffectivenessAgainst(standardUnit, {});
+                expect(effectiveness - effectiveness).toEqual(0);
+            });
+
+            it("is ineffective against nuclear chickens", function() {
+                effectiveness = standardUnit.getEffectivenessAgainst(chickensUnit, {});
+                expect(effectiveness).toEqual(0);
+            });
+        });
+
+        describe("The space spyglass", function() {
+            var effectiveness;
+
+            it("is super effective against standard units", function() {
+                effectiveness = spyglassUnit.getEffectivenessAgainst(standardUnit, {});
+                expect(effectiveness).toEqual(10);
+            });
+
+            it("is super effective against nuclear chickens", function() {
+                effectiveness = spyglassUnit.getEffectivenessAgainst(chickensUnit, {});
+                expect(effectiveness).toEqual(10);
+            });
+        });
+    </script>
+</body>
+</html>
