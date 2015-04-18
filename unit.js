@@ -9,7 +9,8 @@ var Unit = function(options) {
         instantVictory: false,
         perfectDefense: false,
         properties: [],
-        against: {}
+        against: {},
+        riskFactor: 0
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -65,57 +66,68 @@ Unit.TypeData = [
         name: 'Fruit bat firebombs',
         singleUse: true,
         properties: ['animal'],
+        riskFactor: 0.1,
         against: {'conventional': 1}
     },
     {
         name: 'Anti-tank dogs',
         singleUse: true,
         properties: ['animal', 'land'],
+        riskFactor: 0.1,
         against: {'armor': 1}
     },
     {
         name: 'Pigeon guided missiles',
         singleUse: true,
+        riskFactor: 0.1,
         properties: ['animal']
     },
     {
         name: 'Malaria mosquitoes',
         properties: ['animal'],
+        riskFactor: 0.1,
         against: {'infantry': 1, 'cold': -1}
     },
     {
         name: 'Flying tanks',
         properties: ['armor'],
+        riskFactor: 0.1,
         against: {'air': 1}
     },
     {
         name: 'Triebflügel',
+        riskFactor: 0.1,
         properties: ['air']
     },
     {
         name: 'Iceberg ships',
+        riskFactor: 0.1,
         properties: ['sea', 'armor']
     },
     {
         name: 'Meth-fueled infantry',
+        riskFactor: 0.1,
         properties: ['land', 'infantry']
     },
     {
         name: 'Pheromone gas',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         against: {'animal': 1}
     },
     {
         name: 'Panjandrum',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         properties: ['land']
     },
     {
         name: 'Psychic Dogs',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         properties: ['animal']
     },
     {
@@ -123,12 +135,14 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         properties: ['animal'],
+        riskFactor: 0.1,
         against: {'land': -1, 'air': -1}
     },
     {
         name: 'Weaponized Transphobia',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         against: {'animals': -1}
     },
     {
@@ -137,24 +151,28 @@ Unit.TypeData = [
         researchTime: 4,
         singleUse: true,
         properties: ['land'],
+        riskFactor: 0.1,
         against: {'wet': -1}
     },
     {
         name: '"Who? Me?" stench weapon',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         against: {'armor': 1, 'air': -1}
     },
     {
         name: 'Acoustic kitty',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         properties: ['land', 'animal', 'espionage']
     },
     {
         name: 'Soup Bowl War Ship',
         tier: 2,
         researchTime: 4,
+        riskFactor: 0.1,
         properties: ['sea']
     },
     {
@@ -162,6 +180,7 @@ Unit.TypeData = [
         tier: 3,
         researchTime: 6,
         instantVictory: true,
+        riskFactor: 0.1,
         properties: ['space']
     },
     {
@@ -169,6 +188,7 @@ Unit.TypeData = [
         tier: 3,
         researchTime: 6,
         perfectDefense: true,
+        riskFactor: 0.1,
         properties: ['animal', 'land']
     }
 ];
