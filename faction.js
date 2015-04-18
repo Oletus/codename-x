@@ -27,6 +27,7 @@ var Faction = function(options) {
         reserve: [],           // Array of unit types available for use
         researchIntel: [],     // List of unit types the opponent is probably (?) researching
         intelPower: 1,
+        researchSlots: 2,
         messageLog: []
     };
     for(var key in defaults) {

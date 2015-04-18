@@ -32,12 +32,16 @@ var Game = function(canvas) {
 
     this.locations = [];
     this.connections = [];
+    this.factions = [];
     for (var i = 0; i < Game.LocationParameters.length; ++i) {
         this.locations.push(new Location(Game.LocationParameters[i]));
     }
     this.time = 0;
     for (var i = 0; i < Game.LocationParameters.length; i += 2) {
         this.connections.push(new Connection({locationA: this.locations[i], locationB: this.locations[i + 1]}));
+    }
+    for (var i = 0; i < Side.Sides.length; ++i) {
+        this.factions.push(new Faction({side: Side.Sides[i]}));
     }
     
     this.turnNumber = 1; // How many turns have passed (for both players)
@@ -201,6 +205,9 @@ Game.prototype.resolveTurn = function() {
     ++this.turnNumber;
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].resolveCombat();
+    }
+    for (var i = 0; i < this.factions.length; ++i) {
+        this.factions[i].advanceResearch();
     }
 };
 
