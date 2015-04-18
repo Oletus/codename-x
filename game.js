@@ -163,7 +163,11 @@ Game.prototype.render = function() {
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
-    
+
+    for (var i = 0; i < this.factions.length; ++i) {
+        this.factions[i].render(this.ctx);
+    }
+
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
     }
