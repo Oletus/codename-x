@@ -4,8 +4,10 @@ var Location = function(options) {
     var defaults = {
         name: '',
         unit: null, // Unit object
+        lastTurnUnit: null,
         terrain: null, // an array of strings
         side: null,
+        currentSide: null,
         connections: [],
         x: 0,
         y: 0
@@ -20,7 +22,11 @@ var Location = function(options) {
 };
 
 Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
-    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.unit, button);
+    if ( this.side == this.currentSide || this.lastTurnUnit == null ) {
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.unit, button);
+    } else {
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.lastTurnUnit, button);
+    }  
 };
 
 var Connection = function(options) {
@@ -42,6 +48,11 @@ var Connection = function(options) {
     this.lastTurnAEffectiveness = 0;
     this.lastTurnBEffectiveness = 0;
 };
+
+Connection.prototype.setCurrentSide = function(faction) {
+    this.locationA.currentSide = faction;
+    this.locationB.currentSide = faction;
+}
 
 Connection.prototype.resolveCombat = function() {
     var locationA = this.locationA,
@@ -67,6 +78,9 @@ Connection.prototype.resolveCombat = function() {
         this.sideAAdvantage = this.steps;
         this.locationB.side = this.locationA.side;
     }
+
+    this.locationA.lastTurnUnit = this.locationA.unit;
+    this.locationB.lastTurnUnit = this.locationB.unit;
 };
 
 Connection.prototype.isBattleOver = function() {

@@ -310,6 +310,10 @@ Game.prototype.nextTurn = function() {
         this.state = Game.State.PLAYING;
         this.setPlayingUIActive(true);
         this.sidebar.setUnit(null);
+
+        for (var i = 0; i < this.connections.length; ++i) {
+            this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
+        }
     } else if (this.state == Game.State.PLAYING) {
         this.factions[this.currentTurnSide].showUI(false);
         ++this.currentTurnSide;
@@ -330,6 +334,7 @@ Game.prototype.setPlayingUIActive = function(active) {
 
 Game.prototype.resolveTurn = function() {
     ++this.turnNumber;
+
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].resolveCombat();
     }
