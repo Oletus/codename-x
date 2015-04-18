@@ -55,11 +55,17 @@ Connection.prototype.resolveCombat = function() {
     sideAAdvances -= locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain);
 
     this.sideAAdvantage += sideAAdvances;
+    if (this.sideAAdvantage < 0) {
+        this.sideAAdvantage = 0;
+    }
+    if (this.sideAAdvantage > this.steps) {
+        this.sideAAdvantage = this.steps;
+    }
 };
 
 Connection.prototype.isBattleOver = function() {
     // Return true if one side has beaten the other
-    return this.sideAAdvantage == 0 || this.sideAAdvantage == 10;
+    return this.sideAAdvantage == 0 || this.sideAAdvantage == this.steps;
 };
 
 Connection.prototype.render = function(ctx) {
