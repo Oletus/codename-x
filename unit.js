@@ -20,7 +20,7 @@ var Unit = function(options) {
     }
 };
 
-Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, icon) {
+Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType) {
     ctx.beginPath();
     ctx.arc(x, y, 30, 0, Math.PI * 2);
     

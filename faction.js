@@ -74,7 +74,9 @@ Faction.prototype.advanceResearch = function() {
 };
 
 Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
-    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.centerX, button.centerY);
+    if (this.currentResearch.length > i) {
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.centerX, button.centerY, this.currentResearch[i].unitType);
+    }
 };
 
 Faction.prototype.addUI = function(button) {

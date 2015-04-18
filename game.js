@@ -107,14 +107,14 @@ Game.prototype.createUI = function() {
     }
 
     var addFactionUI = function(faction) {
-        var x = 100;
-        var y = 800;
+        var x = 1000;
+        var y = 950;
         for (var i = 0; i < faction.researchSlots; ++i) {
             var button = (function(j) {
                 return new CanvasButton({
                     label: 'research ' + j,
                     centerX: x,
-                    centerY: y + i * 100,
+                    centerY: y + i * 90,
                     width: 60,
                     height: 60,
                     active: false,
@@ -267,4 +267,5 @@ Game.prototype.click = function(vec) {
             this.uiButtons[i].click();
         }
     }
+    console.log(vec.x, vec.y);
 };
