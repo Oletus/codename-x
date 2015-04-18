@@ -3,6 +3,10 @@
 var Unit = function(options) {
     var defaults = {
         name: '',
+        projectId: 0,
+        codename: '',
+        description: '',
+        scientist: '',
         tier: 1,
         researchTime: 2,
         singleUse: false,
@@ -64,6 +68,10 @@ Unit.TypeData = [
     },
     {
         name: 'Fruit bat firebombs',
+        projectId: 5459,
+        codename: 'Bat-bombs',
+        description: 'Fruit bats will be equipped with tiny incendiary time bombs and released over enemy territory. They will carry the bombs into building and set them on fire.',
+        scientist: 'Dr. Bruce Bayne',
         singleUse: true,
         properties: ['animal'],
         riskFactor: 0.1,
@@ -71,6 +79,10 @@ Unit.TypeData = [
     },
     {
         name: 'Anti-tank dogs',
+        projectId: 8656,
+        codename: 'Man\'s Best Friend',
+        description: 'Dogs are to be trained to carry explosives, which would detonate on contact with enemy tanks.',
+        scientist: 'Dr. Pupp Sharikov',
         singleUse: true,
         properties: ['animal', 'land'],
         riskFactor: 0.1,
@@ -78,18 +90,30 @@ Unit.TypeData = [
     },
     {
         name: 'Pigeon guided missiles',
+        codename: 'Birdbrain',
+        projectId: 7796,
+        description: 'We intend to teach pigeons to recognize enemy targets and peck at the controls to deploy missiles.',
+        scientist: 'Dr. B.F. Skinner',
         singleUse: true,
         riskFactor: 0.1,
         properties: ['animal']
     },
     {
         name: 'Malaria mosquitoes',
+        codename: 'That Sucks',
+        projectId: 9870,
+        description: 'Malaria carrying mosquitoes grown in a lab and dropped on enemy territory will infect their troops.',
+        scientist: 'Dr. Marsha Land',
         properties: ['animal'],
         riskFactor: 0.1,
         against: {'infantry': 1, 'cold': -1}
     },
     {
         name: 'Flying tanks',
+        codename: 'Flying Elephants',
+        projectId: 3100,
+        description: 'We intend to design a tank equipped with wings. It would be hauled onto an airplane and then dropped onto the battlefield to glide gracefully to the ground.',
+        scientist: 'Dr. T. Wausau',
         properties: ['armor'],
         riskFactor: 0.1,
         against: {'air': 1}
@@ -97,20 +121,36 @@ Unit.TypeData = [
     {
         name: 'Triebflügel',
         riskFactor: 0.1,
+        codename: 'Triebflügel',
+        projectId: 6567,
+        description: 'An aircraft with three blades powered by rockets. Vertical take off, speed, well-armoured.',
+        scientist: 'Dr. Vay Daar',
         properties: ['air']
     },
     {
         name: 'Iceberg ships',
         riskFactor: 0.1,
+        codename: 'On the Rocks',
+        projectId: 1008,
+        description: 'Due to the shortage of metal, we have designed an aircraft carriers to be built out of cork and ice. It will be used against U-boats.',
+        scientist: 'Dr. Ayse Freese',
         properties: ['sea', 'armor']
     },
     {
         name: 'Meth-fueled infantry',
         riskFactor: 0.1,
+        codename: 'Happy-Happy Pill',
+        projectId: 4209,
+        description: 'Crystal methamphetamine is a brilliant creation of the pharmacists that allows our brave soldiers to stay alert, awake and fighting longer and harder. Can be added to chocolate to facilitate ingestion.',
+        scientist: 'Dr. Walter Black',
         properties: ['land', 'infantry']
     },
     {
         name: 'Pheromone gas',
+        codename: 'Smelly Heart ',
+        projectId: 7031,
+        description: 'Pheromone based gas which when deployed against enemy troops makes them go mad with lust, causing widespread chaos and moral degradation. Works well on non-human animals.',
+        scientist: 'Dr. Strangelove',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
@@ -118,6 +158,10 @@ Unit.TypeData = [
     },
     {
         name: 'Panjandrum',
+        codename: 'Panjandrum',
+        projectId: 5032,
+        description: 'This assault weapon is a barrel of explosives suspended between two massive wheels propelled by rockets.',
+        scientist: 'Dr. Wheeler Cart',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
@@ -125,6 +169,10 @@ Unit.TypeData = [
     },
     {
         name: 'Psychic Dogs',
+        codename: 'His Master’s Voice',
+        projectId: 9033,
+        description: 'Our specialized canine school proposes to train dogs to speak. They can be then sent into enemy territory to gather intelligence and report back.',
+        scientist: 'Dr. I. P. Pavlov',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
@@ -132,6 +180,10 @@ Unit.TypeData = [
     },
     {
         name: 'Kamikaze Dolphins',
+        codename: 'Flipper',
+        projectId: 2035,
+        description: 'Dolphins are gentle, playful creatures. We will  use these traits to train them to deliver explosives to enemy U-boats.',
+        scientist: 'Dr. Willie Shamu',
         tier: 2,
         researchTime: 4,
         properties: ['animal'],
@@ -147,6 +199,10 @@ Unit.TypeData = [
     },
     {
         name: 'Flaming pigs',
+        codename: 'Operation Bacon',
+        projectId: 3036,
+        description: 'A training and deployment program that will lather pigs in tar, set them on fire and send them into battle.',
+        scientist: 'Dr. Pigathius Hogg',
         tier: 2,
         researchTime: 4,
         singleUse: true,
@@ -156,6 +212,10 @@ Unit.TypeData = [
     },
     {
         name: '"Who? Me?" stench weapon',
+        codename: 'Who? Me?',
+        projectId: 4037,
+        description: 'A concoction of gases that smell strongly of a substance commonly known as “poo” can be sprayed on enemy officers to embarrass and demoralize them.',
+        scientist: 'Dr. Odur Fowle',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
@@ -163,6 +223,10 @@ Unit.TypeData = [
     },
     {
         name: 'Acoustic kitty',
+        codename: 'Acoustic kitty',
+        projectId: 1038,
+        description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
+        scientist: 'Dr. Bartholomew Fussiebootes',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
@@ -170,6 +234,10 @@ Unit.TypeData = [
     },
     {
         name: 'Soup Bowl War Ship',
+        codename: 'Floating Soup Bowl',
+        projectId: 7039,
+        description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
+        scientist: 'Dr. Bartholomew Fussiebootes',
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
