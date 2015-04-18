@@ -50,7 +50,7 @@ Unit.Properties = [
     'espionage'
 ];
 
-Unit.Types = [
+Unit.TypeData = [
     {
         name: 'Conventional army',
         properties: ['land']
@@ -166,6 +166,13 @@ Unit.Types = [
         properties: ['animal', 'land']
     }
 ];
+
+Unit.Types = [];
+(function() {
+    for (var i = 0; i < Unit.TypeData.length; ++i) {
+        Unit.Types.push(new Unit(Unit.TypeData[i]));
+    }
+})();
 
 Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
     // Define helper variables
