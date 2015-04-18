@@ -286,6 +286,10 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
         return 10;
     }
 
+    if (unitB.instantVictory == false && this.perfectDefense ) {
+        return 0;
+    }
+
     if (unitB.perfectDefense) {
         return 0;
     }
