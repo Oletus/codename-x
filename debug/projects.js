@@ -10,7 +10,7 @@ module.controller("ProjectsController", ["$scope", function($scope) {
         var properties = [];
         for (var key in unit) {
             // Consider only properties that aren't functions
-            if ( unit[key] !== undefined && !(unit[key].call)) {
+            if ( unit[key] !== undefined && unit[key] !== null && !(unit[key].call)) {
                 properties.push(key);
             }
         }
