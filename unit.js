@@ -67,9 +67,10 @@ Unit.TypeData = [
         name: 'Conventional army',
         codename: 'Conventional army',
         description: 'These brave men and women are sadly quite useless. At this rate we will be fighting the war forever.',
-        properties: ['land'],
+        properties: ['land', 'conventional'],
         tier: 0
     },
+    // TIER 1 UNITS
     {
         name: 'Fruit bat firebombs',
         projectId: 5459,
@@ -79,7 +80,7 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['animal', 'air'],
         riskFactor: 0.1,
-        against: {'conventional': 1}
+        against: {'conventional': 2}
     },
     {
         name: 'Anti-tank dogs',
@@ -90,7 +91,7 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['animal', 'land'],
         riskFactor: 0.1,
-        against: {'armor': 1}
+        against: {'armor': 2}
     },
     {
         name: 'Pigeon guided missiles',
@@ -120,16 +121,7 @@ Unit.TypeData = [
         scientist: 'Dr. T. Wausau',
         properties: ['armor'],
         riskFactor: 0.1,
-        against: {'air': 1}
-    },
-    {
-        name: 'Triebflügel',
-        riskFactor: 0.1,
-        codename: 'Triebflügel',
-        projectId: 6567,
-        description: 'An aircraft with three blades powered by rockets. Vertical take off, speed, well-armoured.',
-        scientist: 'Dr. Vay Daar',
-        properties: ['air', 'armor']
+        against: {'air': 2}
     },
     {
         name: 'Iceberg ships',
@@ -149,6 +141,18 @@ Unit.TypeData = [
         scientist: 'Dr. Walter Black',
         properties: ['land', 'infantry']
     },
+    // TIER 2 UNITS
+    {
+        name: 'Triebflügel',
+        tier: 2,
+        riskFactor: 0.1,
+        codename: 'Triebflügel',
+        projectId: 6567,
+        description: 'An aircraft with three blades powered by rockets. Vertical take off, speed, well-armoured.',
+        scientist: 'Dr. Vay Daar',
+        researchTime: 4,
+        properties: ['air', 'armor']
+    },
     {
         name: 'Pheromone gas',
         codename: 'Smelly Heart',
@@ -158,7 +162,7 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
-        against: {'animal': 1}
+        against: {'animal': 2}
     },
     {
         name: 'Panjandrum',
@@ -194,7 +198,7 @@ Unit.TypeData = [
         researchTime: 4,
         properties: ['animal'],
         riskFactor: 0.1,
-        against: {'land': -1, 'air': -1}
+        against: {'land': -1, 'air': -1, 'wet': 1, 'sea': 1}
     },
     {
         name: 'Flaming pigs',
@@ -213,7 +217,7 @@ Unit.TypeData = [
         name: '"Who? Me?" stench weapon',
         codename: 'Who? Me?',
         projectId: 4037,
-        description: 'A concoction of gases that smell strongly of a substance commonly known as “poo” can be sprayed on enemy officers to embarrass and demoralize them.',
+        description: 'A concoction of gases that smell strongly of a substance commonly known as “poo” can be sprayed on enemy officers to embarrass and demoralize them. Terrifying against targets within vehicles.',
         scientist: 'Dr. Odur Fowle',
         tier: 2,
         researchTime: 4,
@@ -243,6 +247,7 @@ Unit.TypeData = [
         riskFactor: 0.15,
         properties: ['sea']
     },
+    // TIER 3 SUPER UNITS
     {
         name: 'Space spyglass',
         codename: 'Ant Killer',
@@ -259,7 +264,7 @@ Unit.TypeData = [
         name: 'Chicken-warmed nuclear landmines',
         codename: 'Feeling Clucky',
         projectId: 9076,
-        description: 'In order to protect our most strategically valuable cities, we can surround them with nuclear landmines. We will bury the mine with live chickens, which will keep the mechanisms warm through the winter.',
+        description: 'In order to protect our most strategically valuable cities, we can surround them with nuclear landmines. We will bury the mine with live chickens, which will keep the mechanisms warm through the winter. Halts the enemy advance absolutely on a single front.',
         scientist: 'Dr. Rusty Cogscomb',
         tier: 3,
         researchTime: 6,
