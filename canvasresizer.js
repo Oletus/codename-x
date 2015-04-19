@@ -170,6 +170,7 @@ CanvasResizer.prototype.getCanvasPosition = function(event) {
     var rect = this.canvas.getBoundingClientRect();
     var x, y;
     if (event.touches !== undefined) {
+        console.log(event.touches.length);
         if (event.touches.length > 0) {
             x = event.touches[0].clientX;
             y = event.touches[0].clientY;
