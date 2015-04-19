@@ -174,14 +174,26 @@ Game.prototype.createUI = function() {
         label: 'Start Turn',
         centerX: 1920 * 0.5,
         centerY: 540,
-        width: 200,
-        height: 70,
+        width: 250,
+        height: 100,
         clickCallback: function() {
             that.nextPhase();
         }
     });
     this.uiButtons.push(startTurnButton);
     this.preTurnUI.push(startTurnButton);
+    var aiTurnButton = new CanvasButton({
+        label: 'Let AI Play This Turn',
+        centerX: 1920 * 0.5,
+        centerY: 670,
+        width: 250,
+        height: 70,
+        clickCallback: function() {
+            that.aiTurn();
+        }
+    });
+    this.uiButtons.push(aiTurnButton);
+    this.preTurnUI.push(aiTurnButton);
 
     var addLocationUI = function(location) {
         var button = new CanvasButton({
@@ -402,6 +414,44 @@ Game.prototype.approveResearch = function() {
     }
 };
 
+Game.prototype.aiTurn = function() {
+    this.nextPhase();
+    if (this.potentialResearch.length > 0) {
+        this.chosenResearch = this.potentialResearch[0];
+        this.approveResearch();
+    }
+    var currentFaction = this.factions[this.currentTurnSide];
+    var moveRounds = Math.min(currentFaction.reserve.length, 3);
+    var i = 0;
+    while (currentFaction.reserve.length > 0 && i < moveRounds) {
+        // Choose the most valuable unit from the sorted reserve
+        var goodUnit = currentFaction.reserve[currentFaction.reserve.length - 1];
+
+        // Find a location where the unit could be placed
+        var locIndex = Math.floor(Math.random() * this.locations.length);
+        var triesLeft = this.locations.length + 1;
+        while (triesLeft > 0) {
+            ++locIndex;
+            if (locIndex >= this.locations.length) {
+                locIndex = 0;
+            }
+            --triesLeft;
+            if (this.locations[locIndex].side !== Side.Sides[this.currentTurnSide]) {
+                continue;
+            }
+            if (this.locations[locIndex].unit.tier < goodUnit.tier) {
+                // Good idea to place the unit here.
+                break;
+            }
+        }
+        if (triesLeft > 0) {
+            this.fromReserveToLocation(goodUnit, this.locations[locIndex]);
+        }
+        ++i;
+    }
+    this.nextPhase();
+};
+
 Game.prototype.nextPhase = function() {
     if (this.state == Game.State.PRE_TURN) {
         // Out from pre-turn UI
@@ -541,11 +591,14 @@ Game.prototype.setCursorPosition = function(vec) {
 
 Game.prototype.dragToLocation = function(location) {
     if (location.side === Side.Sides[this.currentTurnSide] && this.downButton.draggedObject !== null) {
-        var draggedObject = this.downButton.draggedObject();
-        this.factions[this.currentTurnSide].reserve.push(location.unit);
-        this.factions[this.currentTurnSide].removeReserve(draggedObject);
-        location.unit = draggedObject;
+        this.fromReserveToLocation(this.downButton.draggedObject(), location);
     }
+};
+
+Game.prototype.fromReserveToLocation = function(reserveUnit, location) {
+    this.factions[this.currentTurnSide].addToReserve(location.unit);
+    this.factions[this.currentTurnSide].removeReserve(reserveUnit);
+    location.unit = reserveUnit;
 };
 
 Game.prototype.click = function(vec) {

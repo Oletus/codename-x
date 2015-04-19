@@ -55,6 +55,7 @@ Faction.prototype.startResearch = function(unitType) {
 
 Faction.prototype.addToReserve = function(unitType) {
     this.reserve.push(unitType);
+    this.sortReserve();
 };
 
 Faction.prototype.startRandomResearch = function() {
@@ -104,6 +105,19 @@ Faction.prototype.advanceResearch = function() {
             ++i;
         }
     }
+    this.sortReserve();
+};
+
+Faction.prototype.sortReserve = function() {
+    this.reserve.sort(function(a, b) {
+        if (a.tier < b.tier) {
+            return -1;
+        } else if (a.tier > b.tier) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
 };
 
 Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
