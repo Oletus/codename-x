@@ -18,7 +18,7 @@ var Unit = function(options) {
         properties: [],
         against: {},
         riskFactor: 0,
-        exclusiveFaction: undefined
+        exclusiveFaction: null
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
