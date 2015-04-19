@@ -159,6 +159,16 @@ Faction.prototype.getPotentialResearch = function() {
     filter(possibleResearch, currentResearchUnits);
     filter(possibleResearch, this.completedResearch);
 
+    // Filter out units exclusively defined for another faction.
+    for ( var i = 0; i < possibleResearch.length; ) {
+        if ( possibleResearch[i].exclusiveFaction === null || possibleResearch[i].exclusiveFaction == this.side ) {
+            i++;
+        }
+        else {
+            possibleResearch.splice(i, 1);
+        }
+    }
+
     // Randomize three projects from remaining set
     shuffle(possibleResearch);
 
