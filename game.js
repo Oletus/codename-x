@@ -47,7 +47,7 @@ var Game = function(canvas) {
         that.release(resizer.getCanvasPosition(event));
     });
     this.canvas.addEventListener('touchend', function(event) {
-        that.release(resizer.getCanvasPosition(event));
+        that.release(new Vec2(that.cursorX, that.cursorY));
     });
     this.setCursorPosition({x: 0, y: 0});
 };
