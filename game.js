@@ -64,6 +64,7 @@ Game.VictoryMusic = new Audio('Victory_fanfare');
 
 Game.prototype.createUI = function() {
     this.uiButtons = [];
+    this.preTurnUI = []; // Contains those buttons that are only visible during the "PRE_TURN" stage.
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
 
@@ -111,6 +112,19 @@ Game.prototype.createUI = function() {
             }
         }
     }));
+    
+    var fsButton = new CanvasButton({
+        label: 'Go Fullscreen',
+        centerX: 680,
+        centerY: 500,
+        width: 200,
+        height: 70,
+        clickCallback: function() {
+            requestFullscreen(document.body);
+        }
+    });
+    this.uiButtons.push(fsButton);
+    this.preTurnUI.push(fsButton);
 
     var addLocationUI = function(location) {
         var button = new CanvasButton({
@@ -295,6 +309,7 @@ Game.prototype.nextPhase = function() {
         if (currentFaction.researchSlotAvailable() && potentialResearch.length > 0) {
             this.potentialResearch = potentialResearch;
         }
+        this.setUIActive(this.preTurnUI, false);
         if (this.potentialResearch.length > 0) {
             this.state = Game.State.RESEARCH_PROPOSALS;
             for (var i = 0; i < 3; ++i) {
@@ -329,6 +344,7 @@ Game.prototype.nextPhase = function() {
         this.sidebar.setUnit(null);
         this.state = Game.State.PRE_TURN;
         this.setUIActive(this.playingUI, false);
+        this.setUIActive(this.preTurnUI, true);
     }
 };
 
