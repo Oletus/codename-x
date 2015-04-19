@@ -286,7 +286,7 @@ Unit.TypeData = [
         scientist: 'Dr. Yes',
         tier: 3,
         power: 12,
-        researchTime: 7,
+        researchTime: 8,
         riskFactor: 0.25,
         properties: ['space']
     },
