@@ -15,6 +15,18 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'special_eliteregular';
+    src: url('assets/fonts/SpecialElite-webfont.eot');
+    src: url('assets/fonts/SpecialElite-webfont.eot?#iefix') format('embedded-opentype'),
+         url('assets/fonts/SpecialElite-webfont.woff') format('woff'),
+         url('assets/fonts/SpecialElite-webfont.ttf') format('truetype'),
+         url('assets/fonts/SpecialElite-webfont.svg#special_eliteregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 #canvasWrapper {
     position: relative;
 }
@@ -54,10 +66,21 @@
     width: 380px;
     height: 545px;
     padding: 20px;
-    margin-top: 40px;
+    margin-top: 110px;
 
+    font: 20px special_eliteregular;
     color: #000;
     background: url('assets/gfx/research_proposal.png');
+}
+
+.researchProposal .codename {
+    text-transform: uppercase;
+    font: 20px special_eliteregular;
+    font-weight: bold;
+}
+
+.researchProposal .researchTime {
+    font-weight: bold;
 }
 
 .researchProposal.hilight {
@@ -109,7 +132,7 @@ var start = function() {
         height: 1080
     });
     var game = new Game(resizer.getCanvas());
-    startMainLoop([resizer, game, new LoadingBar()], {debugMode: true});
+    startMainLoop([resizer, game, new LoadingBar()], {debugMode: false});
 };
 </script>
 </head>

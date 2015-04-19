@@ -8,14 +8,19 @@ var SideBar = function() {
     this.descriptionElement = this.appendToThis('p');
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
+    
+    this.codeNameElement = document.createElement('p');
     this.researchTimeElement = document.createElement('p');
 
     this.setUnit(null);
 };
 
-SideBar.prototype.appendToThis = function(type) {
+SideBar.prototype.appendToThis = function(type, classToAdd) {
     var element = document.createElement(type);
     this.mainDiv.appendChild(element);
+    if (classToAdd !== undefined) {
+        element.classList.add(classToAdd);
+    }
     return element;
 };
 
@@ -59,6 +64,7 @@ SideBar.prototype.setUnit = function(unit) {
     if (unit !== null) {
         this.mainDiv.style.display = 'inline';
         this.unitNameElement.textContent = unit.name;
+        this.codeNameElement.textContent = 'CODENAME: ' + unit.codename;
         this.descriptionElement.textContent = unit.description;
         this.powerElement.textContent = 'Power: ' + unit.power;
         this.researchTimeElement.textContent = 'Research time: ' + unit.researchTime;

@@ -6,10 +6,11 @@ var ResearchProposal = function(index, select) {
     this.mainDiv.classList.add('researchProposal');
     canvasWrapper.appendChild(this.mainDiv);
     this.unitNameElement = this.appendToThis('h2');
+    this.codeNameElement = this.appendToThis('h3', 'codename');
     this.descriptionElement = this.appendToThis('p');
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
-    this.researchTimeElement = this.appendToThis('p');
+    this.researchTimeElement = this.appendToThis('p', 'researchTime');
 
     this.mainDiv.style.position = 'absolute';
     this.mainDiv.style.left = (index * 450 + 40) + 'px';
