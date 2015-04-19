@@ -143,7 +143,9 @@ Game.prototype.createUI = function() {
         width: 70,
         height: 70,
         clickCallback: function() {
-            that.nextPhase();
+            if (that.state === Game.State.PLAYING) {
+                that.nextPhase();
+            }
         },
         renderFunc: function(ctx, cursorOn, buttonDown, button) {
             var glowAmount = that.nextPhaseGlowAmount();
@@ -156,8 +158,8 @@ Game.prototype.createUI = function() {
     
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
-        centerX: 680,
-        centerY: 500,
+        centerX: 720,
+        centerY: 670,
         width: 200,
         height: 70,
         clickCallback: function() {
@@ -166,6 +168,18 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(fsButton);
     this.preTurnUI.push(fsButton);
+    var startTurnButton = new CanvasButton({
+        label: 'Start Turn',
+        centerX: 720,
+        centerY: 500,
+        width: 200,
+        height: 70,
+        clickCallback: function() {
+            that.nextPhase();
+        }
+    });
+    this.uiButtons.push(startTurnButton);
+    this.preTurnUI.push(startTurnButton);
 
     var addLocationUI = function(location) {
         var button = new CanvasButton({
@@ -339,7 +353,7 @@ Game.prototype.render = function() {
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
         this.ctx.font = '30px special_eliteregular';
-        this.ctx.fillText(header, 670, 400);
+        this.ctx.fillText(header, 720, 400);
     }
     return this.ctx;
 };
@@ -496,7 +510,7 @@ Game.prototype.update = function(deltaTime) {
 };
 
 Game.prototype.nextPhaseGlowAmount = function() {
-    if (this.potentialResearch.length > 0) {
+    if (this.potentialResearch.length > 0 || this.state !== Game.State.PLAYING) {
         return 0;
     } else {
         return Math.sin(this.time * 2) * 0.5 + 0.3;
