@@ -169,9 +169,13 @@ CanvasResizer.prototype.render = function() {
 CanvasResizer.prototype.getCanvasPosition = function(event) {
     var rect = this.canvas.getBoundingClientRect();
     var x, y;
-    if (event.touches !== undefined && event.touches.length > 0) {
-        x = event.touches[0].clientX;
-        y = event.touches[0].clientY;
+    if (event.touches !== undefined) {
+        if (event.touches.length > 0) {
+            x = event.touches[0].clientX;
+            y = event.touches[0].clientY;
+        } else {
+            return undefined;
+        }
     } else {
         x = event.clientX;
         y = event.clientY;

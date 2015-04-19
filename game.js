@@ -452,6 +452,9 @@ Game.prototype.click = function(vec) {
 };
 
 Game.prototype.release = function(vec) {
+    if (vec !== undefined) {
+        this.setCursorPosition(vec);
+    }
     if (this.downButton !== null) {
         for (var i = 0; i < this.uiButtons.length; ++i) {
             if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
@@ -465,6 +468,5 @@ Game.prototype.release = function(vec) {
         this.downButton.dragged = false;
         this.downButton = null;
     }
-    console.log(vec.x, vec.y);
-    this.setCursorPosition(vec);
+    console.log(this.cursorX, this.cursorY);
 };
