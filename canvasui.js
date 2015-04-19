@@ -60,7 +60,7 @@ CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
     ctx.globalAlpha = 1.0;
     ctx.textAlign = 'center';
     ctx.fillStyle = '#fff';
-    ctx.font = '20px sans-serif';
+    ctx.font = '20px special_eliteregular';
     ctx.fillText(this.label, this.centerX, this.centerY + 7);
 };
 

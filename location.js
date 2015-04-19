@@ -126,7 +126,7 @@ Connection.prototype.render = function(ctx) {
     
     if (!this.isBattleOver()) {
         ctx.fillStyle = '#fff';
-        ctx.font = '16px sans-serif';
+        ctx.font = '16px special_eliteregular';
         ctx.textAlign = 'center';
         ctx.fillText('Last turn: ' + this.lastTurnAEffectiveness, locA.x, locA.y - 40);
         ctx.fillText('Last turn: ' + this.lastTurnBEffectiveness, locB.x, locB.y - 40);

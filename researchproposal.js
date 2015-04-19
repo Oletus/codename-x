@@ -16,7 +16,7 @@ var ResearchProposal = function(index, select) {
     this.descriptionElement = document.createElement('p'); // Not shown
 
     this.mainDiv.style.position = 'absolute';
-    this.mainDiv.style.left = (index * 450 + 40) + 'px';
+    this.mainDiv.style.left = (index * 450 + 60) + 'px';
     
     this.setUnit(null);
     

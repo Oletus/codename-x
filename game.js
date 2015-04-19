@@ -78,10 +78,12 @@ Game.prototype.createUI = function() {
     
     this.researchHTML = document.createElement('div');
     this.researchHTML.id = 'researchWrap';
+    this.researchHTML.style.display = 'none';
     canvasWrapper.appendChild(this.researchHTML);
     
     this.sidebar = new SideBar();
     this.researchProposals = [];
+    this.researchHTML.innerHTML = '<h1>RESEARCH PROPOSALS</h1>';
     for (var i = 0; i < 3; ++i) {
         var proposal = (function(j) {
             return new ResearchProposal(j, function() {
@@ -97,6 +99,18 @@ Game.prototype.createUI = function() {
         this.researchProposals.push(proposal);
         this.researchHTML.appendChild(proposal.mainDiv);
     }
+    var approveResearchButton = new CanvasButton({
+        label: 'Approve Research',
+        centerX: 720,
+        centerY: 750,
+        width: 200,
+        height: 70,
+        clickCallback: function() {
+            that.approveResearch();
+        }
+    });
+    this.uiButtons.push(approveResearchButton);
+    this.researchUI.push(approveResearchButton);
 
     Game.BackgroundMusic.playSingular(true);
 
@@ -213,6 +227,8 @@ Game.prototype.createUI = function() {
     for (var i = 0; i < this.factions.length; ++i) {
         addFactionUI(this.factions[i]);
     }
+
+    this.setUIActive(this.researchUI, false);
     this.setUIActive(this.playingUI, false);
 };
 
@@ -301,10 +317,14 @@ Game.prototype.render = function() {
         var header = 'Get prepared for turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
-        this.ctx.font = '30px sans-serif';
+        this.ctx.font = '30px special_eliteregular';
         this.ctx.fillText(header, 670, 400);
     }
     return this.ctx;
+};
+
+Game.prototype.approveResearch = function() {
+    this.nextPhase();
 };
 
 Game.prototype.nextPhase = function() {
@@ -328,6 +348,7 @@ Game.prototype.nextPhase = function() {
             }
             this.chosenResearch = null;
             this.setUIActive(this.researchUI, true);
+            this.researchHTML.style.display = 'block';
         } else {
             this.startPlayingPhase();
         }
@@ -339,6 +360,7 @@ Game.prototype.nextPhase = function() {
         if (this.chosenResearch !== null) {
             this.factions[this.currentTurnSide].startResearch(this.chosenResearch);
             this.potentialResearch = [];
+            this.researchHTML.style.display = 'none';
             this.startPlayingPhase();
         }
     } else if (this.state == Game.State.PLAYING) {
