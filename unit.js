@@ -150,7 +150,8 @@ Unit.TypeData = [
         projectId: 1008,
         description: 'Due to the shortage of metal, we have designed an aircraft carrier to be built out of cork and ice. They will be used against U-boats.',
         scientist: 'Dr. Ayse Freese',
-        properties: ['sea']
+        properties: ['sea', 'cold'],
+        researchTime: 1
     },
     {
         name: 'Meth-fueled Infantry',
