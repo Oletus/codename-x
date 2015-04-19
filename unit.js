@@ -213,7 +213,7 @@ Unit.TypeData = [
         name: 'Kamikaze Dolphins',
         codename: 'Flipper',
         projectId: 2035,
-        description: 'Dolphins are gentle, playful creatures. We will use these traits to train them to deliver explosives to enemy U-boats.',
+        proposal: 'Dolphins are gentle, playful creatures. We will use these traits to train them to deliver explosives to enemy U-boats.',
         description: 'These gentle, playful creatures can deliver explosives to naval enemy targets.',
         scientist: 'Dr. Willie Shamu',
         tier: 2,
