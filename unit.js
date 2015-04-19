@@ -148,7 +148,7 @@ Unit.TypeData = [
         riskFactor: 0.1,
         codename: 'On the Rocks',
         projectId: 1008,
-        description: 'Due to the shortage of metal, we have designed an aircraft carriers to be built out of cork and ice. They will be used against U-boats.',
+        description: 'Due to the shortage of metal, we have designed an aircraft carrier to be built out of cork and ice. They will be used against U-boats.',
         scientist: 'Dr. Ayse Freese',
         properties: ['sea']
     },
