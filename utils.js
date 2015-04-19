@@ -38,6 +38,12 @@ function shuffle(array) {
   return array;
 }
 
+function setPropertyInAll(array, key, value) {
+    for (var i = 0; i < array.length; ++i) {
+        array[i][key] = value;
+    }
+}
+
 function requestFullscreen(elem) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();

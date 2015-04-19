@@ -76,6 +76,7 @@ Game.prototype.createUI = function() {
     this.preTurnUI = []; // Contains those buttons that are only visible during the "PRE_TURN" stage.
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
+    this.reserveUI = [];
 
     var that = this;
     
@@ -257,6 +258,7 @@ Game.prototype.createUI = function() {
                 });
             })(i);
             that.uiButtons.push(button);
+            that.reserveUI.push(button);
             faction.addUI(button);
         }
     };
@@ -381,12 +383,14 @@ Game.prototype.showResearchUI = function(show) {
             }
             this.setUIActive(this.playingUI, false);
             this.setUIActive(this.researchUI, true);
+            setPropertyInAll(this.reserveUI, 'draggable', false);
         }
     } else {
         this.state = Game.State.PLAYING;
         this.researchHTML.style.display = 'none';
         this.setUIActive(this.researchUI, false);
         this.setUIActive(this.playingUI, true);
+        setPropertyInAll(this.reserveUI, 'draggable', true);
     }
 }
 
