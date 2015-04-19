@@ -139,7 +139,12 @@
 var resizer;
 var canvasWrapper;
 
+var DEV_MODE = true;
+
 var start = function() {
+    var DEBUG_MAIN_LOOP = DEV_MODE && false;
+    Audio.muteAll = DEV_MODE && true;
+
     var canvas = document.createElement('canvas');
     canvasWrapper = document.createElement('div');
     canvasWrapper.appendChild(canvas);
@@ -152,7 +157,7 @@ var start = function() {
         height: 1080
     });
     var game = new Game(resizer.getCanvas());
-    startMainLoop([resizer, game, new LoadingBar()], {debugMode: false});
+    startMainLoop([resizer, game, new LoadingBar()], {debugMode: DEBUG_MAIN_LOOP});
 };
 </script>
 </head>
