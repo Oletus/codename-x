@@ -6,8 +6,10 @@ var Unit = function(options) {
         projectId: 0,
         codename: '',
         description: '',
+        proposal: undefined,
         scientist: '',
         tier: 1,
+        power: undefined,
         researchTime: 2,
         singleUse: false,
         instantVictory: false,
@@ -23,6 +25,14 @@ var Unit = function(options) {
         } else {
             this[key] = options[key];
         }
+    }
+
+    if ( proposal === undefined ) {
+        proposal = description;
+    }
+
+    if ( power === undefined ) {
+        power = tier;
     }
 };
 
@@ -75,7 +85,8 @@ Unit.TypeData = [
         name: 'Fruit bat firebombs',
         projectId: 5459,
         codename: 'Bat-bombs',
-        description: 'Fruit bats will be equipped with tiny incendiary time bombs and released over enemy territory. They will carry the bombs into building and set them on fire.',
+        proposal: 'Fruit bats will be equipped with tiny incendiary time bombs and released over enemy territory. They will carry the bombs into buildings and set them on fire.',
+        description: 'Fruit bats equipped with tiny incendiary time bombs. They will carry the bombs into buildings and set them on fire.',
         scientist: 'Dr. Bruce Bayne',
         singleUse: true,
         properties: ['animal', 'air'],
@@ -86,7 +97,8 @@ Unit.TypeData = [
         name: 'Anti-tank dogs',
         projectId: 8656,
         codename: 'Man\'s Best Friend',
-        description: 'Dogs are to be trained to carry explosives, which would detonate on contact with enemy tanks.',
+        proposal: 'Dogs are to be trained to carry explosives, which would detonate on contact with enemy tanks.',
+        description: 'Dogs that are trained to carry explosives, which detonate on contact with enemy tanks.',
         scientist: 'Dr. Pupp Sharikov',
         singleUse: true,
         properties: ['animal', 'land'],
@@ -97,7 +109,8 @@ Unit.TypeData = [
         name: 'Pigeon guided missiles',
         codename: 'Birdbrain',
         projectId: 7796,
-        description: 'We intend to teach pigeons to recognize enemy targets and peck at the controls to deploy missiles.',
+        proposal: 'We intend to teach pigeons to recognize enemy targets and peck at the controls to deploy missiles.',
+        description: 'These pigeons have been taught to recognize enemy targets and peck at the controls inside missiles to guide them.',
         scientist: 'Dr. B.F. Skinner',
         singleUse: true,
         riskFactor: 0.1,
@@ -182,7 +195,8 @@ Unit.TypeData = [
         name: 'Psychic Dogs',
         codename: 'His Master’s Voice',
         projectId: 9033,
-        description: 'Our specialized canine school proposes to train dogs to speak. They can be then sent into enemy territory to gather intelligence and report back.',
+        proposal: 'Our specialized canine school proposes to train dogs to speak. They can be then sent into enemy territory to gather intelligence and report back.',
+        description: 'These dogs are trained to speak and can be then sent into enemy territory to gather intelligence and report back.',
         scientist: 'Dr. I. P. Pavlov',
         tier: 2,
         researchTime: 4,
@@ -195,10 +209,11 @@ Unit.TypeData = [
         codename: 'Flipper',
         projectId: 2035,
         description: 'Dolphins are gentle, playful creatures. We will use these traits to train them to deliver explosives to enemy U-boats.',
+        description: 'These gentle, playful creatures can deliver explosives to naval enemy targets.',
         scientist: 'Dr. Willie Shamu',
         tier: 2,
         researchTime: 4,
-        properties: ['animal'],
+        properties: ['animal', 'sea'],
         riskFactor: 0.1,
         against: {'land': -1, 'air': -1, 'wet': 1, 'sea': 1}
     },
@@ -206,7 +221,8 @@ Unit.TypeData = [
         name: 'Flaming pigs',
         codename: 'Operation Bacon',
         projectId: 3036,
-        description: 'A training and deployment program that will lather pigs in tar, set them on fire and send them into battle.',
+        proposal: 'A training and deployment program that will lather pigs in tar, set them on fire and send them into battle.',
+        description: 'Pigs lathered in tar and set on fire are sent into battle to terrorize enemies.',
         scientist: 'Dr. Pigathius Hogg',
         tier: 2,
         researchTime: 4,
