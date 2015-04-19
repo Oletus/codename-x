@@ -158,6 +158,21 @@ Game.prototype.createUI = function() {
         }
     }));
     
+    var replayButton = new CanvasButton({
+        label: 'Replay last turn',
+        centerX: 130,
+        centerY: 720,
+        width: 200,
+        height: 70,
+        clickCallback: function() {
+            if (that.state === Game.State.PLAYING) {
+                that.resetAnimations();
+            }
+        }
+    });
+    this.uiButtons.push(replayButton);
+    this.playingUI.push(replayButton);
+    
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
         centerX: 1920 * 0.5,
@@ -456,6 +471,12 @@ Game.prototype.aiTurn = function() {
     this.nextPhase();
 };
 
+Game.prototype.resetAnimations = function() {
+    for (var i = 0; i < this.locations.length; ++i) {
+        this.locations[i].resetAnimation();
+    }
+};
+
 Game.prototype.nextPhase = function() {
     if (this.state == Game.State.PRE_TURN) {
         // Out from pre-turn UI
@@ -467,9 +488,7 @@ Game.prototype.nextPhase = function() {
         for (var i = 0; i < this.connections.length; ++i) {
             this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
         }
-        for (var i = 0; i < this.locations.length; ++i) {
-            this.locations[i].resetAnimation();
-        }
+        this.resetAnimations();
 
         // Set research options for this turn
         this.chosenResearch = null;
