@@ -475,6 +475,9 @@ Game.prototype.resetAnimations = function() {
     for (var i = 0; i < this.locations.length; ++i) {
         this.locations[i].resetAnimation();
     }
+    for (var i = 0; i < this.connections.length; ++i) {
+        this.connections[i].resetAnimation();
+    }
 };
 
 Game.prototype.nextPhase = function() {

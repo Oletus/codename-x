@@ -81,6 +81,7 @@ var Connection = function(options) {
     this.lastTurnAAdvantage = 0;
     this.locationA.connections.push(this);
     this.locationB.connections.push(this);
+    this.changeAnimation = 0;
 };
 
 Connection.prototype.setCurrentSide = function(faction) {
@@ -125,6 +126,10 @@ Connection.prototype.isBattleOver = function() {
     return this.sideAAdvantage == 0 || this.sideAAdvantage == this.steps;
 };
 
+Connection.prototype.resetAnimation = function() {
+    this.changeAnimation = 0;
+};
+
 Connection.prototype.update = function(deltaTime, state) {
     var animationInProgress = false;
     if (state === Game.State.PLAYING) {
@@ -134,6 +139,14 @@ Connection.prototype.update = function(deltaTime, state) {
         } else if (!this.locationB.isAnimationComplete()) {
             this.locationB.update(deltaTime);
             animationInProgress = true;
+        } else {
+            this.changeAnimation += deltaTime;
+            if (this.lastTurnAAdvantage == this.sideAAdvantage) {
+                this.changeAnimation += deltaTime * 4;
+            }
+            if (this.changeAnimation < 1) {
+                animationInProgress = true;
+            }
         }
     }
     return animationInProgress;
@@ -149,6 +162,11 @@ Connection.prototype.render = function(ctx) {
     var arrowLength = dist - 80;
     var stepLength = arrowLength / (this.steps - 1);
     var angle = locA.slope(locB);
+    
+    var displayedAdvantage = this.lastTurnAAdvantage;
+    if (this.changeAnimation >= 1) {
+        displayedAdvantage = this.sideAAdvantage;
+    } 
 
     for (var i = 0; i < this.steps; ++i) {
         var t = (40 + stepLength * i) / dist;
@@ -158,10 +176,22 @@ Connection.prototype.render = function(ctx) {
         ctx.translate(x, y);
         ctx.rotate(angle);
 
-        if (i == this.sideAAdvantage) {
+        if (i >= displayedAdvantage) {
             ctx.fillStyle = this.locationB.side.color;
+        } else {
+            ctx.fillStyle = this.locationA.side.color;
         }
         ctx.fillRect(-6, -6, 12, 12);
+        
+        if ((i < this.sideAAdvantage && i >= this.lastTurnAAdvantage ||
+            i < this.lastTurnAAdvantage && i >= this.sideAAdvantage) &&
+            this.changeAnimation < 1)
+        {
+            ctx.globalAlpha = -Math.cos(this.changeAnimation * 6 * Math.PI) * 0.5 + 0.5;
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(-6, -6, 12, 12);
+            ctx.globalAlpha = 1.0;
+        }
 
         ctx.rotate(-angle);
         ctx.translate(-x, -y);
