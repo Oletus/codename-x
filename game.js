@@ -90,16 +90,21 @@ Game.prototype.createUI = function() {
     Game.BackgroundMusic.playSingular(true);
 
     var that = this;
+
+    // next turn button
     this.uiButtons.push(new CanvasButton({
         label: '',
-        centerX: 1840,
-        centerY: 970,
-        width: 60,
+        centerX: 1838,
+        centerY: 968,
+        width: 70,
         height: 70,
         clickCallback: function() {
             that.nextTurn();
+        },
+        renderFunc: function() {
         }
     }));
+
     var addLocationUI = function(location) {
         var button = new CanvasButton({
             label: location.name,
