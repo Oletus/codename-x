@@ -28,6 +28,7 @@ Side.Sides = [
 var Game = function(canvas) {
     this.bgSprite = new Sprite('background.jpg');
     this.turnPanelSprite = new Sprite('turn_panel.png');
+    this.redGlowSprite = new Sprite('red_glow.png');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
 
@@ -101,7 +102,12 @@ Game.prototype.createUI = function() {
         clickCallback: function() {
             that.nextTurn();
         },
-        renderFunc: function() {
+        renderFunc: function(ctx, cursorOn, buttonDown, button) {
+            var glowAmount = that.nextTurnGlowAmount();
+            if (glowAmount > 0) {
+                ctx.globalAlpha = glowAmount;
+                that.redGlowSprite.drawRotated(ctx, button.visualX(), button.visualY());
+            }
         }
     }));
 
@@ -295,6 +301,7 @@ Game.prototype.render = function() {
     }
     var side = Side.Sides[this.currentTurnSide];
     if (this.state === Game.State.PRE_TURN) {
+        this.ctx.globalAlpha = 1.0;
         var header = 'Get prepared for turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
@@ -381,6 +388,10 @@ Game.prototype.update = function(deltaTime) {
             this.preturnFade = 0;
         }
     }
+};
+
+Game.prototype.nextTurnGlowAmount = function() {
+    return Math.sin(this.time * 2) * 0.5 + 0.3;
 };
 
 Game.prototype.setCursorPosition = function(vec) {
