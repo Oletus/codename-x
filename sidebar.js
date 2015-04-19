@@ -58,6 +58,7 @@ SideBar.prototype.update = function(deltaTime) {
 SideBar.prototype.setUnit = function(unit) {
     this.unit = unit;
     if (unit !== null) {
+        this.sidebarDiv.style.display = 'inline';
         this.unitNameElement.textContent = unit.name;
         this.descriptionElement.textContent = unit.description;
         this.attributesElement.innerHTML = '';
@@ -69,5 +70,7 @@ SideBar.prototype.setUnit = function(unit) {
                 this.appendToAttributes({property: prop, value: unit.against[prop]});
             }
         }
+    } else {
+        this.sidebarDiv.style.display = 'none';
     }
 }

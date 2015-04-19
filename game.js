@@ -321,7 +321,6 @@ Game.prototype.nextTurn = function() {
         }
         this.state = Game.State.PLAYING;
         this.setPlayingUIActive(true);
-        this.sidebar.setUnit(null);
 
         for (var i = 0; i < this.connections.length; ++i) {
             this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
@@ -333,6 +332,7 @@ Game.prototype.nextTurn = function() {
             this.currentTurnSide = 0;
             this.resolveTurn();
         }
+        this.sidebar.setUnit(null);
         this.state = Game.State.PRE_TURN;
         this.setPlayingUIActive(false);
     }
