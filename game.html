@@ -3,6 +3,36 @@
 <head>
 <title>Codename X</title>
 <meta charset="UTF-8">
+<style>
+#canvasWrapper {
+    position: relative;
+}
+
+#sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 400px;
+    height: 500px;
+    color: #fff;
+    padding: 20px;
+    padding-top: 100px;
+    transform-origin: top right;
+    
+    font: 20px sans-serif;
+    font-variant: small-caps;
+}
+
+#sidebar .unitAttribute.property {
+    color: #ff8;
+}
+#sidebar .unitAttribute.good.against {
+    color: #8f8;
+}
+#sidebar .unitAttribute.bad.against {
+    color: #f88;
+}
+</style>
 <!-- output -->
 <script src="sprite.js"></script>
 <script src="animatedsprite.js"></script>
@@ -31,9 +61,16 @@
 'use strict';
 
 var resizer;
+var canvasWrapper;
 
 var start = function() {
+    var canvas = document.createElement('canvas');
+    canvasWrapper = document.createElement('div');
+    canvasWrapper.appendChild(canvas);
+    canvasWrapper.id = 'canvasWrapper';
     resizer = new CanvasResizer({
+        canvas: canvas,
+        wrapperElement: canvasWrapper,
         mode: CanvasResizer.Mode.FIXED_RESOLUTION_INTERPOLATED,
         width: 1920,
         height: 1080

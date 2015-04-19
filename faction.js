@@ -100,7 +100,6 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
         var y = button.visualY();
         ctx.fillStyle = this.side.color;
         var completion = this.currentResearch[i].getCompletion();
-        console.log(completion);
         var barWidth = 200;
         ctx.globalAlpha = 0.5;
         ctx.fillRect(x + 50, y, barWidth, 20);
