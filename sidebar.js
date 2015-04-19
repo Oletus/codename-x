@@ -10,8 +10,10 @@ var SideBar = function() {
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
     
+    // Not shown, only here so functions can be reused:
     this.codeNameElement = document.createElement('p');
     this.researchTimeElement = document.createElement('p');
+    this.proposalElement = document.createElement('p');
 
     this.setUnit(null);
 };
@@ -67,6 +69,7 @@ SideBar.prototype.setUnit = function(unit) {
         this.unitNameElement.textContent = unit.name;
         this.codeNameElement.textContent = 'CODENAME: ' + unit.codename;
         this.descriptionElement.textContent = unit.description;
+        this.proposalElement.textContent = unit.proposal;
         if (unit.singleUse) {
             this.singleUseElement.textContent = 'SINGLE USE. This unit will be destroyed once used.';
         } else {
