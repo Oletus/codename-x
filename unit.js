@@ -134,8 +134,7 @@ Unit.TypeData = [
         scientist: 'Dr. T. Wausau',
         properties: ['armor', 'air', 'land'],
         riskFactor: 0.1,
-        researchTime: 3,
-        against: {'air': 2}
+        researchTime: 3
     },
     {
         name: 'Iceberg ships',
@@ -163,10 +162,11 @@ Unit.TypeData = [
         riskFactor: 0.1,
         codename: 'Triebflügel',
         projectId: 6567,
-        description: 'An aircraft with three blades powered by rockets. Vertical take off, speed, well-armoured.',
+        description: 'An aircraft with three blades powered by rockets. Vertical take off, high speed, well-armoured. An effective anti-air unit.',
         scientist: 'Dr. Vay Daar',
         researchTime: 4,
-        properties: ['air', 'armor']
+        properties: ['air', 'armor'],
+        against: { 'air': 2 }
     },
     {
         name: 'Pheromone gas',
