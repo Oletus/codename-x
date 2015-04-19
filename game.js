@@ -1,30 +1,5 @@
 'use strict';
 
-var Side = function(options) {
-    var defaults = {
-        name: '',
-        color: '#000',
-    };
-    for(var key in defaults) {
-        if (!options.hasOwnProperty(key)) {
-            this[key] = defaults[key];
-        } else {
-            this[key] = options[key];
-        }
-    }
-};
-
-Side.Sides = [
-    {
-        name: 'axis',
-        color: '#a00'
-    },
-    {
-        name: 'allies',
-        color: '#46f'
-    }
-];
-
 var Game = function(canvas) {
     this.bgSprite = new Sprite('background.jpg');
     this.infoPanelsSprite = new Sprite('info_panels.png');
