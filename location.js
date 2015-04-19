@@ -4,7 +4,6 @@ var Location = function(options) {
     var defaults = {
         name: '',
         unit: null, // Unit object
-        lastTurnUnit: null,
         terrain: null, // an array of strings
         side: null,
         currentSide: null,
@@ -19,18 +18,50 @@ var Location = function(options) {
             this[key] = options[key];
         }
     }
+    this.lastTurnEffectiveness = 0;
+    this.lastTurnUnit = null;
+    this.animationProgress = 0;
+    this.messageLog = [];
 };
 
 Location.prototype.getVisibleUnit = function() {
-    if ( this.side == this.currentSide || this.lastTurnUnit == null ) {
+    if (this.lastTurnUnit == null || (this.side == this.currentSide && this.isAnimationComplete())) {
         return this.unit;
     } else {
         return this.lastTurnUnit;
     }
 };
 
+Location.prototype.isAnimationComplete = function() {
+    return this.animationProgress >= this.messageLog.length;
+}
+
 Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
-    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.getVisibleUnit(), button);
+    var x = button.visualX();
+    var y = button.visualY();
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.getVisibleUnit(), button);
+    var logIndex = Math.floor(this.animationProgress);
+    
+    var animY = 1.0;
+    if (logIndex >= this.messageLog.length) {
+        logIndex = this.messageLog.length - 1;
+    } else {
+        animY = mathUtil.fmod(this.animationProgress, 1.0);
+    }
+    if (this.animationProgress > 0) {
+        ctx.textAlign = 'center';
+        ctx.font = '16px special_eliteregular';
+        ctx.fillStyle = '#fff'
+        ctx.fillText(this.messageLog[logIndex], x, y - animY * 10 - 50);
+    }
+};
+
+Location.prototype.update = function(deltaTime) {
+    this.animationProgress += deltaTime;
+};
+
+Location.prototype.resetAnimation = function() {
+    this.animationProgress = 0;
 };
 
 var Connection = function(options) {
@@ -49,8 +80,6 @@ var Connection = function(options) {
     }
     this.locationA.connections.push(this);
     this.locationB.connections.push(this);
-    this.lastTurnAEffectiveness = 0;
-    this.lastTurnBEffectiveness = 0;
 };
 
 Connection.prototype.setCurrentSide = function(faction) {
@@ -68,10 +97,13 @@ Connection.prototype.resolveCombat = function() {
         return;
     }
 
-    this.lastTurnAEffectiveness = locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain);
-    sideAAdvances += this.lastTurnAEffectiveness;
-    this.lastTurnBEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain);
-    sideAAdvances -= this.lastTurnBEffectiveness;
+    locationA.messageLog = [];
+    locationA.lastTurnEffectiveness = locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain, locationA.messageLog);
+    sideAAdvances += locationA.lastTurnEffectiveness;
+
+    locationB.messageLog = [];
+    locationB.lastTurnEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain, locationB.messageLog);
+    sideAAdvances -= locationB.lastTurnEffectiveness;
 
     this.sideAAdvantage += sideAAdvances;
     if (this.sideAAdvantage <= 0) {
@@ -92,7 +124,18 @@ Connection.prototype.isBattleOver = function() {
     return this.sideAAdvantage == 0 || this.sideAAdvantage == this.steps;
 };
 
-Connection.prototype.update = function(deltaTime) {
+Connection.prototype.update = function(deltaTime, state) {
+    var animationInProgress = false;
+    if (state === Game.State.PLAYING) {
+        if (!this.locationA.isAnimationComplete()) {
+            this.locationA.update(deltaTime);
+            animationInProgress = true;
+        } else if (!this.locationB.isAnimationComplete()) {
+            this.locationB.update(deltaTime);
+            animationInProgress = true;
+        }
+    }
+    return animationInProgress;
 };
 
 Connection.prototype.render = function(ctx) {
@@ -124,11 +167,11 @@ Connection.prototype.render = function(ctx) {
     }
     ctx.restore();
     
-    if (!this.isBattleOver()) {
+    /*if (!this.isBattleOver()) {
         ctx.fillStyle = '#fff';
         ctx.font = '16px special_eliteregular';
         ctx.textAlign = 'center';
         ctx.fillText('Last turn: ' + this.lastTurnAEffectiveness, locA.x, locA.y - 40);
         ctx.fillText('Last turn: ' + this.lastTurnBEffectiveness, locB.x, locB.y - 40);
-    }
+    }*/
 };

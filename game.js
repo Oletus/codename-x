@@ -467,6 +467,9 @@ Game.prototype.nextPhase = function() {
         for (var i = 0; i < this.connections.length; ++i) {
             this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
         }
+        for (var i = 0; i < this.locations.length; ++i) {
+            this.locations[i].resetAnimation();
+        }
 
         // Set research options for this turn
         this.chosenResearch = null;
@@ -543,11 +546,17 @@ Game.prototype.isGameOver = function() {
 Game.prototype.update = function(deltaTime) {
     this.time += deltaTime;
 
+    var animationInProgress = false;
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].update(deltaTime);
     }
-    this.factions[this.currentTurnSide].update(deltaTime, this.state);
+    animationInProgress = this.factions[this.currentTurnSide].update(deltaTime, this.state);
     this.setPotentialResearch();
+    for (var i = 0; i < this.connections.length; ++i) {
+        if (!animationInProgress) {
+            animationInProgress = this.connections[i].update(deltaTime, this.state);
+        }
+    }
     
     if (this.state === Game.State.PRE_TURN) {
         this.preturnFade += deltaTime * 3;

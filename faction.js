@@ -110,7 +110,12 @@ Faction.prototype.sortReserve = function() {
     });
 };
 
+/** 
+ * @param {number} deltaTime Time passed in seconds. If undefined, effects will be resolved instantly for AI turn.
+ * @return {boolean} True if animations are still in progress.
+ */
 Faction.prototype.update = function(deltaTime, state) {
+    var animationsInProgress = false;
     if (state === Game.State.PLAYING || state === Game.State.RESEARCH_PROPOSALS) {
         for (var i = 0; i < this.currentResearch.length;) {
             var res = this.currentResearch[i];
@@ -127,6 +132,7 @@ Faction.prototype.update = function(deltaTime, state) {
                             completed = true;
                         }
                     } else {
+                        animationsInProgress = true;
                         break;
                     }
                 }
@@ -141,6 +147,7 @@ Faction.prototype.update = function(deltaTime, state) {
             }
         }
     }
+    return animationsInProgress;
 };
 
 Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
@@ -157,6 +164,7 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
         ctx.fillRect(x + 50, y + 5, completion * barWidth, 10);
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'right';
+        ctx.font = '16px special_eliteregular';
         ctx.fillText('Turns left : ' + this.currentResearch[i].getTurnsLeft(), x + 50 + barWidth, y - 10);
 
         Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.currentResearch[i].unitType, button);

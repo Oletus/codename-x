@@ -311,7 +311,7 @@ Unit.Types = [];
     }
 })();
 
-Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
+Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, msgLog) {
     // Define helper variables
     var i, property;
 
@@ -322,25 +322,36 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
     //}
 
     if (this.power >= 10) {
+        msgLog.push('ULTIMATE ATTACK: ' + this.power);
         return this.power;
     }
 
     if (this.perfectDefense || unitB.perfectDefense) {
+        msgLog.push('STALEMATE!');
         return 0;
+    }
+    
+    if (this.power != 0) {
+        msgLog.push('Base effectiveness: ' + this.power);
     }
 
     for (i = 0; i < unitB.properties.length; ++i) {
         property = unitB.properties[i];
         if (this.against.hasOwnProperty(property)) {
-            effectiveness += this.against[property];
+            var modifier = this.against[property];
+            msgLog.push('Against ' + property + ': ' + modifier);
+            effectiveness += modifier;
         }
     }
     for (i = 0; i < terrain.length; ++i) {
         property = terrain[i];
         if (this.against.hasOwnProperty(property)) {
-            effectiveness += this.against[property];
+            var modifier = this.against[property];
+            msgLog.push(property + ' terrain: ' + modifier);
+            effectiveness += modifier;
         }
     }
+    msgLog.push(this.name + ' total: ' + effectiveness);
     return effectiveness;
 };
 
