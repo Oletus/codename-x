@@ -67,7 +67,7 @@ Game.prototype.createUI = function() {
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
 
-    this.sidebar = new SideBar(this, this.canvas);
+    this.sidebar = new SideBar();
 
     Game.BackgroundMusic.playSingular(true);
 

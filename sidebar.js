@@ -1,24 +1,21 @@
 'use strict';
 
-var SideBar = function(game, canvas) {
-    this.sidebarDiv = document.createElement('div');
-    this.sidebarDiv.id = 'sidebar';
-    canvasWrapper.appendChild(this.sidebarDiv);
-    this.unitNameElement = this.appendToSidebar('h2');
-    this.descriptionElement = this.appendToSidebar('p');
-    this.powerElement = this.appendToSidebar('p');
-    this.attributesElement = this.appendToSidebar('div');
-    this.researchTimeElement = this.appendToSidebar('p');
+var SideBar = function() {
+    this.mainDiv = document.createElement('div');
+    this.mainDiv.id = 'sidebar';
+    canvasWrapper.appendChild(this.mainDiv);
+    this.unitNameElement = this.appendToThis('h2');
+    this.descriptionElement = this.appendToThis('p');
+    this.powerElement = this.appendToThis('p');
+    this.attributesElement = this.appendToThis('div');
+    this.researchTimeElement = document.createElement('p');
 
-    this.game = game;
-    this.canvas = canvas;
-    this.ctx = this.canvas.getContext('2d');
     this.unit = null;
 };
 
-SideBar.prototype.appendToSidebar = function(type) {
+SideBar.prototype.appendToThis = function(type) {
     var element = document.createElement(type);
-    this.sidebarDiv.appendChild(element);
+    this.mainDiv.appendChild(element);
     return element;
 };
 
@@ -50,7 +47,7 @@ SideBar.prototype.appendToAttributes = function(options) {
 };
 
 SideBar.prototype.render = function() {
-    this.sidebarDiv.style.transform = 'scale(' + resizer.getScale() + ')';
+    this.mainDiv.style.transform = 'scale(' + resizer.getScale() + ')';
 };
 
 SideBar.prototype.update = function(deltaTime) {
@@ -60,7 +57,7 @@ SideBar.prototype.update = function(deltaTime) {
 SideBar.prototype.setUnit = function(unit) {
     this.unit = unit;
     if (unit !== null) {
-        this.sidebarDiv.style.display = 'inline';
+        this.mainDiv.style.display = 'inline';
         this.unitNameElement.textContent = unit.name;
         this.descriptionElement.textContent = unit.description;
         this.powerElement.textContent = 'Power: ' + unit.power;
@@ -75,6 +72,6 @@ SideBar.prototype.setUnit = function(unit) {
             }
         }
     } else {
-        this.sidebarDiv.style.display = 'none';
+        this.mainDiv.style.display = 'none';
     }
-}
+};
