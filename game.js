@@ -27,6 +27,7 @@ Side.Sides = [
 
 var Game = function(canvas) {
     this.bgSprite = new Sprite('background.jpg');
+    this.infoPanelsSprite = new Sprite('info_panels.png');
     this.turnPanelSprite = new Sprite('turn_panel.png');
     this.redGlowSprite = new Sprite('red_glow.png');
     this.canvas = canvas;
@@ -141,8 +142,8 @@ Game.prototype.createUI = function() {
     }
 
     var addPotentialResearchButton = function(j) {
-        var x = 1000;
-        var y = 500;
+        var x = 630;
+        var y = 400;
         var button = new CanvasButton({
             label: 'Potential research ' + j,
             centerX: x + j * 130,
@@ -159,6 +160,7 @@ Game.prototype.createUI = function() {
             clickCallback: function() {
                 if (j < that.potentialResearch.length) {
                     that.chosenResearch = that.potentialResearch[j];
+                    that.sidebar.setUnit(that.chosenResearch);
                 }
             }
         });
@@ -290,13 +292,17 @@ Game.prototype.render = function() {
         this.factions[i].render(this.ctx);
     }
     
-    this.sidebar.render();
-    
     if (this.preturnFade > 0) {
         this.ctx.globalAlpha = this.preturnFade;
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
+
+    this.ctx.globalAlpha = 1.0;
+    this.infoPanelsSprite.fillCanvas(this.ctx);
+    
+    this.sidebar.render();
+    
     this.ctx.globalAlpha = 1.0;
     this.turnPanelSprite.draw(this.ctx, this.ctx.canvas.width - this.turnPanelSprite.width, this.ctx.canvas.height - this.turnPanelSprite.height);
 
@@ -309,7 +315,8 @@ Game.prototype.render = function() {
         var header = 'Get prepared for turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
-        this.ctx.fillText(header, this.ctx.canvas.width * 0.5, this.ctx.canvas.height * 0.5);
+        this.ctx.font = '30px sans-serif';
+        this.ctx.fillText(header, 670, 400);
     }
     return this.ctx;
 };
