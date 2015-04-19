@@ -324,6 +324,7 @@ Game.prototype.nextPhase = function() {
                     res = this.potentialResearch[i];
                 }
                 this.researchProposals[i].setUnit(res);
+                this.researchProposals[i].hilight(false);
             }
             this.chosenResearch = null;
             this.setUIActive(this.researchUI, true);
