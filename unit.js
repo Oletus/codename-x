@@ -83,7 +83,7 @@ Unit.TypeData = [
     },
     // TIER 1 UNITS
     {
-        name: 'Fruit bat firebombs',
+        name: 'Fruit Bat Firebombs',
         projectId: 5459,
         codename: 'Bat-bombs',
         proposal: 'Fruit bats will be equipped with tiny incendiary time bombs and released over enemy territory. They will carry the bombs into buildings and set them on fire.',
@@ -148,7 +148,7 @@ Unit.TypeData = [
         properties: ['sea']
     },
     {
-        name: 'Meth-fueled infantry',
+        name: 'Meth-fueled Infantry',
         riskFactor: 0.2,
         researchTime: 1,
         codename: 'Happy-Happy Pill',
@@ -197,7 +197,7 @@ Unit.TypeData = [
         exclusiveFaction: getFaction('allies')
     },
     {
-        name: 'Psychic Dogs',
+        name: 'Surveillance Dogs',
         codename: 'His Master’s Voice',
         projectId: 9033,
         proposal: 'Our specialized canine school proposes to train dogs to speak. They can be then sent into enemy territory to gather intelligence and report back.',
@@ -237,7 +237,7 @@ Unit.TypeData = [
         against: {'wet': -1}
     },
     {
-        name: '"Who? Me?" stench weapon',
+        name: '"Stench Gas',
         codename: 'Who? Me?',
         projectId: 4037,
         description: 'A concoction of gases that smell strongly of a substance commonly known as “poo” can be sprayed on enemy officers to embarrass and demoralize them. Terrifying against targets within vehicles.',
@@ -248,7 +248,7 @@ Unit.TypeData = [
         against: {'armor': 1, 'air': -1}
     },
     {
-        name: 'Acoustic Kitty',
+        name: 'Surveillance Cats',
         codename: 'Acoustic Kitty',
         projectId: 1038,
         description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
@@ -284,7 +284,7 @@ Unit.TypeData = [
         properties: ['space']
     },
     {
-        name: 'Chicken-warmed nuclear landmines',
+        name: 'Chicken-warmed Nuclear Landmines',
         codename: 'Feeling Clucky',
         projectId: 9076,
         description: 'In order to protect our most strategically valuable cities, we can surround them with nuclear landmines. We will bury the mine with live chickens, which will keep the mechanisms warm through the winter. Halts the enemy advance absolutely on a single front.',
