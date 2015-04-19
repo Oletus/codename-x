@@ -370,11 +370,29 @@ Game.prototype.setUIActive = function(uiGroup, active) {
     }
 };
 
+Game.prototype.getFaction = function(side) {
+    for (var i = 0; i < this.factions.length; ++i) {
+        if (this.factions[i].side === side) {
+            return this.factions[i];
+        }
+    }
+    return null;
+};
+
 Game.prototype.resolveTurn = function() {
     ++this.turnNumber;
 
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].resolveCombat();
+    }
+    for (var i = 0; i < this.locations.length; ++i) {
+        // Assign conventional army to locations where single-use units were used.
+        if (this.locations[i].unit.singleUse) {
+            var faction = this.getFaction(this.locations[i].side);
+            var unit = faction.getCheapestReserveUnit();
+            faction.removeReserve(unit);
+            this.locations[i].unit = unit;
+        }
     }
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].advanceResearch();

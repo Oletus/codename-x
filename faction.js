@@ -79,6 +79,18 @@ Faction.prototype.removeReserve = function(reserveUnit) {
     }
 };
 
+Faction.prototype.getCheapestReserveUnit = function() {
+    var minTier = 5;
+    var minUnit;
+    for (var i = 0; i < this.reserve.length; ++i) {
+        if (this.reserve[i].tier < minTier) {
+            minTier = this.reserve[i].tier;
+            minUnit = this.reserve[i];
+        }
+    }
+    return minUnit;
+};
+
 Faction.prototype.advanceResearch = function() {
     for (var i = 0; i < this.currentResearch.length;) {
         var res = this.currentResearch[i];
