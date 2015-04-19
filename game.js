@@ -146,7 +146,7 @@ Game.prototype.createUI = function() {
                 location.render(ctx, cursorOn, buttonDown, button);
             },
             clickCallback: function() {
-                that.sidebar.setUnit(location.unit);
+                that.sidebar.setUnit(location.getVisibleUnit());
             }
         });
         that.uiButtons.push(button);

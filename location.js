@@ -21,12 +21,16 @@ var Location = function(options) {
     }
 };
 
-Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
+Location.prototype.getVisibleUnit = function() {
     if ( this.side == this.currentSide || this.lastTurnUnit == null ) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.unit, button);
+        return this.unit;
     } else {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.lastTurnUnit, button);
-    }  
+        return this.lastTurnUnit;
+    }
+};
+
+Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.getVisibleUnit(), button);
 };
 
 var Connection = function(options) {
