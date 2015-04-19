@@ -17,7 +17,8 @@ var Unit = function(options) {
         isRecon: false,
         properties: [],
         against: {},
-        riskFactor: 0
+        riskFactor: 0,
+        exclusiveFaction: undefined
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -134,7 +135,8 @@ Unit.TypeData = [
         scientist: 'Dr. T. Wausau',
         properties: ['armor', 'air', 'land'],
         riskFactor: 0.1,
-        researchTime: 3
+        researchTime: 3,
+        power: 2
     },
     {
         name: 'Iceberg ships',
@@ -166,7 +168,8 @@ Unit.TypeData = [
         scientist: 'Dr. Vay Daar',
         researchTime: 4,
         properties: ['air', 'armor'],
-        against: { 'air': 2 }
+        against: { 'air': 2 },
+        exclusiveFaction: getFaction('axis')
     },
     {
         name: 'Pheromone gas',
@@ -189,7 +192,9 @@ Unit.TypeData = [
         researchTime: 4,
         riskFactor: 0.1,
         singleUse: true,
-        properties: ['land']
+        properties: ['land'],
+        against: { 'land': 2 },
+        exclusiveFaction: getFaction('allies')
     },
     {
         name: 'Psychic Dogs',
