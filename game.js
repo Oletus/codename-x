@@ -51,6 +51,9 @@ var Game = function(canvas) {
     this.currentTurnSide = 0; // Index to Side.Sides
     this.state = Game.State.PRE_TURN;
     
+    this.potentialResearch = [];
+    this.chosenResearch = null;
+    
     this.downButton = null;
     this.createUI();
 
@@ -75,8 +78,9 @@ var Game = function(canvas) {
 
 Game.State = {
     PRE_TURN: 0, // blank screen so that the players don't see each other's intel
-    PLAYING: 1,
-    FINISHED: 2
+    RESEARCH_PROPOSALS: 1,
+    PLAYING: 2,
+    FINISHED: 3
 };
 
 Game.BackgroundMusic = new Audio('Codename_X_theme');
@@ -85,6 +89,7 @@ Game.VictoryMusic = new Audio('Victory_fanfare');
 Game.prototype.createUI = function() {
     this.uiButtons = [];
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
+    this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
 
     this.sidebar = new SideBar(this, this.canvas);
 
@@ -100,10 +105,10 @@ Game.prototype.createUI = function() {
         width: 70,
         height: 70,
         clickCallback: function() {
-            that.nextTurn();
+            that.nextPhase();
         },
         renderFunc: function(ctx, cursorOn, buttonDown, button) {
-            var glowAmount = that.nextTurnGlowAmount();
+            var glowAmount = that.nextPhaseGlowAmount();
             if (glowAmount > 0) {
                 ctx.globalAlpha = glowAmount;
                 that.redGlowSprite.drawRotated(ctx, button.visualX(), button.visualY());
@@ -136,8 +141,8 @@ Game.prototype.createUI = function() {
     }
 
     var addPotentialResearchButton = function(j) {
-        var x = 1560;
-        var y = 700;
+        var x = 1000;
+        var y = 500;
         var button = new CanvasButton({
             label: 'Potential research ' + j,
             centerX: x + j * 130,
@@ -153,13 +158,12 @@ Game.prototype.createUI = function() {
             },
             clickCallback: function() {
                 if (j < that.potentialResearch.length) {
-                    that.factions[that.currentTurnSide].startResearch(that.potentialResearch[j]);
-                    that.potentialResearch = [];
+                    that.chosenResearch = that.potentialResearch[j];
                 }
             }
         });
         that.uiButtons.push(button);
-        that.playingUI.push(button);
+        that.researchUI.push(button);
     }
     for (var i = 0; i < 3; ++i) {
         addPotentialResearchButton(i);
@@ -222,7 +226,7 @@ Game.prototype.createUI = function() {
     for (var i = 0; i < this.factions.length; ++i) {
         addFactionUI(this.factions[i]);
     }
-    this.setPlayingUIActive(false);
+    this.setUIActive(this.playingUI, false);
 };
 
 Game.LocationParameters = [
@@ -310,20 +314,29 @@ Game.prototype.render = function() {
     return this.ctx;
 };
 
-Game.prototype.nextTurn = function() {
+Game.prototype.nextPhase = function() {
     if (this.state == Game.State.PRE_TURN) {
         var currentFaction = this.factions[this.currentTurnSide];
-        this.potentialResearch = [];
         currentFaction.showUI(true);
         var potentialResearch = currentFaction.getPotentialResearch();
         if (currentFaction.researchSlotAvailable() && potentialResearch.length > 0) {
             this.potentialResearch = potentialResearch;
         }
-        this.state = Game.State.PLAYING;
-        this.setPlayingUIActive(true);
+        if (this.potentialResearch.length > 0) {
+            this.state = Game.State.RESEARCH_PROPOSALS;
+            this.setUIActive(this.researchUI, true);
+        } else {
+            this.startPlayingPhase();
+        }
 
         for (var i = 0; i < this.connections.length; ++i) {
             this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
+        }
+    } else if (this.state == Game.State.RESEARCH_PROPOSALS) {
+        if (this.chosenResearch !== null) {
+            this.factions[this.currentTurnSide].startResearch(this.chosenResearch);
+            this.potentialResearch = [];
+            this.startPlayingPhase();
         }
     } else if (this.state == Game.State.PLAYING) {
         this.factions[this.currentTurnSide].showUI(false);
@@ -334,13 +347,19 @@ Game.prototype.nextTurn = function() {
         }
         this.sidebar.setUnit(null);
         this.state = Game.State.PRE_TURN;
-        this.setPlayingUIActive(false);
+        this.setUIActive(this.playingUI, false);
     }
 };
 
-Game.prototype.setPlayingUIActive = function(active) {
-    for (var i = 0; i < this.playingUI.length; ++i) {
-        this.playingUI[i].active = active;
+Game.prototype.startPlayingPhase = function() {
+    this.state = Game.State.PLAYING;
+    this.setUIActive(this.researchUI, false);
+    this.setUIActive(this.playingUI, true);
+};
+
+Game.prototype.setUIActive = function(uiGroup, active) {
+    for (var i = 0; i < uiGroup.length; ++i) {
+        uiGroup[i].active = active;
     }
 };
 
@@ -382,6 +401,9 @@ Game.prototype.update = function(deltaTime) {
             this.preturnFade = 1;
         }
     }
+    if (this.state === Game.State.RESEARCH_PROPOSALS) {
+        
+    }
     if (this.state === Game.State.PLAYING) {
         this.preturnFade -= deltaTime * 3;
         if (this.preturnFade < 0) {
@@ -390,7 +412,7 @@ Game.prototype.update = function(deltaTime) {
     }
 };
 
-Game.prototype.nextTurnGlowAmount = function() {
+Game.prototype.nextPhaseGlowAmount = function() {
     return Math.sin(this.time * 2) * 0.5 + 0.3;
 };
 
