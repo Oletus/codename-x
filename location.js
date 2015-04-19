@@ -34,7 +34,7 @@ Location.prototype.getVisibleUnit = function() {
 
 Location.prototype.isAnimationComplete = function() {
     return this.animationProgress >= this.messageLog.length;
-}
+};
 
 Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
     var x = button.visualX();
@@ -48,7 +48,7 @@ Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
     } else {
         animY = mathUtil.fmod(this.animationProgress, 1.0);
     }
-    if (this.animationProgress > 0) {
+    if (this.animationProgress > 0 && logIndex >= 0) {
         ctx.textAlign = 'center';
         ctx.font = '16px special_eliteregular';
         ctx.fillStyle = '#fff'
@@ -78,6 +78,7 @@ var Connection = function(options) {
             this[key] = options[key];
         }
     }
+    this.lastTurnAAdvantage = 0;
     this.locationA.connections.push(this);
     this.locationB.connections.push(this);
 };
@@ -85,26 +86,26 @@ var Connection = function(options) {
 Connection.prototype.setCurrentSide = function(faction) {
     this.locationA.currentSide = faction;
     this.locationB.currentSide = faction;
-}
+};
 
 Connection.prototype.resolveCombat = function() {
     var locationA = this.locationA,
         locationB = this.locationB;
 
-    var sideAAdvances = 0;
+    locationA.messageLog = [];
+    locationB.messageLog = [];
 
     if (this.isBattleOver()) {
         return;
     }
 
-    locationA.messageLog = [];
+    var sideAAdvances = 0;
     locationA.lastTurnEffectiveness = locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain, locationA.messageLog);
     sideAAdvances += locationA.lastTurnEffectiveness;
-
-    locationB.messageLog = [];
     locationB.lastTurnEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain, locationB.messageLog);
     sideAAdvances -= locationB.lastTurnEffectiveness;
 
+    this.lastTurnAAdvantage = this.sideAAdvantage;
     this.sideAAdvantage += sideAAdvances;
     if (this.sideAAdvantage <= 0) {
         this.sideAAdvantage = 0;
@@ -166,12 +167,4 @@ Connection.prototype.render = function(ctx) {
         ctx.translate(-x, -y);
     }
     ctx.restore();
-    
-    /*if (!this.isBattleOver()) {
-        ctx.fillStyle = '#fff';
-        ctx.font = '16px special_eliteregular';
-        ctx.textAlign = 'center';
-        ctx.fillText('Last turn: ' + this.lastTurnAEffectiveness, locA.x, locA.y - 40);
-        ctx.fillText('Last turn: ' + this.lastTurnBEffectiveness, locB.x, locB.y - 40);
-    }*/
 };
