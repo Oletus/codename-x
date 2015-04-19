@@ -5,6 +5,7 @@ var Game = function(canvas) {
     this.infoPanelsSprite = new Sprite('info_panels.png');
     this.turnPanelSprite = new Sprite('turn_panel.png');
     this.redGlowSprite = new Sprite('red_glow.png');
+    this.blueGlowSprite = new Sprite('red_glow.png', '#ff8');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
 
@@ -29,6 +30,7 @@ var Game = function(canvas) {
     
     this.potentialResearch = [];
     this.chosenResearch = null;
+    this.researchGlowAmount = 0; // visual glow for the research button;
     
     this.downButton = null;
     this.createUI();
@@ -100,7 +102,7 @@ Game.prototype.createUI = function() {
         this.researchHTML.appendChild(proposal.mainDiv);
     }
     var approveResearchButton = new CanvasButton({
-        label: 'Approve Research',
+        label: 'Choose Research',
         centerX: 720,
         centerY: 750,
         width: 200,
@@ -114,6 +116,25 @@ Game.prototype.createUI = function() {
 
     Game.BackgroundMusic.playSingular(true);
 
+    // research toggle button
+    this.uiButtons.push(new CanvasButton({
+        label: '',
+        centerX: 1457,
+        centerY: 1013,
+        width: 70,
+        height: 70,
+        clickCallback: function() {
+            that.showResearchUI(that.state === Game.State.PLAYING);
+        },
+        renderFunc: function(ctx, cursorOn, buttonDown, button) {
+            var glowAmount = that.researchGlowAmount;
+            if (glowAmount > 0) {
+                ctx.globalAlpha = glowAmount;
+                that.blueGlowSprite.drawRotated(ctx, button.visualX(), button.visualY());
+            }
+        }
+    }));
+    
     // next turn button
     this.uiButtons.push(new CanvasButton({
         label: '',
@@ -314,7 +335,7 @@ Game.prototype.render = function() {
     var side = Side.Sides[this.currentTurnSide];
     if (this.state === Game.State.PRE_TURN) {
         this.ctx.globalAlpha = 1.0;
-        var header = 'Get prepared for turn number ' + this.turnNumber + ', playing as ' + side.name + '.';
+        var header = side.name + ' player, get ready for turn #' + this.turnNumber + '.';
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
         this.ctx.font = '30px special_eliteregular';
@@ -323,66 +344,74 @@ Game.prototype.render = function() {
     return this.ctx;
 };
 
-Game.prototype.approveResearch = function() {
-    this.nextPhase();
-};
-
-Game.prototype.nextPhase = function() {
-    if (this.state == Game.State.PRE_TURN) {
-        var currentFaction = this.factions[this.currentTurnSide];
-        currentFaction.showUI(true);
-        var potentialResearch = currentFaction.getPotentialResearch();
-        if (currentFaction.researchSlotAvailable() && potentialResearch.length > 0) {
-            this.potentialResearch = potentialResearch;
-        }
-        this.setUIActive(this.preTurnUI, false);
+Game.prototype.showResearchUI = function(show) {
+    if (show) {
         if (this.potentialResearch.length > 0) {
             this.state = Game.State.RESEARCH_PROPOSALS;
+            this.researchHTML.style.display = 'block';
             for (var i = 0; i < 3; ++i) {
                 var res = null;
                 if (i < this.potentialResearch.length) {
                     res = this.potentialResearch[i];
                 }
                 this.researchProposals[i].setUnit(res);
-                this.researchProposals[i].hilight(false);
+                var hilight = this.researchProposals[i] === this.chosenResearch;
+                this.researchProposals[i].hilight(hilight);
             }
-            this.chosenResearch = null;
+            this.setUIActive(this.playingUI, false);
             this.setUIActive(this.researchUI, true);
-            this.researchHTML.style.display = 'block';
-        } else {
-            this.startPlayingPhase();
         }
+    } else {
+        this.state = Game.State.PLAYING;
+        this.researchHTML.style.display = 'none';
+        this.setUIActive(this.researchUI, false);
+        this.setUIActive(this.playingUI, true);
+    }
+}
 
-        for (var i = 0; i < this.connections.length; ++i) {
-            this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
-        }
-    } else if (this.state == Game.State.RESEARCH_PROPOSALS) {
-        if (this.chosenResearch !== null) {
-            this.factions[this.currentTurnSide].startResearch(this.chosenResearch);
-            this.potentialResearch = [];
-            this.researchHTML.style.display = 'none';
-            this.startPlayingPhase();
-        }
-    } else if (this.state == Game.State.PLAYING) {
-        this.factions[this.currentTurnSide].showUI(false);
-        ++this.currentTurnSide;
-        if (this.currentTurnSide === Side.Sides.length) {
-            this.currentTurnSide = 0;
-            this.resolveTurn();
-        }
-        this.sidebar.setUnit(null);
-        this.state = Game.State.PRE_TURN;
-        this.setUIActive(this.playingUI, false);
-        this.setUIActive(this.preTurnUI, true);
+Game.prototype.approveResearch = function() {
+    if (this.chosenResearch !== null) {    
+        this.factions[this.currentTurnSide].startResearch(this.chosenResearch);
+        this.potentialResearch = [];
+        this.showResearchUI(false);
     }
 };
 
-Game.prototype.startPlayingPhase = function() {
-    this.state = Game.State.PLAYING;
-    this.setUIActive(this.researchUI, false);
-    this.setUIActive(this.playingUI, true);
-    for (var i = 0; i < 3; ++i) {
-        this.researchProposals[i].setUnit(null);
+Game.prototype.nextPhase = function() {
+    if (this.state == Game.State.PRE_TURN) {
+        // Out from pre-turn UI
+        this.setUIActive(this.preTurnUI, false);
+        
+        // Get into the playing UI
+        var currentFaction = this.factions[this.currentTurnSide];
+        currentFaction.showUI(true);
+        for (var i = 0; i < this.connections.length; ++i) {
+            this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
+        }
+
+        // Set research options for this turn
+        this.chosenResearch = null;
+        var potentialResearch = currentFaction.getPotentialResearch();
+        if (currentFaction.researchSlotAvailable() && potentialResearch.length > 0) {
+            this.potentialResearch = potentialResearch;
+        } else {
+            this.potentialResearch = [];
+        }
+        this.state = Game.State.PLAYING;
+        this.setUIActive(this.playingUI, true);
+    } else if (this.state == Game.State.PLAYING) {
+        if (this.potentialResearch.length == 0) {
+            this.factions[this.currentTurnSide].showUI(false);
+            ++this.currentTurnSide;
+            if (this.currentTurnSide === Side.Sides.length) {
+                this.currentTurnSide = 0;
+                this.resolveTurn();
+            }
+            this.sidebar.setUnit(null);
+            this.state = Game.State.PRE_TURN;
+            this.setUIActive(this.playingUI, false);
+            this.setUIActive(this.preTurnUI, true);
+        }
     }
 };
 
@@ -442,14 +471,11 @@ Game.prototype.update = function(deltaTime) {
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].update(deltaTime);
     }
-    if (this.state === Game.State.PRE_TURN) {
+    if (this.state === Game.State.PRE_TURN || this.state === Game.State.RESEARCH_PROPOSALS) {
         this.preturnFade += deltaTime * 3;
         if (this.preturnFade > 1) {
             this.preturnFade = 1;
         }
-    }
-    if (this.state === Game.State.RESEARCH_PROPOSALS) {
-        
     }
     if (this.state === Game.State.PLAYING) {
         this.preturnFade -= deltaTime * 3;
@@ -457,10 +483,24 @@ Game.prototype.update = function(deltaTime) {
             this.preturnFade = 0;
         }
     }
+    if (this.potentialResearch.length > 0) {
+        if (this.state === Game.State.PLAYING) {
+            this.researchGlowAmount += deltaTime * 10 * Math.sin(this.time * 20.0);
+        } else if (this.state === Game.State.RESEARCH_PROPOSALS) {
+            this.researchGlowAmount += deltaTime * 3;
+        }
+    } else {
+        this.researchGlowAmount -= deltaTime * 3;
+    }
+    this.researchGlowAmount = mathUtil.clamp(0, 1, this.researchGlowAmount);
 };
 
 Game.prototype.nextPhaseGlowAmount = function() {
-    return Math.sin(this.time * 2) * 0.5 + 0.3;
+    if (this.potentialResearch.length > 0) {
+        return 0;
+    } else {
+        return Math.sin(this.time * 2) * 0.5 + 0.3;
+    }
 };
 
 Game.prototype.setCursorPosition = function(vec) {
