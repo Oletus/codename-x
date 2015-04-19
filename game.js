@@ -37,6 +37,9 @@ var Game = function(canvas) {
     this.canvas.addEventListener('mousemove', function(event) {
         that.setCursorPosition(resizer.getCanvasPosition(event));
     });
+    this.canvas.addEventListener('touchmove', function(event) {
+        that.setCursorPosition(resizer.getCanvasPosition(event));
+    });
     this.canvas.addEventListener('mousedown', function(event) {
         that.click(resizer.getCanvasPosition(event));
     });
