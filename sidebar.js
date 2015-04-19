@@ -6,6 +6,7 @@ var SideBar = function() {
     canvasWrapper.appendChild(this.mainDiv);
     this.unitNameElement = this.appendToThis('h2');
     this.descriptionElement = this.appendToThis('p');
+    this.singleUseElement = this.appendToThis('p');
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
     
@@ -66,6 +67,11 @@ SideBar.prototype.setUnit = function(unit) {
         this.unitNameElement.textContent = unit.name;
         this.codeNameElement.textContent = 'CODENAME: ' + unit.codename;
         this.descriptionElement.textContent = unit.description;
+        if (unit.singleUse) {
+            this.singleUseElement.textContent = 'SINGLE USE. This unit will be destroyed once used.';
+        } else {
+            this.singleUseElement.textContent = '';
+        }
         this.powerElement.textContent = 'Power: ' + unit.power;
         this.researchTimeElement.textContent = 'Research time: ' + unit.researchTime;
         this.attributesElement.innerHTML = '';

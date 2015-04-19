@@ -33,7 +33,11 @@ var Unit = function(options) {
     }
 
     if (this.power === undefined) {
-        this.power = this.tier;
+        if (this.singleUse) {
+            this.power = this.tier * 2;
+        } else {
+            this.power = this.tier;
+        }
     }
 };
 

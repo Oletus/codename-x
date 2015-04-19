@@ -8,6 +8,7 @@ var ResearchProposal = function(index, select) {
     this.unitNameElement = this.appendToThis('h2');
     this.codeNameElement = this.appendToThis('h3', 'codename');
     this.descriptionElement = this.appendToThis('p');
+    this.singleUseElement = this.appendToThis('p');
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
     this.researchTimeElement = this.appendToThis('p', 'researchTime');
