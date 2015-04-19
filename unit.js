@@ -79,7 +79,7 @@ Unit.Properties = [
 
 Unit.TypeData = [
     {
-        name: 'Conventional army',
+        name: 'Conventional Army',
         codename: 'Conventional army',
         description: 'These brave men and women are sadly quite useless. At this rate we will be fighting the war forever.',
         properties: ['land', 'conventional'],
@@ -99,7 +99,7 @@ Unit.TypeData = [
         against: {'conventional': 2}
     },
     {
-        name: 'Anti-tank dogs',
+        name: 'Anti-tank Dogs',
         projectId: 8656,
         codename: 'Man\'s Best Friend',
         proposal: 'Dogs are to be trained to carry explosives, which would detonate on contact with enemy tanks.',
@@ -111,7 +111,7 @@ Unit.TypeData = [
         against: {'armor': 2}
     },
     {
-        name: 'Pigeon guided missiles',
+        name: 'Pigeon Guided Missiles',
         codename: 'Birdbrain',
         projectId: 7796,
         proposal: 'We intend to train pigeons to recognize enemy targets and peck at the controls inside missiles to guide them.',
@@ -122,7 +122,7 @@ Unit.TypeData = [
         properties: ['animal', 'air']
     },
     {
-        name: 'Malaria mosquitoes',
+        name: 'Malaria Mosquitoes',
         codename: 'That Sucks',
         projectId: 9870,
         description: 'Malaria carrying mosquitoes grown in a lab and dropped on enemy territory will infect their troops.',
@@ -132,7 +132,7 @@ Unit.TypeData = [
         against: {'infantry': 2, 'cold': -1}
     },
     {
-        name: 'Flying tanks',
+        name: 'Flying Tanks',
         codename: 'Flying Elephants',
         projectId: 3100,
         proposal: 'We intend to design a tank equipped with wings. It would be hauled onto an airplane and then dropped onto the battlefield to glide gracefully to the ground.',
@@ -144,7 +144,7 @@ Unit.TypeData = [
         power: 2
     },
     {
-        name: 'Iceberg ships',
+        name: 'Iceberg Ships',
         riskFactor: 0.1,
         codename: 'On the Rocks',
         projectId: 1008,
@@ -156,7 +156,7 @@ Unit.TypeData = [
         name: 'Meth-fueled Infantry',
         riskFactor: 0.2,
         researchTime: 1,
-        codename: 'Happy-Happy Pill',
+        codename: 'MethWarrior',
         projectId: 4209,
         description: 'Crystal methamphetamine is a brilliant creation of the pharmacists that allows our brave soldiers to stay alert, awake and fighting longer and harder. Can be added to chocolate to facilitate ingestion.',
         scientist: 'Dr. Walter Black',
@@ -228,7 +228,7 @@ Unit.TypeData = [
         against: {'land': -1, 'air': -1, 'wet': 1, 'sea': 1}
     },
     {
-        name: 'Flaming pigs',
+        name: 'Flaming Pigs',
         codename: 'Operation Bacon',
         projectId: 3036,
         proposal: 'A training and deployment program that will lather pigs in tar, set them on fire and send them into battle.',
@@ -242,7 +242,7 @@ Unit.TypeData = [
         against: {'wet': -1}
     },
     {
-        name: '"Stench Gas',
+        name: 'Stench Gas',
         codename: 'Who? Me?',
         projectId: 4037,
         description: 'A concoction of gases that smell strongly of a substance commonly known as “poo” can be sprayed on enemy officers to embarrass and demoralize them. Terrifying against targets within vehicles.',
@@ -277,7 +277,7 @@ Unit.TypeData = [
     },
     // TIER 3 SUPER UNITS
     {
-        name: 'Space spyglass',
+        name: 'Space Spyglass',
         codename: 'Ant Killer',
         projectId: 6604,
         proposal: 'We propose setting up a giant mirror in space, which would have the capacity to focus solar rays on enemy cities and burn them.',
