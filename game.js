@@ -25,6 +25,7 @@ var Game = function(canvas) {
     
     this.turnNumber = 1; // How many turns have passed (for both players)
     this.preturnFade = 1;
+    this.researchFade = 0;
     this.currentTurnSide = 0; // Index to Side.Sides
     this.state = Game.State.PRE_TURN;
     
@@ -158,8 +159,8 @@ Game.prototype.createUI = function() {
     
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
-        centerX: 720,
-        centerY: 670,
+        centerX: 1920 * 0.5,
+        centerY: 800,
         width: 200,
         height: 70,
         clickCallback: function() {
@@ -170,8 +171,8 @@ Game.prototype.createUI = function() {
     this.preTurnUI.push(fsButton);
     var startTurnButton = new CanvasButton({
         label: 'Start Turn',
-        centerX: 720,
-        centerY: 500,
+        centerX: 1920 * 0.5,
+        centerY: 540,
         width: 200,
         height: 70,
         clickCallback: function() {
@@ -318,6 +319,14 @@ Game.LocationParameters = [
 }
 ];
 
+Game.prototype.drawFader = function(fade) {
+    if (fade > 0) {
+        this.ctx.globalAlpha = fade;
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    }
+};
+
 Game.prototype.render = function() {
     this.bgSprite.fillCanvas(this.ctx);
     for (var i = 0; i < this.connections.length; ++i) {
@@ -328,11 +337,7 @@ Game.prototype.render = function() {
         this.factions[i].render(this.ctx);
     }
     
-    if (this.preturnFade > 0) {
-        this.ctx.globalAlpha = this.preturnFade;
-        this.ctx.fillStyle = '#000';
-        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    }
+    this.drawFader(this.researchFade);
 
     this.ctx.globalAlpha = 1.0;
     this.infoPanelsSprite.fillCanvas(this.ctx);
@@ -342,6 +347,8 @@ Game.prototype.render = function() {
     
     this.ctx.globalAlpha = 1.0;
     this.turnPanelSprite.draw(this.ctx, this.ctx.canvas.width - this.turnPanelSprite.width, this.ctx.canvas.height - this.turnPanelSprite.height);
+    
+    this.drawFader(this.preturnFade);
 
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
@@ -353,7 +360,7 @@ Game.prototype.render = function() {
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
         this.ctx.font = '30px special_eliteregular';
-        this.ctx.fillText(header, 720, 400);
+        this.ctx.fillText(header, this.ctx.canvas.width * 0.5, 450);
     }
     return this.ctx;
 };
@@ -485,18 +492,20 @@ Game.prototype.update = function(deltaTime) {
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].update(deltaTime);
     }
-    if (this.state === Game.State.PRE_TURN || this.state === Game.State.RESEARCH_PROPOSALS) {
+    if (this.state === Game.State.PRE_TURN) {
         this.preturnFade += deltaTime * 3;
-        if (this.preturnFade > 1) {
-            this.preturnFade = 1;
-        }
-    }
-    if (this.state === Game.State.PLAYING) {
+    } else {
         this.preturnFade -= deltaTime * 3;
-        if (this.preturnFade < 0) {
-            this.preturnFade = 0;
-        }
     }
+    this.preturnFade = mathUtil.clamp(0, 1, this.preturnFade);
+
+    if (this.state === Game.State.RESEARCH_PROPOSALS) {
+        this.researchFade += deltaTime * 3;
+    } else {
+        this.researchFade -= deltaTime * 3;
+    }
+    this.researchFade = mathUtil.clamp(0, 1, this.researchFade);
+
     if (this.potentialResearch.length > 0) {
         if (this.state === Game.State.PLAYING) {
             this.researchGlowAmount += deltaTime * 10 * Math.sin(this.time * 20.0);
