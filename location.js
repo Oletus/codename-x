@@ -78,7 +78,7 @@ var Connection = function(options) {
             this[key] = options[key];
         }
     }
-    this.lastTurnAAdvantage = 0;
+    this.lastTurnAAdvantage = this.sideAAdvantage;
     this.locationA.connections.push(this);
     this.locationB.connections.push(this);
     this.changeAnimation = 0;
