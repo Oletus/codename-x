@@ -67,11 +67,31 @@ Game.prototype.createUI = function() {
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
 
+    var that = this;
+    
+    this.researchHTML = document.createElement('div');
+    this.researchHTML.id = 'researchWrap';
+    canvasWrapper.appendChild(this.researchHTML);
+    
     this.sidebar = new SideBar();
+    this.researchProposals = [];
+    for (var i = 0; i < 3; ++i) {
+        var proposal = (function(j) {
+            return new ResearchProposal(j, function() {
+                that.chosenResearch = that.potentialResearch[j];
+                for (var k = 0; k < 3; ++k) {
+                    if (k != j) {
+                        that.researchProposals[k].hilight(false);
+                    }
+                }
+                that.researchProposals[j].hilight(true);
+            });
+        })(i);
+        this.researchProposals.push(proposal);
+        this.researchHTML.appendChild(proposal.mainDiv);
+    }
 
     Game.BackgroundMusic.playSingular(true);
-
-    var that = this;
 
     // next turn button
     this.uiButtons.push(new CanvasButton({
@@ -114,36 +134,6 @@ Game.prototype.createUI = function() {
     };
     for (var i = 0; i < this.locations.length; ++i) {
         addLocationUI(this.locations[i]);
-    }
-
-    var addPotentialResearchButton = function(j) {
-        var x = 630;
-        var y = 400;
-        var button = new CanvasButton({
-            label: 'Potential research ' + j,
-            centerX: x + j * 130,
-            centerY: y,
-            width: 60,
-            height: 60,
-            renderFunc: function(ctx, cursorOn, buttonDown, button) {
-                if (j < that.potentialResearch.length) {
-                    Unit.renderIcon(
-                        ctx, cursorOn, buttonDown, Side.Sides[that.currentTurnSide],
-                        button.visualX(), button.visualY(), that.potentialResearch[j], button);
-                }
-            },
-            clickCallback: function() {
-                if (j < that.potentialResearch.length) {
-                    that.chosenResearch = that.potentialResearch[j];
-                    that.sidebar.setUnit(that.chosenResearch);
-                }
-            }
-        });
-        that.uiButtons.push(button);
-        that.researchUI.push(button);
-    }
-    for (var i = 0; i < 3; ++i) {
-        addPotentialResearchButton(i);
     }
 
     var addFactionUI = function(faction) {
@@ -277,6 +267,7 @@ Game.prototype.render = function() {
     this.infoPanelsSprite.fillCanvas(this.ctx);
     
     this.sidebar.render();
+    this.researchHTML.style.transform = 'scale(' + resizer.getScale() + ')';
     
     this.ctx.globalAlpha = 1.0;
     this.turnPanelSprite.draw(this.ctx, this.ctx.canvas.width - this.turnPanelSprite.width, this.ctx.canvas.height - this.turnPanelSprite.height);
@@ -306,6 +297,13 @@ Game.prototype.nextPhase = function() {
         }
         if (this.potentialResearch.length > 0) {
             this.state = Game.State.RESEARCH_PROPOSALS;
+            for (var i = 0; i < 3; ++i) {
+                var res = null;
+                if (i < this.potentialResearch.length) {
+                    res = this.potentialResearch[i];
+                }
+                this.researchProposals[i].setUnit(res);
+            }
             this.chosenResearch = null;
             this.setUIActive(this.researchUI, true);
         } else {
@@ -338,6 +336,9 @@ Game.prototype.startPlayingPhase = function() {
     this.state = Game.State.PLAYING;
     this.setUIActive(this.researchUI, false);
     this.setUIActive(this.playingUI, true);
+    for (var i = 0; i < 3; ++i) {
+        this.researchProposals[i].setUnit(null);
+    }
 };
 
 Game.prototype.setUIActive = function(uiGroup, active) {

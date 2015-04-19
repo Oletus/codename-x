@@ -10,7 +10,7 @@ var SideBar = function() {
     this.attributesElement = this.appendToThis('div');
     this.researchTimeElement = document.createElement('p');
 
-    this.unit = null;
+    this.setUnit(null);
 };
 
 SideBar.prototype.appendToThis = function(type) {

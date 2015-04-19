@@ -42,6 +42,27 @@
 #sidebar .unitAttribute.bad.against {
     color: #f88;
 }
+
+#researchWrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: top left;
+}
+
+.researchProposal {
+    width: 380px;
+    height: 545px;
+    padding: 20px;
+    margin-top: 40px;
+
+    color: #000;
+    background: url('assets/gfx/research_proposal.png');
+}
+
+.researchProposal.hilight {
+    box-shadow: inset 0px 0px 30px 0px rgba(255,235,153,1);
+}
 </style>
 <!-- output -->
 <script src="sprite.js"></script>
@@ -59,9 +80,10 @@
 <script src="mainloop.js"></script>
 <script src="util2d.js"></script>
 <script src="canvasui.js"></script>
-<script src="sidebar.js"></script>
 
 <!-- game specific -->
+<script src="sidebar.js"></script>
+<script src="researchproposal.js"></script>
 <script src="utils.js"></script>
 <script src="factionid.js"></script>
 <script src="unit.js"></script>
