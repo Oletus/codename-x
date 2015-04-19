@@ -171,7 +171,7 @@ Unit.TypeData = [
         projectId: 6567,
         description: 'An aircraft with three blades powered by rockets. Vertical take off, high speed, well-armoured. An effective anti-air unit.',
         scientist: 'Dr. Vay Daar',
-        researchTime: 4,
+        researchTime: 5,
         properties: ['air', 'armor'],
         against: { 'air': 2 },
         exclusiveFaction: getFaction('axis')
@@ -194,7 +194,7 @@ Unit.TypeData = [
         description: 'This assault weapon is a barrel of explosives suspended between two massive wheels propelled by rockets.',
         scientist: 'Dr. Wheeler Cart',
         tier: 2,
-        researchTime: 4,
+        researchTime: 5,
         riskFactor: 0.1,
         singleUse: true,
         properties: ['land'],
@@ -281,11 +281,12 @@ Unit.TypeData = [
         codename: 'Ant Killer',
         projectId: 6604,
         proposal: 'We propose setting up a giant mirror in space, which would have the capacity to focus solar rays on enemy cities and burn them.',
-        description: 'A giant mirror in space, which has the capacity to focus solar rays on enemy cities and burn them.',
+        description: 'A giant mirror in space, which has the capacity to focus solar rays on enemy cities and burn them. Once in orbit, it cannot be retargeted.',
+        singleUse: true,
         scientist: 'Dr. Yes',
         tier: 3,
-        researchTime: 6,
-        instantVictory: true,
+        power: 12,
+        researchTime: 7,
         riskFactor: 0.25,
         properties: ['space']
     },
@@ -320,15 +321,11 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
     //    return -1;
     //}
 
-    if (this.instantVictory) {
-        return 10;
+    if (this.power >= 10) {
+        return this.power;
     }
 
-    if (unitB.instantVictory == false && this.perfectDefense ) {
-        return 0;
-    }
-
-    if (unitB.perfectDefense) {
+    if (this.perfectDefense || unitB.perfectDefense) {
         return 0;
     }
 
