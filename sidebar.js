@@ -6,6 +6,7 @@ var SideBar = function(game, canvas) {
     canvasWrapper.appendChild(this.sidebarDiv);
     this.unitNameElement = this.appendToSidebar('h2');
     this.descriptionElement = this.appendToSidebar('p');
+    this.powerElement = this.appendToSidebar('p');
     this.attributesElement = this.appendToSidebar('div');
 
     this.game = game;
@@ -61,6 +62,7 @@ SideBar.prototype.setUnit = function(unit) {
         this.sidebarDiv.style.display = 'inline';
         this.unitNameElement.textContent = unit.name;
         this.descriptionElement.textContent = unit.description;
+        this.powerElement.textContent = 'Power: ' + unit.power;
         this.attributesElement.innerHTML = '';
         for (var i = 0; i < unit.properties.length; ++i) {
             this.appendToAttributes({property: unit.properties[i]});

@@ -27,12 +27,12 @@ var Unit = function(options) {
         }
     }
 
-    if ( proposal === undefined ) {
-        proposal = description;
+    if (this.proposal === undefined) {
+        this.proposal = this.description;
     }
 
-    if ( power === undefined ) {
-        power = tier;
+    if (this.power === undefined) {
+        this.power = this.tier;
     }
 };
 
@@ -303,7 +303,7 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain) {
     // Define helper variables
     var i, property;
 
-    var effectiveness = this.tier;
+    var effectiveness = this.power;
 
     //if ( Math.random() <= this.riskFactor ) {
     //    return -1;
