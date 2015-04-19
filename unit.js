@@ -119,8 +119,9 @@ Unit.TypeData = [
         projectId: 3100,
         description: 'We intend to design a tank equipped with wings. It would be hauled onto an airplane and then dropped onto the battlefield to glide gracefully to the ground.',
         scientist: 'Dr. T. Wausau',
-        properties: ['armor'],
+        properties: ['armor', 'air', 'land'],
         riskFactor: 0.1,
+        researchTime: 3,
         against: {'air': 2}
     },
     {
@@ -134,7 +135,8 @@ Unit.TypeData = [
     },
     {
         name: 'Meth-fueled infantry',
-        riskFactor: 0.1,
+        riskFactor: 0.2,
+        researchTime: 1,
         codename: 'Happy-Happy Pill',
         projectId: 4209,
         description: 'Crystal methamphetamine is a brilliant creation of the pharmacists that allows our brave soldiers to stay alert, awake and fighting longer and harder. Can be added to chocolate to facilitate ingestion.',
@@ -231,7 +233,7 @@ Unit.TypeData = [
         description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
         scientist: 'Dr. Bartholomew Fussiebootes',
         tier: 2,
-        researchTime: 4,
+        researchTime: 3,
         isRecon: true,
         riskFactor: 0.1,
         properties: ['land', 'animal', 'espionage']
