@@ -12,6 +12,7 @@ var Unit = function(options) {
         singleUse: false,
         instantVictory: false,
         perfectDefense: false,
+        isRecon: false,
         properties: [],
         against: {},
         riskFactor: 0
@@ -76,7 +77,7 @@ Unit.TypeData = [
         description: 'Fruit bats will be equipped with tiny incendiary time bombs and released over enemy territory. They will carry the bombs into building and set them on fire.',
         scientist: 'Dr. Bruce Bayne',
         singleUse: true,
-        properties: ['animal'],
+        properties: ['animal', 'air'],
         riskFactor: 0.1,
         against: {'conventional': 1}
     },
@@ -99,7 +100,7 @@ Unit.TypeData = [
         scientist: 'Dr. B.F. Skinner',
         singleUse: true,
         riskFactor: 0.1,
-        properties: ['animal']
+        properties: ['animal', 'air']
     },
     {
         name: 'Malaria mosquitoes',
@@ -109,7 +110,7 @@ Unit.TypeData = [
         scientist: 'Dr. Marsha Land',
         properties: ['animal'],
         riskFactor: 0.1,
-        against: {'infantry': 1, 'cold': -1}
+        against: {'infantry': 2, 'cold': -1}
     },
     {
         name: 'Flying tanks',
@@ -128,7 +129,7 @@ Unit.TypeData = [
         projectId: 6567,
         description: 'An aircraft with three blades powered by rockets. Vertical take off, speed, well-armoured.',
         scientist: 'Dr. Vay Daar',
-        properties: ['air']
+        properties: ['air', 'armor']
     },
     {
         name: 'Iceberg ships',
@@ -137,7 +138,7 @@ Unit.TypeData = [
         projectId: 1008,
         description: 'Due to the shortage of metal, we have designed an aircraft carriers to be built out of cork and ice. It will be used against U-boats.',
         scientist: 'Dr. Ayse Freese',
-        properties: ['sea', 'armor']
+        properties: ['sea']
     },
     {
         name: 'Meth-fueled infantry',
@@ -150,7 +151,7 @@ Unit.TypeData = [
     },
     {
         name: 'Pheromone gas',
-        codename: 'Smelly Heart ',
+        codename: 'Smelly Heart',
         projectId: 7031,
         description: 'Pheromone based gas which when deployed against enemy troops makes them go mad with lust, causing widespread chaos and moral degradation. Works well on non-human animals.',
         scientist: 'Dr. Strangelove',
@@ -168,6 +169,7 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
+        singleUse: true,
         properties: ['land']
     },
     {
@@ -178,8 +180,9 @@ Unit.TypeData = [
         scientist: 'Dr. I. P. Pavlov',
         tier: 2,
         researchTime: 4,
+        isRecon: true,
         riskFactor: 0.05,
-        properties: ['animal']
+        properties: ['animal', 'land']
     },
     {
         name: 'Kamikaze Dolphins',
@@ -202,7 +205,7 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         singleUse: true,
-        properties: ['land'],
+        properties: ['land', 'animal'],
         riskFactor: 0.1,
         against: {'wet': -1}
     },
@@ -225,6 +228,7 @@ Unit.TypeData = [
         scientist: 'Dr. Bartholomew Fussiebootes',
         tier: 2,
         researchTime: 4,
+        isRecon: true,
         riskFactor: 0.1,
         properties: ['land', 'animal', 'espionage']
     },
