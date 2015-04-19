@@ -8,6 +8,7 @@ var SideBar = function(game, canvas) {
     this.descriptionElement = this.appendToSidebar('p');
     this.powerElement = this.appendToSidebar('p');
     this.attributesElement = this.appendToSidebar('div');
+    this.researchTimeElement = this.appendToSidebar('p');
 
     this.game = game;
     this.canvas = canvas;
@@ -63,6 +64,7 @@ SideBar.prototype.setUnit = function(unit) {
         this.unitNameElement.textContent = unit.name;
         this.descriptionElement.textContent = unit.description;
         this.powerElement.textContent = 'Power: ' + unit.power;
+        this.researchTimeElement.textContent = 'Research time: ' + unit.researchTime;
         this.attributesElement.innerHTML = '';
         for (var i = 0; i < unit.properties.length; ++i) {
             this.appendToAttributes({property: unit.properties[i]});
