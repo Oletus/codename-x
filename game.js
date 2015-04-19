@@ -39,18 +39,21 @@ var Game = function(canvas) {
     });
     this.canvas.addEventListener('touchmove', function(event) {
         that.setCursorPosition(resizer.getCanvasPosition(event));
+        event.preventDefault();
     });
     this.canvas.addEventListener('mousedown', function(event) {
         that.click(resizer.getCanvasPosition(event));
     });
     this.canvas.addEventListener('touchstart', function(event) {
         that.click(resizer.getCanvasPosition(event));
+        event.preventDefault();
     });
     this.canvas.addEventListener('mouseup', function(event) {
         that.release(resizer.getCanvasPosition(event));
     });
     this.canvas.addEventListener('touchend', function(event) {
         that.release(new Vec2(that.cursorX, that.cursorY));
+        event.preventDefault();
     });
     this.setCursorPosition({x: 0, y: 0});
 };
