@@ -331,6 +331,7 @@ Game.prototype.nextPhase = function() {
         }
         if (this.potentialResearch.length > 0) {
             this.state = Game.State.RESEARCH_PROPOSALS;
+            this.chosenResearch = null;
             this.setUIActive(this.researchUI, true);
         } else {
             this.startPlayingPhase();
