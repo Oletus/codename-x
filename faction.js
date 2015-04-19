@@ -12,6 +12,7 @@ var UnitInstance = function(options) {
             this[key] = options[key];
         }
     }
+    this.animatedCompletion = 0;
 };
 
 UnitInstance.prototype.advanceResearch = function() {
@@ -26,6 +27,8 @@ UnitInstance.prototype.getCompletion = function() {
 UnitInstance.prototype.getTurnsLeft = function() {
     return this.unitType.researchTime - this.turnsResearched;
 };
+
+
 
 var Faction = function(options) {
     var defaults = {
@@ -58,17 +61,11 @@ Faction.prototype.addToReserve = function(unitType) {
     this.sortReserve();
 };
 
-Faction.prototype.startRandomResearch = function() {
-    if (this.researchSlotAvailable()) {
-        var potentials = this.getPotentialResearch();
-        if (potentials.length > 0) {
-            this.startResearch(potentials[0]);
-        }
-    }
-};
-
 Faction.prototype.researchSlotAvailable = function() {
-    return this.currentResearch.length < this.researchSlots;
+    // Only let player to start one research per turn.
+    var startedResearchThisTurn = this.currentResearch.length >= 1 &&
+        this.currentResearch[this.currentResearch.length - 1].turnsResearched === 0;
+    return this.currentResearch.length < this.researchSlots && !startedResearchThisTurn;
 };
 
 Faction.prototype.removeReserve = function(reserveUnit) {
@@ -96,14 +93,7 @@ Faction.prototype.advanceResearch = function() {
     for (var i = 0; i < this.currentResearch.length;) {
         var res = this.currentResearch[i];
         var completed = res.advanceResearch();
-        if (completed) {
-            this.completedResearch.push(res.unitType);
-            this.addToReserve(res.unitType);
-            this.messageLog.push('Completed research on ' + res.unitType.name);
-            this.currentResearch.splice(i, 1);
-        } else {
-            ++i;
-        }
+        ++i;
     }
     this.sortReserve();
 };
@@ -120,17 +110,51 @@ Faction.prototype.sortReserve = function() {
     });
 };
 
+Faction.prototype.update = function(deltaTime, state) {
+    if (state === Game.State.PLAYING || state === Game.State.RESEARCH_PROPOSALS) {
+        for (var i = 0; i < this.currentResearch.length;) {
+            var res = this.currentResearch[i];
+            var completed = false;
+            if (deltaTime === undefined) {
+                // AI turn update
+                completed = res.getCompletion() >= 1;
+            } else {
+                if (res.animatedCompletion < res.getCompletion()) {
+                    res.animatedCompletion += deltaTime / res.unitType.researchTime;
+                    if (res.animatedCompletion >= res.getCompletion()) {
+                        res.animatedCompletion = res.getCompletion();
+                        if (res.animatedCompletion >= 1) {
+                            completed = true;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if (completed) {
+                this.completedResearch.push(res.unitType);
+                this.addToReserve(res.unitType);
+                this.messageLog.push('Completed research on ' + res.unitType.name);
+                this.currentResearch.splice(i, 1);
+            } else {
+                ++i;
+            }
+        }
+    }
+};
+
 Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.currentResearch.length > i) {
         var x = button.visualX();
         var y = button.visualY();
         ctx.fillStyle = this.side.color;
-        var completion = this.currentResearch[i].getCompletion();
+        var completion = this.currentResearch[i].animatedCompletion;
         var barWidth = 200;
         ctx.globalAlpha = 0.5;
         ctx.fillRect(x + 50, y, barWidth, 20);
+        ctx.fillStyle = '#fff'
         ctx.globalAlpha = 1;
-        ctx.fillRect(x + 50, y, completion * barWidth, 20);
+        ctx.fillRect(x + 50, y + 5, completion * barWidth, 10);
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'right';
         ctx.fillText('Turns left : ' + this.currentResearch[i].getTurnsLeft(), x + 50 + barWidth, y - 10);

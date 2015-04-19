@@ -416,11 +416,15 @@ Game.prototype.approveResearch = function() {
 
 Game.prototype.aiTurn = function() {
     this.nextPhase();
+    var currentFaction = this.factions[this.currentTurnSide];
+    
+    currentFaction.update(undefined, this.state); // Make animations complete instantly.
+    this.setPotentialResearch();
+    
     if (this.potentialResearch.length > 0) {
         this.chosenResearch = this.potentialResearch[0];
         this.approveResearch();
     }
-    var currentFaction = this.factions[this.currentTurnSide];
     var moveRounds = Math.min(currentFaction.reserve.length, 3);
     var i = 0;
     while (currentFaction.reserve.length > 0 && i < moveRounds) {
@@ -466,12 +470,7 @@ Game.prototype.nextPhase = function() {
 
         // Set research options for this turn
         this.chosenResearch = null;
-        var potentialResearch = currentFaction.getPotentialResearch();
-        if (currentFaction.researchSlotAvailable() && potentialResearch.length > 0) {
-            this.potentialResearch = potentialResearch;
-        } else {
-            this.potentialResearch = [];
-        }
+        this.potentialResearch = [];
         this.state = Game.State.PLAYING;
         this.setUIActive(this.playingUI, true);
     } else if (this.state == Game.State.PLAYING) {
@@ -543,9 +542,13 @@ Game.prototype.isGameOver = function() {
 
 Game.prototype.update = function(deltaTime) {
     this.time += deltaTime;
+
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].update(deltaTime);
     }
+    this.factions[this.currentTurnSide].update(deltaTime, this.state);
+    this.setPotentialResearch();
+    
     if (this.state === Game.State.PRE_TURN) {
         this.preturnFade += deltaTime * 3;
     } else {
@@ -570,6 +573,13 @@ Game.prototype.update = function(deltaTime) {
         this.researchGlowAmount -= deltaTime * 3;
     }
     this.researchGlowAmount = mathUtil.clamp(0, 1, this.researchGlowAmount);
+};
+
+Game.prototype.setPotentialResearch = function() {
+    var currentFaction = this.factions[this.currentTurnSide];
+    if (currentFaction.researchSlotAvailable() && this.potentialResearch.length === 0) {
+        this.potentialResearch = currentFaction.getPotentialResearch();
+    }
 };
 
 Game.prototype.nextPhaseGlowAmount = function() {
