@@ -41,6 +41,7 @@ CanvasLabel.prototype.hitTest = function() {
 var CanvasButton = function(options) {
     var defaults = {
         label: 'Button',
+        labelFunc: null,
         centerX: 0,
         centerY: 0,
         width: 100,
@@ -99,7 +100,11 @@ CanvasButton.prototype.render = function(ctx, cursorX, cursorY) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#fff';
     ctx.font = '20px special_eliteregular';
-    ctx.fillText(this.label, this.centerX, this.centerY + 7);
+    var label = this.label;
+    if (this.labelFunc) {
+        label = this.labelFunc();
+    }
+    ctx.fillText(label, this.centerX, this.centerY + 7);
 };
 
 CanvasButton.prototype.visualX = function() {

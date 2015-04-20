@@ -171,14 +171,24 @@ Game.prototype.createUI = function() {
     }));
     
     var replayButton = new CanvasButton({
-        label: 'Replay last turn',
-        centerX: 130,
+        labelFunc: function() {
+            if (that.animationInProgress) {
+                return 'Skip combat animation';
+            } else {
+                return 'Replay last turn';
+            }
+        },
+        centerX: 170,
         centerY: 720,
-        width: 200,
+        width: 280,
         height: 70,
         clickCallback: function() {
             if (that.state === Game.State.PLAYING) {
-                that.resetAnimations();
+                if (that.animationInProgress) {
+                    that.skipAnimations();
+                } else {
+                    that.resetAnimations();
+                }
             }
         }
     });
@@ -559,6 +569,15 @@ Game.prototype.resetAnimations = function() {
     }
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].resetAnimation();
+    }
+};
+
+Game.prototype.skipAnimations = function() {
+    for (var i = 0; i < this.locations.length; ++i) {
+        this.locations[i].skipAnimation();
+    }
+    for (var i = 0; i < this.connections.length; ++i) {
+        this.connections[i].skipAnimation();
     }
 };
 

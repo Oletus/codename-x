@@ -46,6 +46,14 @@ Location.prototype.getVisibleSide = function() {
     }
 };
 
+Location.prototype.resetAnimation = function() {
+    this.animationProgress = 0;
+};
+
+Location.prototype.skipAnimation = function() {
+    this.animationProgress = this.messageLog.length;
+};
+
 Location.prototype.isAnimationComplete = function() {
     return this.animationProgress >= this.messageLog.length;
 };
@@ -73,10 +81,6 @@ Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
 
 Location.prototype.update = function(deltaTime) {
     this.animationProgress += deltaTime;
-};
-
-Location.prototype.resetAnimation = function() {
-    this.animationProgress = 0;
 };
 
 var Connection = function(options) {
@@ -148,6 +152,10 @@ Connection.prototype.isBattleOver = function() {
 
 Connection.prototype.resetAnimation = function() {
     this.changeAnimation = 0;
+};
+
+Connection.prototype.skipAnimation = function() {
+    this.changeAnimation = 1;
 };
 
 Connection.prototype.update = function(deltaTime, state) {
