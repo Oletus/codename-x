@@ -1,5 +1,43 @@
 'use strict';
 
+var CanvasLabel = function(options) {
+    var defaults = {
+        label: 'Label',
+        labelFunc: null,
+        x: 0,
+        y: 0,
+        active: true
+    };
+    for(var key in defaults) {
+        if (!options.hasOwnProperty(key)) {
+            this[key] = defaults[key];
+        } else {
+            this[key] = options[key];
+        }
+    }
+};
+
+CanvasLabel.prototype.render = function(ctx) {
+    if (this.active) {
+        ctx.globalAlpha = 1.0;
+        ctx.color = '#fff';
+        ctx.textAlign = 'left';
+        ctx.font = '30px special_eliteregular';
+        var label = this.label;
+        if (this.labelFunc) {
+            label = this.labelFunc();
+        }
+        ctx.fillText(label, this.x, this.y);
+    }
+};
+
+CanvasLabel.prototype.update = function(deltaTime) {
+};
+
+CanvasLabel.prototype.hitTest = function() {
+    return false;
+};
+
 var CanvasButton = function(options) {
     var defaults = {
         label: 'Button',

@@ -344,23 +344,13 @@ Game.prototype.createUI = function() {
             that.uiButtons.push(button);
             faction.addUI(button);
         }
-        var label = new (function() {
-            this.active = false;
-            this.render = function(ctx) {
-                if (this.active) {
-                    ctx.globalAlpha = 1.0;
-                    ctx.color = '#fff';
-                    ctx.textAlign = 'left';
-                    ctx.font = '30px special_eliteregular';
-                    ctx.fillText(faction.getCurrentIntelPower(), 838, 882);
-                }
-            };
-            this.update = function() {
-            };
-            this.hitTest = function() {
-                return false;
-            };
-        })();
+        var label = new CanvasLabel({
+            x: 838,
+            y: 882,
+            labelFunc: function() {
+                return faction.getCurrentIntelPower();
+            }
+        });
         that.uiButtons.push(label);
         faction.addUI(label);
     };
