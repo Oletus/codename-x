@@ -118,6 +118,12 @@ Connection.prototype.resolveCombat = function() {
 
     locationA.messageLog = [];
     locationB.messageLog = [];
+    
+    locationA.lastTurnSide = locationA.side;
+    locationB.lastTurnSide = locationB.side;
+    locationA.lastTurnUnit = locationA.unit;
+    locationB.lastTurnUnit = locationB.unit;
+    this.lastTurnAAdvantage = this.sideAAdvantage;
 
     if (this.isBattleOver()) {
         this.battleWasOverLastTurn = true;
@@ -130,7 +136,6 @@ Connection.prototype.resolveCombat = function() {
     locationB.lastTurnEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain, locationA.terrainAgainst, locationB.messageLog);
     sideAAdvances -= locationB.lastTurnEffectiveness;
 
-    this.lastTurnAAdvantage = this.sideAAdvantage;
     this.sideAAdvantage += sideAAdvances;
     if (this.sideAAdvantage <= 0) {
         this.sideAAdvantage = 0;
@@ -140,9 +145,6 @@ Connection.prototype.resolveCombat = function() {
         this.sideAAdvantage = this.steps;
         this.locationB.side = this.locationA.side;
     }
-
-    this.locationA.lastTurnUnit = this.locationA.unit;
-    this.locationB.lastTurnUnit = this.locationB.unit;
 };
 
 Connection.prototype.isBattleOver = function() {
