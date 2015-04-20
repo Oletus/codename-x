@@ -36,6 +36,7 @@ var Game = function(canvas) {
     this.preturnFade = 1;
     this.researchFade = 0;
     this.currentTurnSide = 0; // Index to Side.Sides
+    this.currentFaction = this.factions[this.currentTurnSide];
     this.state = Game.State.PRE_TURN;
     this.playingAgainstAI = false;
     
@@ -116,10 +117,12 @@ Game.prototype.createUI = function() {
         this.researchHTML.appendChild(proposal.mainDiv);
     }
     var approveResearchButton = new CanvasButton({
-        label: 'Choose Research',
+        labelFunc: function() {
+            return 'Approve Research for Lab ' + (that.currentFaction.currentResearch.length + 1) + ' / ' + that.currentFaction.researchSlots;
+        },
         centerX: 720,
         centerY: 750,
-        width: 200,
+        width: 350,
         height: 70,
         clickCallback: function() {
             that.approveResearch();
@@ -613,6 +616,7 @@ Game.prototype.nextPhase = function() {
                 this.currentTurnSide = 0;
                 this.resolveTurn();
             }
+            this.currentFaction = this.factions[this.currentTurnSide];
             this.sidebar.setUnit(null);
             this.state = Game.State.PRE_TURN;
             this.setUIActive(this.playingUI, false);
@@ -620,7 +624,7 @@ Game.prototype.nextPhase = function() {
             if (this.turnNumber >= 2) {
                 this.aiPlayerButton.active = false;
             }
-            if (this.factions[this.currentTurnSide].aiControlled) {
+            if (this.currentFaction.aiControlled) {
                 this.aiTurn();
             } else if (this.playingAgainstAI) {
                 this.nextPhase();
