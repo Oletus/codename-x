@@ -18,7 +18,8 @@ var Unit = function(options) {
         properties: [],
         against: {},
         riskFactor: 0,
-        exclusiveFaction: null
+        exclusiveFaction: null,
+        icon: null
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -39,29 +40,53 @@ var Unit = function(options) {
             this.power = this.tier;
         }
     }
+    this.iconSprite = null;
+    if (this.icon !== null) {
+        this.iconSprite = new Sprite('icons/' + this.icon + '.png');
+    }
 };
 
 Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType, button) {
+    
     ctx.beginPath();
-    ctx.arc(x, y, 30, 0, Math.PI * 2);
-    
-    ctx.fillStyle = side.color;
-    ctx.globalAlpha = 0.5;
-    ctx.fill();
-    
-    ctx.lineWidth = 3;
-    if ((cursorOn || button.dragged) && !buttonDown) {
-        ctx.strokeStyle = '#fff';
+    var radius;
+    var lineWidth;
+    var shadowOffset = 3;
+    if ((cursorOn || button.dragged) || buttonDown) {
+        if (buttonDown) {
+            shadowOffset = 0;
+        }
+        radius = 31;
+        lineWidth = 5;
     } else {
-        ctx.strokeStyle = side.color;
+        radius = 32;
+        lineWidth = 3;
     }
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    
+    ctx.save();
+    ctx.fillStyle = side.color;
+    ctx.globalAlpha = 1.0;
+    ctx.shadowColor = '#000';
+    ctx.shadowBlur = 7;
+    ctx.shadowOffsetX = shadowOffset;
+    ctx.shadowOffsetY = shadowOffset;
+    ctx.fill();
+    ctx.restore();
+    
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = '#fff';
     ctx.globalAlpha = 1.0;
     ctx.stroke();
     
-    ctx.font = '12px special_eliteregular';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.fillText(unitType.name, x, y);
+    if (unitType.iconSprite !== null) {
+        unitType.iconSprite.drawRotated(ctx, x, y, 0, 0.56);
+    } else {    
+        ctx.font = '12px special_eliteregular';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.fillText(unitType.name, x, y);
+    }
 };
 
 Unit.Properties = [
@@ -83,14 +108,16 @@ Unit.TypeData = [
         codename: 'Conventional army',
         description: 'These brave men and women are sadly quite useless. At this rate we will be fighting the war forever.',
         properties: ['land', 'conventional'],
-        tier: 0
+        tier: 0,
+        icon: 'infantry'
     },
     {
-        name: 'Unkown Unit',
+        name: 'Unknown',
         codename: 'UFO',
         description: 'We do not know what the enemy will deploy here against us this turn.',
         power: '???',
-        tier: 0
+        tier: 0,
+        icon: 'unknown'
     },
     // TIER 1 UNITS
     {
@@ -103,7 +130,8 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['animal', 'air'],
         riskFactor: 0.1,
-        against: {'conventional': 2}
+        against: {'conventional': 2},
+        icon: 'batbomb'
     },
     {
         name: 'Anti-tank Dogs',
@@ -115,7 +143,8 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['animal', 'land'],
         riskFactor: 0.1,
-        against: {'armor': 2}
+        against: {'armor': 2},
+        icon: 'explodingdog'
     },
     {
         name: 'Pigeon Guided Missiles',
@@ -126,7 +155,8 @@ Unit.TypeData = [
         scientist: 'Dr. B.F. Skinner',
         singleUse: true,
         riskFactor: 0.1,
-        properties: ['animal', 'air']
+        properties: ['animal', 'air'],
+        icon: 'birdbrain'
     },
     {
         name: 'Malaria Mosquitoes',
@@ -136,7 +166,8 @@ Unit.TypeData = [
         scientist: 'Dr. Marsha Land',
         properties: ['animal'],
         riskFactor: 0.1,
-        against: {'infantry': 2, 'cold': -1}
+        against: {'infantry': 2, 'cold': -1},
+        icon: 'mosquitoe'
     },
     {
         name: 'Flying Tanks',
@@ -148,7 +179,8 @@ Unit.TypeData = [
         properties: ['armor', 'air', 'land'],
         riskFactor: 0.1,
         researchTime: 3,
-        power: 2
+        power: 2,
+        icon: 'flyingtank'
     },
     {
         name: 'Iceberg Ships',
@@ -158,7 +190,8 @@ Unit.TypeData = [
         description: 'Due to the shortage of metal, we have designed an aircraft carrier to be built out of cork and ice. They will be used against U-boats.',
         scientist: 'Dr. Ayse Freese',
         properties: ['sea', 'cold'],
-        researchTime: 1
+        researchTime: 1,
+        icon: 'iceboat'
     },
     {
         name: 'Meth-fueled Infantry',
@@ -168,7 +201,8 @@ Unit.TypeData = [
         projectId: 4209,
         description: 'Crystal methamphetamine is a brilliant creation of the pharmacists that allows our brave soldiers to stay alert, awake and fighting longer and harder. Can be added to chocolate to facilitate ingestion.',
         scientist: 'Dr. Walter Black',
-        properties: ['land', 'infantry']
+        properties: ['land', 'infantry'],
+        icon: 'methwarrior'
     },
     // TIER 2 UNITS
     {
@@ -182,7 +216,8 @@ Unit.TypeData = [
         researchTime: 5,
         properties: ['air', 'armor'],
         against: { 'air': 2 },
-        exclusiveFaction: getFaction('axis')
+        exclusiveFaction: getFaction('axis'),
+        icon: 'flygel'
     },
     {
         name: 'Pheromone gas',
@@ -193,7 +228,8 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
-        against: {'animal': 2}
+        against: {'animal': 2},
+        icon: 'sexwarrior'
     },
     {
         name: 'Panjandrum',
@@ -207,7 +243,8 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['land'],
         against: { 'land': 2 },
-        exclusiveFaction: getFaction('allies')
+        exclusiveFaction: getFaction('allies'),
+        icon: 'panjandrum'
     },
     {
         name: 'Surveillance Dogs',
@@ -220,7 +257,8 @@ Unit.TypeData = [
         researchTime: 4,
         isRecon: true,
         riskFactor: 0.05,
-        properties: ['animal', 'land']
+        properties: ['animal', 'land'],
+        icon: 'talkingdog'
     },
     {
         name: 'Kamikaze Dolphins',
@@ -233,7 +271,8 @@ Unit.TypeData = [
         researchTime: 4,
         properties: ['animal', 'sea'],
         riskFactor: 0.1,
-        against: {'land': -1, 'air': -1, 'wet': 1, 'sea': 1}
+        against: {'land': -1, 'air': -1, 'wet': 1, 'sea': 1},
+        icon: 'flipper'
     },
     {
         name: 'Flaming Pigs',
@@ -247,7 +286,8 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['land', 'animal'],
         riskFactor: 0.1,
-        against: {'wet': -1}
+        against: {'wet': -1},
+        icon: 'flamingpig'
     },
     {
         name: 'Stench Gas',
@@ -270,7 +310,8 @@ Unit.TypeData = [
         researchTime: 3,
         isRecon: true,
         riskFactor: 0.1,
-        properties: ['land', 'animal', 'espionage']
+        properties: ['land', 'animal', 'espionage'],
+        icon: 'cyborgcat'
     },
     {
         name: 'Soup Bowl War Ship',
@@ -281,7 +322,8 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         riskFactor: 0.15,
-        properties: ['sea']
+        properties: ['sea'],
+        icon: 'roundship'
     },
     // TIER 3 SUPER UNITS
     {
@@ -296,7 +338,8 @@ Unit.TypeData = [
         power: 12,
         researchTime: 8,
         riskFactor: 0.25,
-        properties: ['space']
+        properties: ['space'],
+        icon: 'spacemirror'
     },
     {
         name: 'Chicken-warmed Nuclear Landmines',
@@ -308,7 +351,8 @@ Unit.TypeData = [
         researchTime: 6,
         perfectDefense: true,
         riskFactor: 0.25,
-        properties: ['animal', 'land']
+        properties: ['animal', 'land'],
+        icon: 'chickenmine'
     }
 ];
 

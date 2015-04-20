@@ -652,6 +652,8 @@ Game.prototype.click = function(vec) {
                 this.downButton.dragged = true;
                 this.dragStartX = this.cursorX;
                 this.dragStartY = this.cursorY;
+            } else {
+                this.uiButtons[i].click();
             }
         }
     }

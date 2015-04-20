@@ -25,7 +25,7 @@ var Location = function(options) {
 };
 
 Location.prototype.getVisibleUnit = function() {
-    if (!this.connections[0].animationInProgress) {
+    if (!this.connections[0].animationInProgress && this.isAnimationComplete()) {
         if (this.side === this.currentSide) {
             return this.unit;
         } else {
@@ -44,8 +44,9 @@ Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
     var x = button.visualX();
     var y = button.visualY();
     Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.getVisibleUnit(), button);
+
     var logIndex = Math.floor(this.animationProgress);
-    
+
     var animY = 1.0;
     if (logIndex >= this.messageLog.length) {
         logIndex = this.messageLog.length - 1;
