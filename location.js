@@ -180,7 +180,7 @@ Connection.prototype.render = function(ctx) {
     var dist = locA.distance(locB);
     var arrowLength = dist - 80;
     var stepLength = arrowLength / (this.steps - 1);
-    var angle = locA.slope(locB);
+    var angle = locA.slopeAngle(locB);
     
     var displayedAdvantage = this.lastTurnAAdvantage;
     if (this.changeAnimation >= 1) {

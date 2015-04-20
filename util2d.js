@@ -706,6 +706,18 @@ Vec2.prototype.slope = function(vec) {
 };
 
 /**
+ * Calculate the angle of the slope from this vector to another vector.
+ * @param {Vec2} vec The other vector.
+ * @return {number} The slope.
+ */
+Vec2.prototype.slopeAngle = function(vec) {
+    var temp = new Vec2(vec.x, vec.y);
+    temp.x -= this.x;
+    temp.y -= this.y;
+    return temp.angle();
+};
+
+/**
  * Projects this vector to the nearest point on the line defined by two points.
  * @param {Vec2} lineA One point on the line to project to.
  * @param {Vec2} lineB Another point on the line to project to.
