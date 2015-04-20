@@ -470,7 +470,9 @@ Game.prototype.aiTurn = function() {
         this.chosenResearch = this.potentialResearch[0];
         this.approveResearch();
     }
-    var moveRounds = Math.min(currentFaction.reserve.length, 3);
+    // swappinessFactor is the tendency to shuffle around same tier units
+    var swappinessFactor = Math.random() * 0.1 * (Math.min(this.turnNumber, 10) - 1);
+    var moveRounds = Math.min(currentFaction.reserve.length, 3) + Math.floor(swappinessFactor * 2);
     var i = 0;
     while (currentFaction.reserve.length > 0 && i < moveRounds) {
         // Choose the most valuable unit from the sorted reserve
@@ -490,6 +492,9 @@ Game.prototype.aiTurn = function() {
             }
             if (this.locations[locIndex].unit.tier < goodUnit.tier) {
                 // Good idea to place the unit here.
+                break;
+            } else if (this.locations[locIndex].unit.tier == goodUnit.tier && Math.random() < swappinessFactor) {
+                // Make the AI swap units on the same tier occasionally.
                 break;
             }
         }
