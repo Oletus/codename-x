@@ -210,7 +210,7 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(fsButton);
     this.preTurnUI.push(fsButton);
-    var fsButton = new CanvasButton({
+    var muteButton = new CanvasButton({
         labelFunc: function() {
             return Audio.allMuted ? 'Unmute audio' : 'Mute audio';
         },
@@ -222,8 +222,8 @@ Game.prototype.createUI = function() {
             Audio.muteAll(!Audio.allMuted);
         }
     });
-    this.uiButtons.push(fsButton);
-    this.preTurnUI.push(fsButton);
+    this.uiButtons.push(muteButton);
+    this.preTurnUI.push(muteButton);
     
     var startTurnButton = new CanvasButton({
         label: 'Start Turn',
