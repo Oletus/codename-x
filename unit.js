@@ -302,7 +302,7 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
-        against: {'armor': 1, 'air': -1},
+        against: {'armor': 2, 'air': -2, 'animal': -2},
         icon: 'poo'
     },
     {
