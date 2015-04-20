@@ -97,10 +97,9 @@ Faction.prototype.getCheapestReserveUnit = function() {
 Faction.prototype.advanceResearch = function() {
     for (var i = 0; i < this.currentResearch.length;) {
         var res = this.currentResearch[i];
-        var completed = res.advanceResearch();
+        res.advanceResearch();
         ++i;
     }
-    this.sortReserve();
 };
 
 Faction.prototype.getCurrentIntelPower = function() {
@@ -172,7 +171,9 @@ Faction.prototype.update = function(deltaTime, state) {
                 }
             }
             if (completed) {
-                this.completedResearch.push(res.unitType);
+                if (this.completedResearch.indexOf(res.unitType) < 0) {
+                    this.completedResearch.push(res.unitType);
+                }
                 this.messageLog.push('Completed research on ' + res.unitType.name);
                 this.currentResearch.splice(i, 1);
                 this.addToReserve(res.unitType);
@@ -247,16 +248,6 @@ Faction.prototype.getPotentialResearch = function() {
         possibleResearch = filterByTier(Unit.Types, 1);
     }
 
-    // Remove all found in current or completed projects
-    var currentResearchUnits = [];
-
-    for (var i = 0; i < this.currentResearch.length; ++i) {
-        currentResearchUnits.push(this.currentResearch[i].unitType);
-    }
-
-    filter(possibleResearch, currentResearchUnits);
-    filter(possibleResearch, this.completedResearch);
-
     // Filter out units exclusively defined for another faction.
     for ( var i = 0; i < possibleResearch.length; ) {
         if ( possibleResearch[i].exclusiveFaction === null || possibleResearch[i].exclusiveFaction == this.side ) {
@@ -267,9 +258,45 @@ Faction.prototype.getPotentialResearch = function() {
         }
     }
 
+    // Remove all found in current projects
+    var currentResearchUnits = [];
+    for (var i = 0; i < this.currentResearch.length; ++i) {
+        currentResearchUnits.push(this.currentResearch[i].unitType);
+    }
+    filter(possibleResearch, currentResearchUnits);
+    
+    // Remove units found in completed projects
+    // Single-use units might reappear unless they are in the reserve
+    var completedResearchMultiUse = [];
+    var completedResearchSingleUse = [];
+    for (var i = 0; i < this.completedResearch.length; ++i) {
+        var res = this.completedResearch[i];
+        if (res.singleUse) {
+            completedResearchSingleUse.push(res);
+        } else {
+            completedResearchMultiUse.push(res);
+        }
+    }
+    filter(possibleResearch, completedResearchMultiUse);
+    
+    // Cut a fraction of single-use units based on how many completely new ones are still available
+    var singleUseProjectsLeft = 0;
+    for (var i = 0; i < possibleResearch.length; ++i) {
+        if (possibleResearch[i].singleUse && completedResearchSingleUse.indexOf(possibleResearch[i]) < 0) {
+            ++singleUseProjectsLeft;
+        }
+    }
+    if (singleUseProjectsLeft >= 3) {
+        filter(possibleResearch, completedResearchSingleUse);
+    } else {
+        shuffle(completedResearchSingleUse);
+        arrayUtil.cutToFraction(completedResearchSingleUse, singleUseProjectsLeft / 3);
+        filter(possibleResearch, completedResearchSingleUse);
+    }
+    // Don't allow single-use units that are in reserve to appear twice
+    filter(possibleResearch, this.reserve);
+
     // Randomize three projects from remaining set
     shuffle(possibleResearch);
-
-    // Return set of three (0-3 to be exact)
     return possibleResearch.splice(0, 3);
 };

@@ -1,5 +1,7 @@
 'use strict';
 
+var arrayUtil = {};
+
 function filter(resultArray, arrayToRemove) {
     var cellRemoved = false;
 
@@ -43,6 +45,10 @@ function setPropertyInAll(array, key, value) {
         array[i][key] = value;
     }
 }
+
+arrayUtil.cutToFraction = function(array, fraction) {
+    array.splice(Math.floor(array.length * fraction));
+};
 
 function requestFullscreen(elem) {
     if (elem.requestFullscreen) {
