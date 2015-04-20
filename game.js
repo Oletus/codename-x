@@ -402,6 +402,7 @@ Game.prototype.createUI = function() {
             that.uiButtons.push(button);
             that.reserveUI.push(button);
             faction.addUI(button);
+            button.reserveIndex = i; // TODO: clean up this hack...
         }
         // Intel buttons
         x = 780;
@@ -601,7 +602,7 @@ Game.prototype.showResearchUI = function(show) {
         this.setUIActive(this.playingUI, true);
         setPropertyInAll(this.reserveUI, 'draggable', true);
         for (var i = 0; i < this.reserveUI.length; ++i) {
-            if (i >= this.currentFaction.reserve.length) {
+            if (this.reserveUI[i].reserveIndex >= this.currentFaction.reserve.length) {
                 this.reserveUI[i].draggable = false;
             }
         }
@@ -812,7 +813,7 @@ Game.prototype.update = function(deltaTime) {
         }
         setPropertyInAll(this.reserveUI, 'draggable', true);
         for (var i = 0; i < this.reserveUI.length; ++i) {
-            if (i >= this.currentFaction.reserve.length) {
+            if (this.reserveUI[i].reserveIndex >= this.currentFaction.reserve.length) {
                 this.reserveUI[i].draggable = false;
             }
         }
