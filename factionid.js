@@ -22,7 +22,7 @@ Side.Sides = [
     },
     {
         id: 1,
-        name: 'allies',
+        name: 'allied',
         color: '#46f'
     }
 ];

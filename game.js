@@ -35,6 +35,7 @@ var Game = function(canvas) {
     this.turnNumber = 0; // How many turns have passed (for both players)
     this.preturnFade = 1;
     this.researchFade = 0;
+    this.finishedAnimation = 0;
     this.currentTurnSide = 0; // Index to Side.Sides
     this.currentFaction = this.factions[this.currentTurnSide];
     this.state = Game.State.PRE_TURN;
@@ -186,7 +187,7 @@ Game.prototype.createUI = function() {
         width: 280,
         height: 70,
         clickCallback: function() {
-            if (that.state === Game.State.PLAYING) {
+            if (that.state === Game.State.PLAYING || that.state === Game.State.FINISHED) {
                 if (that.animationInProgress) {
                     that.skipAnimations();
                 } else {
@@ -472,8 +473,13 @@ Game.prototype.render = function() {
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].render(this.ctx);
     }
+
+    var gameAreaFade = this.researchFade;
+    if (this.finishedAnimation > 0) {
+        gameAreaFade = Math.min(this.finishedAnimation, 0.2);
+    }
     
-    this.drawFader(this.researchFade);
+    this.drawFader(gameAreaFade);
 
     this.ctx.globalAlpha = 1.0;
     this.infoPanelsSprite.fillCanvas(this.ctx);
@@ -489,10 +495,25 @@ Game.prototype.render = function() {
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].render(this.ctx, this.cursorX, this.cursorY);
     }
+    
+    if (this.finishedAnimation > 0) {
+        this.ctx.save();
+        this.ctx.shadowColor = '#000';
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowOffsetX = 4;
+        this.ctx.shadowOffsetY = 4;
+        this.ctx.globalAlpha = Math.min(this.finishedAnimation, 1);
+        this.ctx.textAlign = 'center';
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = '40px special_eliteregular';
+        this.ctx.fillText(capitalizeFirstLetter(this.winner.name + ' powers are victorious!'), 770, 730);
+        this.ctx.restore();
+    }
+    
     var side = Side.Sides[this.currentTurnSide];
     if (this.state === Game.State.PRE_TURN) {
         this.ctx.globalAlpha = 1.0;
-        var header = capitalizeFirstLetter(side.name + ' player, get ready for turn #' + this.turnNumber + '.');
+        var header = capitalizeFirstLetter(side.name + ' powers official, get ready for turn #' + this.turnNumber + '.');
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
         this.ctx.font = '30px special_eliteregular';
@@ -689,18 +710,22 @@ Game.prototype.resolveTurn = function() {
 
 Game.prototype.setGameOver = function() {
     // Return true if the game is over
-    var aVictories = 0;
-    var bVictories = 0;
+    var victories = [0, 0];
     for (var i = 0; i < this.connections.length; ++i) {
         if (this.connections[i].isBattleOver()) {
             if (this.connections[i].locationA.side === Side.Sides[0]) {
-                aVictories++;
+                victories[0]++;
             } else {
-                bVictories++;
+                victories[1]++;
             }
         }
     }
-    this.isGameOver = aVictories >= 2 || bVictories >= 2;
+    for (var i = 0; i < victories.length; ++i) {
+        if (victories[i] >= 2) {
+            this.isGameOver = true;
+            this.winner = Side.Sides[i];
+        }
+    }
 };
 
 Game.prototype.update = function(deltaTime) {
@@ -743,6 +768,10 @@ Game.prototype.update = function(deltaTime) {
         this.researchFade -= deltaTime * 3;
     }
     this.researchFade = mathUtil.clamp(0, 1, this.researchFade);
+    
+    if (this.state === Game.State.FINISHED) {
+        this.finishedAnimation += deltaTime;
+    }
 
     if (this.potentialResearch.length > 0 && !this.isGameOver && !this.animationInProgress) {
         if (this.state === Game.State.PLAYING) {

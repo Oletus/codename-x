@@ -269,7 +269,7 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['land'],
         against: { 'land': 2 },
-        exclusiveFaction: getFaction('allies'),
+        exclusiveFaction: getFaction('allied'),
         icon: 'panjandrum',
         wikipedia: 'http://en.wikipedia.org/wiki/Panjandrum'
     },

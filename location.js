@@ -160,7 +160,7 @@ Connection.prototype.skipAnimation = function() {
 
 Connection.prototype.update = function(deltaTime, state) {
     this.animationInProgress = false;
-    if (state === Game.State.PLAYING && !this.battleWasOverLastTurn) {
+    if (state === Game.State.PLAYING || state === Game.State.FINISHED && !this.battleWasOverLastTurn) {
         if (!this.locationA.isAnimationComplete()) {
             this.locationA.update(deltaTime);
             this.animationInProgress = true;
