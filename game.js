@@ -23,7 +23,13 @@ var Game = function(canvas) {
         this.connections.push(new Connection({locationA: a, locationB: b, steps: steps}));
     }
     for (var i = 0; i < Side.Sides.length; ++i) {
-        this.factions.push(new Faction({side: Side.Sides[i]}));
+        var factionLocations = [];
+        for (var j = 0; j < this.locations.length; ++j) {
+            if  (this.locations[j].side == Side.Sides[i]) {
+                factionLocations.push(this.locations[j]);
+            }
+        }
+        this.factions.push(new Faction({side: Side.Sides[i], locations: factionLocations}));
     }
     
     this.turnNumber = 0; // How many turns have passed (for both players)
@@ -338,6 +344,25 @@ Game.prototype.createUI = function() {
             that.uiButtons.push(button);
             faction.addUI(button);
         }
+        var label = new (function() {
+            this.active = false;
+            this.render = function(ctx) {
+                if (this.active) {
+                    ctx.globalAlpha = 1.0;
+                    ctx.color = '#fff';
+                    ctx.textAlign = 'left';
+                    ctx.font = '30px special_eliteregular';
+                    ctx.fillText(faction.getCurrentIntelPower(), 838, 882);
+                }
+            };
+            this.update = function() {
+            };
+            this.hitTest = function() {
+                return false;
+            };
+        })();
+        that.uiButtons.push(label);
+        faction.addUI(label);
     };
     for (var i = 0; i < this.factions.length; ++i) {
         addFactionUI(this.factions[i]);

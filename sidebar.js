@@ -81,7 +81,11 @@ SideBar.prototype.setUnit = function(unit, extratext) {
         }
         this.powerElement.textContent = 'Combat strength: ' + unit.power;
         this.researchTimeElement.textContent = 'Research time: ' + unit.researchTime;
+
         this.attributesElement.innerHTML = '';
+        if (unit.isRecon) {
+            this.appendToAttributes({property: 'intel bonus: ' + unit.intelPower});
+        }
         for (var i = 0; i < unit.properties.length; ++i) {
             this.appendToAttributes({property: unit.properties[i]});
         }
@@ -90,6 +94,7 @@ SideBar.prototype.setUnit = function(unit, extratext) {
                 this.appendToAttributes({property: prop, value: unit.against[prop]});
             }
         }
+
         if (unit.blackIconSprite) {
             this.imgElement.src = unit.blackIconSprite.url();
             this.imgElement.style.display = 'block';

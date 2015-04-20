@@ -10,6 +10,7 @@ var Unit = function(options) {
         scientist: '',
         tier: 1,
         power: undefined,
+        intelPower: 0,
         researchTime: 2,
         singleUse: false,
         instantVictory: false,
@@ -207,6 +208,20 @@ Unit.TypeData = [
         properties: ['land', 'infantry'],
         icon: 'methwarrior'
     },
+    {
+        name: 'Surveillance Cats',
+        codename: 'Acoustic Kitty',
+        projectId: 1038,
+        description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
+        scientist: 'Dr. Bartholomew Fussiebootes',
+        tier: 1,
+        researchTime: 2,
+        isRecon: true,
+        intelPower: 2,
+        riskFactor: 0.1,
+        properties: ['land', 'animal'],
+        icon: 'cyborgcat'
+    },
     // TIER 2 UNITS
     {
         name: 'Triebflügel',
@@ -257,8 +272,10 @@ Unit.TypeData = [
         description: 'These dogs are trained to speak and can be then sent into enemy territory to gather intelligence and report back.',
         scientist: 'Dr. I. P. Pavlov',
         tier: 2,
-        researchTime: 4,
+        researchTime: 3,
         isRecon: true,
+        power: 1,
+        intelPower: 4,
         riskFactor: 0.05,
         properties: ['animal', 'land'],
         icon: 'talkingdog'
@@ -304,19 +321,6 @@ Unit.TypeData = [
         riskFactor: 0.1,
         against: {'armor': 2, 'air': -2, 'animal': -2},
         icon: 'poo'
-    },
-    {
-        name: 'Surveillance Cats',
-        codename: 'Acoustic Kitty',
-        projectId: 1038,
-        description: 'Our world famous surgeon will implant a listening device, a battery and an antenna into a kitten. It can then be deployed as a very fluffy and adorable spy.',
-        scientist: 'Dr. Bartholomew Fussiebootes',
-        tier: 2,
-        researchTime: 3,
-        isRecon: true,
-        riskFactor: 0.1,
-        properties: ['land', 'animal', 'espionage'],
-        icon: 'cyborgcat'
     },
     {
         name: 'Soup Bowl War Ship',

@@ -37,10 +37,11 @@ var Faction = function(options) {
         completedResearch: [], // Array of unit types that have been researched
         reserve: [],           // Array of unit types available for use
         researchIntel: [],     // List of unit types the opponent is probably (?) researching
-        intelPower: 1,
+        intelPower: 2,
         researchSlots: 2,
         messageLog: [],
-        aiControlled: false
+        aiControlled: false,
+        locations: []
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -102,15 +103,31 @@ Faction.prototype.advanceResearch = function() {
     this.sortReserve();
 };
 
+Faction.prototype.getCurrentIntelPower = function() {
+    // If intel units are in reserve, they are only half as effective.
+    var intelPower = this.intelPower;
+    for (var i = 0; i < this.reserve.length; ++i) {
+        intelPower += this.reserve[i].intelPower / 2;
+    }
+    for (var i = 0; i < this.locations.length; ++i) {
+        intelPower += this.locations[i].unit.intelPower;
+    }
+    return intelPower;
+};
+
 // Once per turn
 Faction.prototype.updateIntel = function(opponentFaction) {
-    this.intelOnSide = opponentFaction.side;
     this.researchIntel = [];
-    this.accumulatedIntelPower += this.intelPower;
+    this.intelOnSide = opponentFaction.side;
+
+    this.accumulatedIntelPower += this.getCurrentIntelPower();
+
     var discoveredIndex = 0;
-    while (this.accumulatedIntelPower > 2 && opponentFaction.currentResearch.length > discoveredIndex) {
-        this.researchIntel.push(opponentFaction.currentResearch[discoveredIndex].unitType);
-        this.accumulatedIntelPower -= 2;
+    var opponentResearch = opponentFaction.currentResearch.slice(0);
+    shuffle(opponentResearch);
+    while (this.accumulatedIntelPower > 4 && opponentResearch.length > discoveredIndex) {
+        this.researchIntel.push(opponentResearch[discoveredIndex].unitType);
+        this.accumulatedIntelPower -= 4;
         ++discoveredIndex;
     }
 };
@@ -156,9 +173,9 @@ Faction.prototype.update = function(deltaTime, state) {
             }
             if (completed) {
                 this.completedResearch.push(res.unitType);
-                this.addToReserve(res.unitType);
                 this.messageLog.push('Completed research on ' + res.unitType.name);
                 this.currentResearch.splice(i, 1);
+                this.addToReserve(res.unitType);
             } else {
                 ++i;
             }
