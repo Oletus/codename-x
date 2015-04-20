@@ -328,6 +328,7 @@ Game.LocationParameters = [
     y: 100,
     side: Side.Sides[1],
     terrain: ['cold'],
+    terrainAgainst: {'sea': -2},
     steps: 6,
 },
 {
@@ -337,6 +338,7 @@ Game.LocationParameters = [
     y: 210,
     side: Side.Sides[0],
     terrain: ['cold'],
+    terrainAgainst: {'sea': -2},
     steps: 6,
 },
 {

@@ -4,7 +4,8 @@ var Location = function(options) {
     var defaults = {
         name: '',
         unit: null, // Unit object
-        terrain: null, // an array of strings
+        terrain: [], // an array of strings
+        terrainAgainst: {},
         side: null,
         currentSide: null,
         connections: [],
@@ -120,9 +121,9 @@ Connection.prototype.resolveCombat = function() {
     }
 
     var sideAAdvances = 0;
-    locationA.lastTurnEffectiveness = locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain, locationA.messageLog);
+    locationA.lastTurnEffectiveness = locationA.unit.getEffectivenessAgainst(locationB.unit, locationB.terrain, locationB.terrainAgainst, locationA.messageLog);
     sideAAdvances += locationA.lastTurnEffectiveness;
-    locationB.lastTurnEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain, locationB.messageLog);
+    locationB.lastTurnEffectiveness = locationB.unit.getEffectivenessAgainst(locationA.unit, locationA.terrain, locationA.terrainAgainst, locationB.messageLog);
     sideAAdvances -= locationB.lastTurnEffectiveness;
 
     this.lastTurnAAdvantage = this.sideAAdvantage;

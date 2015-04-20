@@ -365,7 +365,7 @@ Unit.Types = [];
     }
 })();
 
-Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, msgLog) {
+Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, terrainAgainst, msgLog) {
     // Define helper variables
     var i, property;
 
@@ -402,6 +402,14 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, msgLog) {
         if (this.against.hasOwnProperty(property)) {
             var modifier = this.against[property];
             msgLog.push(property + ' terrain: ' + modifier);
+            effectiveness += modifier;
+        }
+    }
+    for (i = 0; i < this.properties.length; ++i) {
+        property = this.properties[i];
+        if (terrainAgainst.hasOwnProperty(property)) {
+            var modifier = terrainAgainst[property];
+            msgLog.push(property + " units don't work here: " + modifier);
             effectiveness += modifier;
         }
     }
