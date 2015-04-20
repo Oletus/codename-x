@@ -14,6 +14,7 @@ var SideBar = function() {
     this.codeNameElement = document.createElement('p');
     this.researchTimeElement = document.createElement('p');
     this.proposalElement = document.createElement('p');
+    this.imgElement = document.createElement('img');
 
     this.setUnit(null);
 };
@@ -85,6 +86,12 @@ SideBar.prototype.setUnit = function(unit) {
             if (unit.against.hasOwnProperty(prop)) {
                 this.appendToAttributes({property: prop, value: unit.against[prop]});
             }
+        }
+        if (unit.blackIconSprite) {
+            this.imgElement.src = unit.blackIconSprite.url();
+            this.imgElement.style.display = 'block';
+        } else {
+            this.imgElement.style.display = 'hidden';
         }
     } else {
         this.mainDiv.style.display = 'none';

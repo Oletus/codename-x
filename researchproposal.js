@@ -12,6 +12,7 @@ var ResearchProposal = function(index, select) {
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
     this.researchTimeElement = this.appendToThis('p', 'researchTime');
+    this.imgElement = this.appendToThis('img', 'icon');
     
     this.descriptionElement = document.createElement('p'); // Not shown
 

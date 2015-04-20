@@ -41,8 +41,11 @@ var Unit = function(options) {
         }
     }
     this.iconSprite = null;
+    this.blackIconSprite = null;
     if (this.icon !== null) {
-        this.iconSprite = new Sprite('icons/' + this.icon + '.png');
+        var iconPath = 'icons/' + this.icon + '.png';
+        this.iconSprite = new Sprite(iconPath);
+        this.blackIconSprite = new Sprite(iconPath, '#000');
     }
 };
 

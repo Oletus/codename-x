@@ -143,6 +143,21 @@ Sprite.prototype.drawRotatedNonUniform = function(ctx, centerX, centerY, angleRa
 };
 
 /**
+ * @return {string} An url corresponding to the Sprite.
+ */
+Sprite.prototype.url = function() {
+    if (this.img instanceof HTMLCanvasElement) {
+        try {
+            return this.img.toDataURL();
+        } catch(exception) {
+            return '';
+        }
+    } else {
+        return this.img.src;
+    }
+};
+
+/**
  * Fill the canvas with the sprite, preserving the sprite's aspect ratio, with the sprite centered on the canvas.
  * @param {CanvasRenderingContext2D} ctx
  */
