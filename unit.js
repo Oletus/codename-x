@@ -269,9 +269,10 @@ Unit.TypeData = [
         scientist: 'Dr. Willie Shamu',
         tier: 2,
         researchTime: 4,
+        singleUse: true,
         properties: ['animal', 'sea'],
         riskFactor: 0.1,
-        against: {'land': -1, 'air': -1, 'wet': 1, 'sea': 1},
+        against: {'land': -1, 'air': -1, 'sea': 1},
         icon: 'flipper'
     },
     {
