@@ -130,7 +130,7 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['animal', 'air'],
         riskFactor: 0.1,
-        against: {'conventional': 2},
+        against: {'conventional': 1},
         icon: 'batbomb'
     },
     {
