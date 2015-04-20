@@ -216,8 +216,8 @@ Game.prototype.createUI = function() {
         },
         clickCallback: function() {
             if (that.state === Game.State.FINISHED) {
-                that.restartGame();
                 Game.VictoryMusic.stop();
+                that.restartGame();
             }
         }
     });
