@@ -63,11 +63,14 @@ SideBar.prototype.update = function(deltaTime) {
     this.time += deltaTime;
 };
 
-SideBar.prototype.setUnit = function(unit) {
+SideBar.prototype.setUnit = function(unit, extratext) {
+    if (extratext === undefined) {
+        extratext = '';
+    }
     this.unit = unit;
     if (unit !== null) {
         this.mainDiv.style.display = 'inline';
-        this.unitNameElement.textContent = unit.name;
+        this.unitNameElement.textContent = extratext + unit.name;
         this.codeNameElement.textContent = 'CODENAME: ' + unit.codename;
         this.descriptionElement.textContent = unit.description;
         this.proposalElement.textContent = unit.proposal;

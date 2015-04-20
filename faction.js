@@ -50,6 +50,8 @@ var Faction = function(options) {
         }
     }
     this.ui = [];
+    this.accumulatedIntelPower = 0;
+    this.intelOnSide = null;
 };
 
 Faction.prototype.startResearch = function(unitType) {
@@ -90,6 +92,7 @@ Faction.prototype.getCheapestReserveUnit = function() {
     return minUnit;
 };
 
+// Once per turn
 Faction.prototype.advanceResearch = function() {
     for (var i = 0; i < this.currentResearch.length;) {
         var res = this.currentResearch[i];
@@ -97,6 +100,19 @@ Faction.prototype.advanceResearch = function() {
         ++i;
     }
     this.sortReserve();
+};
+
+// Once per turn
+Faction.prototype.updateIntel = function(opponentFaction) {
+    this.intelOnSide = opponentFaction.side;
+    this.researchIntel = [];
+    this.accumulatedIntelPower += this.intelPower;
+    var discoveredIndex = 0;
+    while (this.accumulatedIntelPower > 2 && opponentFaction.currentResearch.length > discoveredIndex) {
+        this.researchIntel.push(opponentFaction.currentResearch[discoveredIndex].unitType);
+        this.accumulatedIntelPower -= 2;
+        ++discoveredIndex;
+    }
 };
 
 Faction.prototype.sortReserve = function() {
@@ -175,6 +191,12 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
 Faction.prototype.renderReserveButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.reserve.length > i) {
         Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.reserve[i], button);
+    }
+};
+
+Faction.prototype.renderIntelButton = function(ctx, cursorOn, buttonDown, i, button) {
+    if (this.researchIntel.length > i) {
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.intelOnSide, button.visualX(), button.visualY(), this.researchIntel[i], button);
     }
 };
 

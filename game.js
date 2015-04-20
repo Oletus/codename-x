@@ -313,6 +313,31 @@ Game.prototype.createUI = function() {
             that.reserveUI.push(button);
             faction.addUI(button);
         }
+        // Intel buttons
+        x = 780;
+        for (var i = 0; i < faction.researchSlots; ++i) {
+            var button = (function(j) {
+                return new CanvasButton({
+                    label: 'opponent research ' + j,
+                    centerX: x,
+                    centerY: y + j * 80,
+                    width: 65,
+                    height: 65,
+                    active: false,
+                    draggable: false,
+                    renderFunc: function(ctx, cursorOn, buttonDown, button) {
+                        faction.renderIntelButton(ctx, cursorOn, buttonDown, j, button);
+                    },
+                    clickCallback: function() {
+                        if (j < faction.researchIntel.length) {
+                            that.sidebar.setUnit(faction.researchIntel[j], 'The enemy is researching ');
+                        }
+                    }
+                });
+            })(i);
+            that.uiButtons.push(button);
+            faction.addUI(button);
+        }
     };
     for (var i = 0; i < this.factions.length; ++i) {
         addFactionUI(this.factions[i]);
@@ -592,6 +617,9 @@ Game.prototype.resolveTurn = function() {
             faction.removeReserve(unit);
             this.locations[i].unit = unit;
         }
+    }
+    for (var i = 0; i < this.factions.length; ++i) {
+        this.factions[i].updateIntel(this.factions[1 - i]);
     }
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].advanceResearch();
