@@ -83,7 +83,7 @@ SideBar.prototype.setUnit = function(unit, extratext) {
         this.researchTimeElement.textContent = 'Research time: ' + unit.researchTime;
 
         this.attributesElement.innerHTML = '';
-        if (unit.isRecon) {
+        if (unit.intelPower > 0) {
             this.appendToAttributes({property: 'intel bonus: ' + unit.intelPower + ' (' + Math.floor(unit.intelPower / 2) + ' in reserve)'});
         }
         for (var i = 0; i < unit.properties.length; ++i) {
