@@ -19,14 +19,18 @@ var Location = function(options) {
         }
     }
     this.lastTurnEffectiveness = 0;
-    this.lastTurnUnit = null;
+    this.lastTurnUnit = this.unit;
     this.animationProgress = 0;
     this.messageLog = [];
 };
 
 Location.prototype.getVisibleUnit = function() {
-    if (this.lastTurnUnit == null || (this.side == this.currentSide && this.isAnimationComplete())) {
-        return this.unit;
+    if (!this.connections[0].animationInProgress) {
+        if (this.side === this.currentSide) {
+            return this.unit;
+        } else {
+            return Unit.Types[1]; // Unknown unit
+        }
     } else {
         return this.lastTurnUnit;
     }
@@ -131,25 +135,25 @@ Connection.prototype.resetAnimation = function() {
 };
 
 Connection.prototype.update = function(deltaTime, state) {
-    var animationInProgress = false;
+    this.animationInProgress = false;
     if (state === Game.State.PLAYING) {
         if (!this.locationA.isAnimationComplete()) {
             this.locationA.update(deltaTime);
-            animationInProgress = true;
+            this.animationInProgress = true;
         } else if (!this.locationB.isAnimationComplete()) {
             this.locationB.update(deltaTime);
-            animationInProgress = true;
+            this.animationInProgress = true;
         } else {
             this.changeAnimation += deltaTime;
             if (this.lastTurnAAdvantage == this.sideAAdvantage) {
                 this.changeAnimation += deltaTime * 4;
             }
             if (this.changeAnimation < 1) {
-                animationInProgress = true;
+                this.animationInProgress = true;
             }
         }
     }
-    return animationInProgress;
+    return this.animationInProgress;
 };
 
 Connection.prototype.render = function(ctx) {

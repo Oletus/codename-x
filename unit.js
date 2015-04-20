@@ -85,6 +85,13 @@ Unit.TypeData = [
         properties: ['land', 'conventional'],
         tier: 0
     },
+    {
+        name: 'Unkown Unit',
+        codename: 'UFO',
+        description: 'We do not know what the enemy will deploy here against us this turn.',
+        power: '???',
+        tier: 0
+    },
     // TIER 1 UNITS
     {
         name: 'Fruit Bat Firebombs',

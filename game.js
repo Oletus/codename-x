@@ -23,7 +23,7 @@ var Game = function(canvas) {
         this.factions.push(new Faction({side: Side.Sides[i]}));
     }
     
-    this.turnNumber = 1; // How many turns have passed (for both players)
+    this.turnNumber = 0; // How many turns have passed (for both players)
     this.preturnFade = 1;
     this.researchFade = 0;
     this.currentTurnSide = 0; // Index to Side.Sides
@@ -59,6 +59,8 @@ var Game = function(canvas) {
         event.preventDefault();
     });
     this.setCursorPosition({x: 0, y: 0});
+
+    this.resolveTurn();
 };
 
 Game.State = {
