@@ -266,9 +266,14 @@ Game.prototype.createUI = function() {
             },
             clickCallback: function() {
                 that.sidebar.setUnit(location.getVisibleUnit());
+            },
+            draggable: true,
+            draggedObject: function() {
+                return location;
             }
         });
         that.uiButtons.push(button);
+        location.button = button;
         that.playingUI.push(button);
     };
     for (var i = 0; i < this.locations.length; ++i) {
@@ -566,6 +571,7 @@ Game.prototype.aiTurn = function() {
 Game.prototype.resetAnimations = function() {
     for (var i = 0; i < this.locations.length; ++i) {
         this.locations[i].resetAnimation();
+        this.locations[i].button.draggable = false;
     }
     for (var i = 0; i < this.connections.length; ++i) {
         this.connections[i].resetAnimation();
@@ -697,6 +703,13 @@ Game.prototype.update = function(deltaTime) {
         Game.VictoryMusic.playSingular();
         this.state = Game.State.FINISHED;
     }
+    if (this.state === Game.State.PLAYING && !this.animationInProgress && !this.isGameOver) {
+        for (var i = 0; i < this.locations.length; ++i) {
+            if (this.locations[i].side === Side.Sides[this.currentTurnSide]) {
+                this.locations[i].button.draggable = true;
+            }
+        }
+    }
     
     if (this.state === Game.State.PRE_TURN) {
         this.preturnFade += deltaTime * 3;
@@ -712,7 +725,7 @@ Game.prototype.update = function(deltaTime) {
     }
     this.researchFade = mathUtil.clamp(0, 1, this.researchFade);
 
-    if (this.potentialResearch.length > 0 && !this.isGameOver) {
+    if (this.potentialResearch.length > 0 && !this.isGameOver && !this.animationInProgress) {
         if (this.state === Game.State.PLAYING) {
             this.researchGlowAmount += deltaTime * 10 * Math.sin(this.time * 20.0);
         } else if (this.state === Game.State.RESEARCH_PROPOSALS) {
@@ -750,7 +763,14 @@ Game.prototype.setCursorPosition = function(vec) {
 
 Game.prototype.dragToLocation = function(location) {
     if (location.side === Side.Sides[this.currentTurnSide] && this.downButton.draggedObject !== null) {
-        this.fromReserveToLocation(this.downButton.draggedObject(), location);
+        var draggedObject = this.downButton.draggedObject();
+        if (draggedObject instanceof Location) {
+            if (draggedObject.side === location.side) {
+                this.fromLocationToLocation(draggedObject, location);
+            }
+        } else {
+            this.fromReserveToLocation(draggedObject, location);
+        }
     }
 };
 
@@ -758,6 +778,12 @@ Game.prototype.fromReserveToLocation = function(reserveUnit, location) {
     this.factions[this.currentTurnSide].addToReserve(location.unit);
     this.factions[this.currentTurnSide].removeReserve(reserveUnit);
     location.unit = reserveUnit;
+};
+
+Game.prototype.fromLocationToLocation = function(locA, locB) {
+    var temp = locA.unit;
+    locA.unit = locB.unit;
+    locB.unit = temp;
 };
 
 Game.prototype.click = function(vec) {
@@ -785,7 +811,7 @@ Game.prototype.release = function(vec) {
             if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
                 if (this.downButton === this.uiButtons[i]) {
                     this.uiButtons[i].click();
-                } else if (this.uiButtons[i].dragTargetFunc !== null) {
+                } else if (this.uiButtons[i].dragTargetFunc !== null && this.downButton.draggable) {
                     this.uiButtons[i].dragTargetFunc();
                 }
             }

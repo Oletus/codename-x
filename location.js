@@ -71,7 +71,7 @@ Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
     } else {
         animY = mathUtil.fmod(this.animationProgress, 1.0);
     }
-    if (this.animationProgress > 0 && logIndex >= 0) {
+    if (this.animationProgress > 0 && logIndex >= 0 && !button.dragged) {
         ctx.textAlign = 'center';
         ctx.font = '16px special_eliteregular';
         ctx.fillStyle = '#fff'
