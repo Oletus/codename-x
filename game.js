@@ -195,7 +195,7 @@ Game.prototype.createUI = function() {
         label: 'Start Turn',
         centerX: 1920 * 0.5,
         centerY: 540,
-        width: 250,
+        width: 350,
         height: 100,
         clickCallback: function() {
             that.nextPhase();
@@ -203,23 +203,11 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(startTurnButton);
     this.preTurnUI.push(startTurnButton);
-    var aiTurnButton = new CanvasButton({
-        label: 'Let AI Play This Turn',
-        centerX: 1920 * 0.5,
-        centerY: 670,
-        width: 250,
-        height: 70,
-        clickCallback: function() {
-            that.aiTurn();
-        }
-    });
-    this.uiButtons.push(aiTurnButton);
-    this.preTurnUI.push(aiTurnButton);
-    var aiPlayerButton = new CanvasButton({
+    this.aiPlayerButton = new CanvasButton({
         label: 'Let AI Control This Faction',
         centerX: 1920 * 0.5,
-        centerY: 800,
-        width: 250,
+        centerY: 700,
+        width: 350,
         height: 70,
         clickCallback: function() {
             if (!that.playingAgainstAI) {
@@ -229,8 +217,23 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.uiButtons.push(aiPlayerButton);
-    this.preTurnUI.push(aiPlayerButton);
+    this.uiButtons.push(this.aiPlayerButton);
+    this.preTurnUI.push(this.aiPlayerButton);
+
+    if (DEV_MODE) {
+        var aiTurnButton = new CanvasButton({
+            label: 'Let AI Play This Turn',
+            centerX: 1920 * 0.5,
+            centerY: 900,
+            width: 350,
+            height: 70,
+            clickCallback: function() {
+                that.aiTurn();
+            }
+        });
+        this.uiButtons.push(aiTurnButton);
+        this.preTurnUI.push(aiTurnButton);
+    }
 
     var addLocationUI = function(location) {
         var button = new CanvasButton({
@@ -545,6 +548,9 @@ Game.prototype.nextPhase = function() {
             this.state = Game.State.PRE_TURN;
             this.setUIActive(this.playingUI, false);
             this.setUIActive(this.preTurnUI, true);
+            if (this.turnNumber >= 2) {
+                this.aiPlayerButton.active = false;
+            }
             if (this.factions[this.currentTurnSide].aiControlled) {
                 this.aiTurn();
             } else if (this.playingAgainstAI) {
