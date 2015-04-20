@@ -780,6 +780,9 @@ Game.prototype.update = function(deltaTime) {
                 this.locations[i].button.draggable = true;
             }
         }
+        setPropertyInAll(this.reserveUI, 'draggable', true);
+    } else {
+        setPropertyInAll(this.reserveUI, 'draggable', false);
     }
     
     if (this.state === Game.State.PRE_TURN) {
