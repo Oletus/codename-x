@@ -278,23 +278,25 @@ Faction.prototype.getPotentialResearch = function() {
         }
     }
     filter(possibleResearch, completedResearchMultiUse);
-    
-    // Cut a fraction of single-use units based on how many completely new ones are still available
+    filter(possibleResearch, completedResearchSingleUse);
+
     var singleUseProjectsLeft = 0;
     for (var i = 0; i < possibleResearch.length; ++i) {
-        if (possibleResearch[i].singleUse && completedResearchSingleUse.indexOf(possibleResearch[i]) < 0) {
+        if (possibleResearch[i].singleUse) {
             ++singleUseProjectsLeft;
         }
     }
-    if (singleUseProjectsLeft >= 3) {
-        filter(possibleResearch, completedResearchSingleUse);
-    } else {
+
+    if (this.completedResearch.length >= 3 && singleUseProjectsLeft < 3) {
+        // Add some single-use projects back to potential research if they are not in the reserve
+        filter(completedResearchSingleUse, this.reserve);
         shuffle(completedResearchSingleUse);
-        arrayUtil.cutToFraction(completedResearchSingleUse, singleUseProjectsLeft / 3);
-        filter(possibleResearch, completedResearchSingleUse);
+        var i = 0;
+        while (i < completedResearchSingleUse.length && singleUseProjectsLeft + i < 3) {
+            possibleResearch.push(completedResearchSingleUse[i]);
+            ++i;
+        }
     }
-    // Don't allow single-use units that are in reserve to appear twice
-    filter(possibleResearch, this.reserve);
 
     // Randomize three projects from remaining set
     shuffle(possibleResearch);
