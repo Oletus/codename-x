@@ -217,8 +217,8 @@ Game.prototype.createUI = function() {
             label: location.name,
             centerX: location.x,
             centerY: location.y,
-            width: 60,
-            height: 60,
+            width: 65,
+            height: 65,
             dragTargetFunc: function() {
                 that.dragToLocation(location);
             },
@@ -245,8 +245,8 @@ Game.prototype.createUI = function() {
                     label: 'research ' + j,
                     centerX: x,
                     centerY: y + j * 80,
-                    width: 60,
-                    height: 60,
+                    width: 65,
+                    height: 65,
                     active: false,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
                         faction.renderResearchButton(ctx, cursorOn, buttonDown, j, button);
@@ -261,16 +261,16 @@ Game.prototype.createUI = function() {
             that.uiButtons.push(button);
             faction.addUI(button);
         }
-        x = 60;
+        x = 50;
         var perRow = 9;
         for (var i = 0; i < Unit.Types.length; ++i) {
             var button = (function(j) {
                 return new CanvasButton({
                     label: 'reserve ' + j,
-                    centerX: x + (j % perRow) * 63,
-                    centerY: y + Math.floor(j / perRow) * 80 + ((j % perRow) % 2) * 30 - 15,
-                    width: 60,
-                    height: 60,
+                    centerX: x + (j % perRow) * 73,
+                    centerY: y + Math.floor(j / perRow) *80 + ((j % perRow) % 2) * 34 - 15,
+                    width: 65,
+                    height: 65,
                     active: false,
                     draggable: true,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
