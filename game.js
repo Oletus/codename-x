@@ -200,9 +200,9 @@ Game.prototype.createUI = function() {
     
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
-        centerX: 1920 * 0.5,
+        centerX: 1920 * 0.6,
         centerY: 200,
-        width: 200,
+        width: 240,
         height: 70,
         clickCallback: function() {
             requestFullscreen(document.body);
@@ -210,6 +210,21 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(fsButton);
     this.preTurnUI.push(fsButton);
+    var fsButton = new CanvasButton({
+        labelFunc: function() {
+            return Audio.allMuted ? 'Unmute audio' : 'Mute audio';
+        },
+        centerX: 1920 * 0.4,
+        centerY: 200,
+        width: 240,
+        height: 70,
+        clickCallback: function() {
+            Audio.muteAll(!Audio.allMuted);
+        }
+    });
+    this.uiButtons.push(fsButton);
+    this.preTurnUI.push(fsButton);
+    
     var startTurnButton = new CanvasButton({
         label: 'Start Turn',
         centerX: 1920 * 0.5,
