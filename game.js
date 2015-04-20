@@ -791,6 +791,7 @@ Game.prototype.fromLocationToLocation = function(locA, locB) {
 };
 
 Game.prototype.click = function(vec) {
+    this.setCursorPosition(vec);
     for (var i = 0; i < this.uiButtons.length; ++i) {
         if (this.uiButtons[i].active && this.uiButtons[i].hitTest(this.cursorX, this.cursorY)) {
             this.downButton = this.uiButtons[i];
