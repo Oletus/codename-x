@@ -319,7 +319,7 @@ Unit.TypeData = [
         name: 'Soup Bowl War Ship',
         codename: 'Floating Soup Bowl',
         projectId: 7039,
-        description: 'An innovative naval vessel with a circular hull. The design allows this war ship to carry a massive amount of weapons. May fall prey to laws of physics.',
+        description: 'An innovative naval vessel with a circular hull. The design allows this war ship to carry a massive amount of weapons. May fall prey to the laws of physics.',
         scientist: 'Dr. B. Owler',
         tier: 2,
         researchTime: 4,
