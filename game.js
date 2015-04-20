@@ -226,8 +226,8 @@ Game.prototype.createUI = function() {
     
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
-        centerX: 1920 * 0.6,
-        centerY: 200,
+        centerX: 1920 * 0.8,
+        centerY: 800,
         width: 240,
         height: 70,
         clickCallback: function() {
@@ -240,8 +240,8 @@ Game.prototype.createUI = function() {
         labelFunc: function() {
             return Audio.allMuted ? 'Unmute audio' : 'Mute audio';
         },
-        centerX: 1920 * 0.4,
-        centerY: 200,
+        centerX: 1920 * 0.2,
+        centerY: 800,
         width: 240,
         height: 70,
         clickCallback: function() {
@@ -251,14 +251,30 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(muteButton);
     this.preTurnUI.push(muteButton);
     
+    var nameLabel = new CanvasLabel({
+        label: 'Panjandrum vs. Triebflügel',
+        centerX: 1920 * 0.5,
+        centerY: 250,
+        fontSize: 60
+    });
+    this.uiButtons.push(nameLabel);
+    this.preTurnUI.push(nameLabel);
     var creditsLabel = new CanvasLabel({
+        label: 'LUDUM DARE #32 JAM GAME',
+        centerX: 1920 * 0.5,
+        centerY: 960,
+        fontSize: 20
+    });
+    this.uiButtons.push(creditsLabel);
+    this.preTurnUI.push(creditsLabel);
+    var creditsLabel2 = new CanvasLabel({
         label: 'By Olli Etuaho, Valtteri Heinonen, Charlie Hornsby, Sakari Leppä, Kimmo Keskinen, Anastasia Diatlova and Zachary Laster',
         centerX: 1920 * 0.5,
         centerY: 1000,
         fontSize: 20
     });
-    this.uiButtons.push(creditsLabel);
-    this.preTurnUI.push(creditsLabel);
+    this.uiButtons.push(creditsLabel2);
+    this.preTurnUI.push(creditsLabel2);
     
     var startTurnButton = new CanvasButton({
         label: 'Start Turn',
