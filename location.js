@@ -82,7 +82,7 @@ var Connection = function(options) {
     var defaults = {
         locationA: null,
         locationB: null,
-        sideAAdvantage: 5,
+        sideAAdvantage: undefined,
         steps: 10
     };
     for (var key in defaults) {
@@ -91,6 +91,9 @@ var Connection = function(options) {
         } else {
             this[key] = options[key];
         }
+    }
+    if (this.sideAAdvantage === undefined) {
+        this.sideAAdvantage = Math.floor(this.steps / 2);
     }
     this.lastTurnAAdvantage = this.sideAAdvantage;
     this.battleWasOverLastTurn = false;

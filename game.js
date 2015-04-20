@@ -17,7 +17,10 @@ var Game = function(canvas) {
     }
     this.time = 0;
     for (var i = 0; i < Game.LocationParameters.length; i += 2) {
-        this.connections.push(new Connection({locationA: this.locations[i], locationB: this.locations[i + 1]}));
+        var steps = Game.LocationParameters[i].steps + Game.LocationParameters[i + 1].steps;
+        var a = this.locations[i];
+        var b = this.locations[i + 1];
+        this.connections.push(new Connection({locationA: a, locationB: b, steps: steps}));
     }
     for (var i = 0; i < Side.Sides.length; ++i) {
         this.factions.push(new Faction({side: Side.Sides[i]}));
@@ -306,7 +309,8 @@ Game.LocationParameters = [
     x: 325,
     y: 260,
     side: Side.Sides[1],
-    terrain: ['wet']
+    terrain: ['wet'],
+    steps: 4,
 },
 {
     name: 'Germany',
@@ -314,7 +318,8 @@ Game.LocationParameters = [
     x: 520,
     y: 395,
     side: Side.Sides[0],
-    terrain: ['wet']
+    terrain: ['wet'],
+    steps: 4,
 },
 {
     name: 'Russia',
@@ -322,7 +327,8 @@ Game.LocationParameters = [
     x: 1095,
     y: 100,
     side: Side.Sides[1],
-    terrain: ['cold']
+    terrain: ['cold'],
+    steps: 6,
 },
 {
     name: 'Baltics',
@@ -330,7 +336,8 @@ Game.LocationParameters = [
     x: 860,
     y: 210,
     side: Side.Sides[0],
-    terrain: ['cold']
+    terrain: ['cold'],
+    steps: 6,
 },
 {
     name: 'Greece',
@@ -338,7 +345,8 @@ Game.LocationParameters = [
     x: 1095,
     y: 580,
     side: Side.Sides[1],
-    terrain: ['warm']
+    terrain: ['warm'],
+    steps: 5
 },
 {
     name: 'Italy',
@@ -346,7 +354,8 @@ Game.LocationParameters = [
     x: 855,
     y: 505,
     side: Side.Sides[0],
-    terrain: ['warm']
+    terrain: ['warm'],
+    steps: 5
 }
 ];
 
