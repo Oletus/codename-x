@@ -31,6 +31,7 @@ var Game = function(canvas) {
     this.researchFade = 0;
     this.currentTurnSide = 0; // Index to Side.Sides
     this.state = Game.State.PRE_TURN;
+    this.playingAgainstAI = false;
     
     this.potentialResearch = [];
     this.chosenResearch = null;
@@ -181,7 +182,7 @@ Game.prototype.createUI = function() {
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
         centerX: 1920 * 0.5,
-        centerY: 800,
+        centerY: 200,
         width: 200,
         height: 70,
         clickCallback: function() {
@@ -214,6 +215,22 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(aiTurnButton);
     this.preTurnUI.push(aiTurnButton);
+    var aiPlayerButton = new CanvasButton({
+        label: 'Let AI Control This Faction',
+        centerX: 1920 * 0.5,
+        centerY: 800,
+        width: 250,
+        height: 70,
+        clickCallback: function() {
+            if (!that.playingAgainstAI) {
+                that.factions[that.currentTurnSide].aiControlled = true;
+                that.playingAgainstAI = true;
+                that.aiTurn();
+            }
+        }
+    });
+    this.uiButtons.push(aiPlayerButton);
+    this.preTurnUI.push(aiPlayerButton);
 
     var addLocationUI = function(location) {
         var button = new CanvasButton({
@@ -523,6 +540,11 @@ Game.prototype.nextPhase = function() {
             this.state = Game.State.PRE_TURN;
             this.setUIActive(this.playingUI, false);
             this.setUIActive(this.preTurnUI, true);
+            if (this.factions[this.currentTurnSide].aiControlled) {
+                this.aiTurn();
+            } else if (this.playingAgainstAI) {
+                this.nextPhase();
+            }
         }
     }
 };

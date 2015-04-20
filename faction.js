@@ -39,7 +39,8 @@ var Faction = function(options) {
         researchIntel: [],     // List of unit types the opponent is probably (?) researching
         intelPower: 1,
         researchSlots: 2,
-        messageLog: []
+        messageLog: [],
+        aiControlled: false
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
