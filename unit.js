@@ -401,7 +401,7 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, terrainAgainst
         property = terrain[i];
         if (this.against.hasOwnProperty(property)) {
             var modifier = this.against[property];
-            msgLog.push(property + ' terrain: ' + modifier);
+            msgLog.push(capitalizeFirstLetter(property + ' terrain: ' + modifier));
             effectiveness += modifier;
         }
     }
@@ -409,7 +409,7 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, terrainAgainst
         property = this.properties[i];
         if (terrainAgainst.hasOwnProperty(property)) {
             var modifier = terrainAgainst[property];
-            msgLog.push(property + " units don't work here: " + modifier);
+            msgLog.push(capitalizeFirstLetter(property + " units don't work here: " + modifier));
             effectiveness += modifier;
         }
     }
