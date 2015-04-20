@@ -259,8 +259,8 @@ Game.prototype.createUI = function() {
             label: location.name,
             centerX: location.x,
             centerY: location.y,
-            width: 65,
-            height: 65,
+            width: 90,
+            height: 90,
             dragTargetFunc: function() {
                 that.dragToLocation(location);
             },
@@ -292,8 +292,8 @@ Game.prototype.createUI = function() {
                     label: 'research ' + j,
                     centerX: x,
                     centerY: y + j * 80,
-                    width: 65,
-                    height: 65,
+                    width: 75,
+                    height: 75,
                     active: false,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
                         faction.renderResearchButton(ctx, cursorOn, buttonDown, j, button);
@@ -315,9 +315,9 @@ Game.prototype.createUI = function() {
                 return new CanvasButton({
                     label: 'reserve ' + j,
                     centerX: x + (j % perRow) * 73,
-                    centerY: y + Math.floor(j / perRow) *80 + ((j % perRow) % 2) * 34 - 15,
-                    width: 65,
-                    height: 65,
+                    centerY: y + Math.floor(j / perRow) * 80 + ((j % perRow) % 2) * 34 - 15,
+                    width: 73,
+                    height: 73,
                     active: false,
                     draggable: true,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
@@ -345,8 +345,8 @@ Game.prototype.createUI = function() {
                     label: 'opponent research ' + j,
                     centerX: x,
                     centerY: y + j * 80,
-                    width: 65,
-                    height: 65,
+                    width: 75,
+                    height: 75,
                     active: false,
                     draggable: false,
                     renderFunc: function(ctx, cursorOn, buttonDown, button) {
