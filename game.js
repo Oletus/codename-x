@@ -151,7 +151,7 @@ Game.prototype.createUI = function() {
         width: 70,
         height: 70,
         clickCallback: function() {
-            if (that.state === Game.State.PLAYING) {
+            if (that.state === Game.State.PLAYING && !that.animationInProgress) {
                 that.nextPhase();
             }
         },
@@ -428,6 +428,9 @@ Game.prototype.render = function() {
 };
 
 Game.prototype.showResearchUI = function(show) {
+    if (this.state >= Game.State.FINISHED) {
+        return;
+    }
     if (show) {
         if (this.potentialResearch.length > 0) {
             this.state = Game.State.RESEARCH_PROPOSALS;
@@ -593,37 +596,43 @@ Game.prototype.resolveTurn = function() {
     for (var i = 0; i < this.factions.length; ++i) {
         this.factions[i].advanceResearch();
     }
-    if (this.isGameOver()) {
-        this.state = Game.State.FINISHED;
-        Game.BackgroundMusic.stop();
-        Game.VictoryMusic.playSingular();
-    }
+    this.setGameOver();
 };
 
-Game.prototype.isGameOver = function() {
+Game.prototype.setGameOver = function() {
     // Return true if the game is over
-    var completedBattles = 0;
+    var aVictories = 0;
+    var bVictories = 0;
     for (var i = 0; i < this.connections.length; ++i) {
         if (this.connections[i].isBattleOver()) {
-            completedBattles++;
+            if (this.connections[i].locationA.side === Side.Sides[0]) {
+                aVictories++;
+            } else {
+                bVictories++;
+            }
         }
     }
-    return completedBattles >= 2;
+    this.isGameOver = aVictories >= 2 || bVictories >= 2;
 };
 
 Game.prototype.update = function(deltaTime) {
     this.time += deltaTime;
 
-    var animationInProgress = false;
+    this.animationInProgress = false;
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].update(deltaTime);
     }
-    animationInProgress = this.factions[this.currentTurnSide].update(deltaTime, this.state);
+    this.animationInProgress = this.factions[this.currentTurnSide].update(deltaTime, this.state);
     this.setPotentialResearch();
     for (var i = 0; i < this.connections.length; ++i) {
-        if (!animationInProgress) {
-            animationInProgress = this.connections[i].update(deltaTime, this.state);
+        if (!this.animationInProgress) {
+            this.animationInProgress = this.connections[i].update(deltaTime, this.state);
         }
+    }
+    if (this.state === Game.State.PLAYING && !this.animationInProgress && this.isGameOver) {
+        Game.BackgroundMusic.stop();
+        Game.VictoryMusic.playSingular();
+        this.state = Game.State.FINISHED;
     }
     
     if (this.state === Game.State.PRE_TURN) {
@@ -640,7 +649,7 @@ Game.prototype.update = function(deltaTime) {
     }
     this.researchFade = mathUtil.clamp(0, 1, this.researchFade);
 
-    if (this.potentialResearch.length > 0) {
+    if (this.potentialResearch.length > 0 && !this.isGameOver) {
         if (this.state === Game.State.PLAYING) {
             this.researchGlowAmount += deltaTime * 10 * Math.sin(this.time * 20.0);
         } else if (this.state === Game.State.RESEARCH_PROPOSALS) {
@@ -660,7 +669,7 @@ Game.prototype.setPotentialResearch = function() {
 };
 
 Game.prototype.nextPhaseGlowAmount = function() {
-    if (this.potentialResearch.length > 0 || this.state !== Game.State.PLAYING) {
+    if (this.potentialResearch.length > 0 || this.state !== Game.State.PLAYING || this.animationInProgress) {
         return 0;
     } else {
         return Math.sin(this.time * 2) * 0.5 + 0.3;
