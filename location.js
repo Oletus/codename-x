@@ -20,6 +20,7 @@ var Location = function(options) {
     }
     this.lastTurnEffectiveness = 0;
     this.lastTurnUnit = this.unit;
+    this.lastTurnSide = this.side;
     this.animationProgress = 0;
     this.messageLog = [];
 };
@@ -36,6 +37,14 @@ Location.prototype.getVisibleUnit = function() {
     }
 };
 
+Location.prototype.getVisibleSide = function() {
+    if (!this.connections[0].animationInProgress && this.isAnimationComplete()) {
+        return this.side;
+    } else {
+        return this.lastTurnSide;
+    }
+};
+
 Location.prototype.isAnimationComplete = function() {
     return this.animationProgress >= this.messageLog.length;
 };
@@ -43,7 +52,7 @@ Location.prototype.isAnimationComplete = function() {
 Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
     var x = button.visualX();
     var y = button.visualY();
-    Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.getVisibleUnit(), button);
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.getVisibleSide(), x, y, this.getVisibleUnit(), button);
 
     var logIndex = Math.floor(this.animationProgress);
 
@@ -84,6 +93,7 @@ var Connection = function(options) {
         }
     }
     this.lastTurnAAdvantage = this.sideAAdvantage;
+    this.battleWasOverLastTurn = false;
     this.locationA.connections.push(this);
     this.locationB.connections.push(this);
     this.changeAnimation = 0;
@@ -102,6 +112,7 @@ Connection.prototype.resolveCombat = function() {
     locationB.messageLog = [];
 
     if (this.isBattleOver()) {
+        this.battleWasOverLastTurn = true;
         return;
     }
 
@@ -137,7 +148,7 @@ Connection.prototype.resetAnimation = function() {
 
 Connection.prototype.update = function(deltaTime, state) {
     this.animationInProgress = false;
-    if (state === Game.State.PLAYING) {
+    if (state === Game.State.PLAYING && !this.battleWasOverLastTurn) {
         if (!this.locationA.isAnimationComplete()) {
             this.locationA.update(deltaTime);
             this.animationInProgress = true;
@@ -182,9 +193,9 @@ Connection.prototype.render = function(ctx) {
         ctx.rotate(angle);
 
         if (i >= displayedAdvantage) {
-            ctx.fillStyle = this.locationB.side.color;
+            ctx.fillStyle = this.locationB.getVisibleSide().color;
         } else {
-            ctx.fillStyle = this.locationA.side.color;
+            ctx.fillStyle = this.locationA.getVisibleSide().color;
         }
         ctx.fillRect(-6, -6, 12, 12);
         
