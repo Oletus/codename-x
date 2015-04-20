@@ -418,7 +418,7 @@ Game.prototype.render = function() {
     var side = Side.Sides[this.currentTurnSide];
     if (this.state === Game.State.PRE_TURN) {
         this.ctx.globalAlpha = 1.0;
-        var header = side.name + ' player, get ready for turn #' + this.turnNumber + '.';
+        var header = capitalizeFirstLetter(side.name + ' player, get ready for turn #' + this.turnNumber + '.');
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
         this.ctx.font = '30px special_eliteregular';
