@@ -325,9 +325,10 @@ Unit.TypeData = [
         description: 'An innovative naval vessel with a circular hull. The design allows this war ship to carry a massive amount of weapons. May fall prey to the laws of physics.',
         scientist: 'Dr. B. Owler',
         tier: 2,
+        power: 3,
         researchTime: 4,
         riskFactor: 0.15,
-        properties: ['sea'],
+        properties: ['sea', 'armor'],
         icon: 'roundship'
     },
     // TIER 3 SUPER UNITS
