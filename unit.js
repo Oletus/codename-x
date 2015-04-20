@@ -386,7 +386,7 @@ Unit.prototype.getEffectivenessAgainst = function(unitB, terrain, terrainAgainst
     }
     
     if (this.power != 0) {
-        msgLog.push('Base effectiveness: ' + this.power);
+        msgLog.push('Combat strength: ' + this.power);
     }
 
     for (i = 0; i < unitB.properties.length; ++i) {

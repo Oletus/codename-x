@@ -75,7 +75,7 @@ SideBar.prototype.setUnit = function(unit) {
         } else {
             this.singleUseElement.textContent = '';
         }
-        this.powerElement.textContent = 'Power: ' + unit.power;
+        this.powerElement.textContent = 'Combat strength: ' + unit.power;
         this.researchTimeElement.textContent = 'Research time: ' + unit.researchTime;
         this.attributesElement.innerHTML = '';
         for (var i = 0; i < unit.properties.length; ++i) {
