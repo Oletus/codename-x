@@ -8,6 +8,8 @@ var Game = function(canvas) {
     this.blueGlowSprite = new Sprite('red_glow.png', '#ff8');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
+    
+    this.sidebar = new SideBar();
 
     this.restartGame();
 
@@ -76,6 +78,7 @@ Game.prototype.restartGame = function() {
 
     this.downButton = null;
     this.createUI();
+    this.sidebar.setUnit(null);
 
     this.resolveTurn();
 };
@@ -105,7 +108,6 @@ Game.prototype.createUI = function() {
     this.researchHTML.style.display = 'none';
     canvasWrapper.appendChild(this.researchHTML);
     
-    this.sidebar = new SideBar();
     this.researchProposals = [];
     this.researchHTML.innerHTML = '<h1>RESEARCH PROPOSALS</h1>';
     for (var i = 0; i < 3; ++i) {
