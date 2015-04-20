@@ -9,6 +9,35 @@ var Game = function(canvas) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
 
+    this.restartGame();
+
+    var that = this;
+    this.canvas.addEventListener('mousemove', function(event) {
+        that.setCursorPosition(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('touchmove', function(event) {
+        that.setCursorPosition(resizer.getCanvasPosition(event));
+        event.preventDefault();
+    });
+    this.canvas.addEventListener('mousedown', function(event) {
+        that.click(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('touchstart', function(event) {
+        that.click(resizer.getCanvasPosition(event));
+        event.preventDefault();
+    });
+    this.canvas.addEventListener('mouseup', function(event) {
+        that.release(resizer.getCanvasPosition(event));
+    });
+    this.canvas.addEventListener('touchend', function(event) {
+        that.release(new Vec2(that.cursorX, that.cursorY));
+        event.preventDefault();
+    });
+    this.setCursorPosition({x: 0, y: 0});
+};
+
+Game.prototype.restartGame = function() {
+    this.isGameOver = false;
     this.locations = [];
     this.connections = [];
     this.factions = [];
@@ -43,34 +72,10 @@ var Game = function(canvas) {
     
     this.potentialResearch = [];
     this.chosenResearch = null;
-    this.researchGlowAmount = 0; // visual glow for the research button;
-    
+    this.researchGlowAmount = 0; // visual glow for the research button.
+
     this.downButton = null;
     this.createUI();
-
-    var that = this;
-    this.canvas.addEventListener('mousemove', function(event) {
-        that.setCursorPosition(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchmove', function(event) {
-        that.setCursorPosition(resizer.getCanvasPosition(event));
-        event.preventDefault();
-    });
-    this.canvas.addEventListener('mousedown', function(event) {
-        that.click(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchstart', function(event) {
-        that.click(resizer.getCanvasPosition(event));
-        event.preventDefault();
-    });
-    this.canvas.addEventListener('mouseup', function(event) {
-        that.release(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchend', function(event) {
-        that.release(new Vec2(that.cursorX, that.cursorY));
-        event.preventDefault();
-    });
-    this.setCursorPosition({x: 0, y: 0});
 
     this.resolveTurn();
 };
@@ -90,6 +95,7 @@ Game.prototype.createUI = function() {
     this.preTurnUI = []; // Contains those buttons that are only visible during the "PRE_TURN" stage.
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
+    this.victoryUI = []; // Contains those buttons that are only visible during the "FINISHED" stage.
     this.reserveUI = [];
 
     var that = this;
@@ -198,6 +204,25 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(replayButton);
     this.playingUI.push(replayButton);
+    
+    var resetGameButton = new CanvasButton({
+        label: 'Restart game',
+        centerX: 1270,
+        centerY: 720,
+        width: 280,
+        height: 70,
+        activeFunc: function() {
+            return (that.state === Game.State.FINISHED);
+        },
+        clickCallback: function() {
+            if (that.state === Game.State.FINISHED) {
+                that.restartGame();
+                Game.VictoryMusic.stop();
+            }
+        }
+    });
+    this.uiButtons.push(resetGameButton);
+    this.victoryUI.push(resetGameButton);
     
     var fsButton = new CanvasButton({
         label: 'Go Fullscreen',
@@ -395,6 +420,7 @@ Game.prototype.createUI = function() {
 
     this.setUIActive(this.researchUI, false);
     this.setUIActive(this.playingUI, false);
+    this.setUIActive(this.victoryUI, false);
 };
 
 Game.LocationParameters = [
@@ -506,7 +532,7 @@ Game.prototype.render = function() {
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = '#fff';
         this.ctx.font = '40px special_eliteregular';
-        this.ctx.fillText(capitalizeFirstLetter(this.winner.name + ' powers are victorious!'), 770, 730);
+        this.ctx.fillText(capitalizeFirstLetter(this.winner.name + ' powers are victorious!'), 720, 730);
         this.ctx.restore();
     }
     
@@ -746,6 +772,7 @@ Game.prototype.update = function(deltaTime) {
         Game.BackgroundMusic.stop();
         Game.VictoryMusic.playSingular();
         this.state = Game.State.FINISHED;
+        this.setUIActive(this.victoryUI, true);
     }
     if (this.state === Game.State.PLAYING && !this.animationInProgress && !this.isGameOver) {
         for (var i = 0; i < this.locations.length; ++i) {
