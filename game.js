@@ -349,7 +349,8 @@ Game.prototype.createUI = function() {
             y: 882,
             labelFunc: function() {
                 return faction.getCurrentIntelPower();
-            }
+            },
+            active: false
         });
         that.uiButtons.push(label);
         faction.addUI(label);

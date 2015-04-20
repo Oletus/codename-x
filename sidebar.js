@@ -84,7 +84,7 @@ SideBar.prototype.setUnit = function(unit, extratext) {
 
         this.attributesElement.innerHTML = '';
         if (unit.isRecon) {
-            this.appendToAttributes({property: 'intel bonus: ' + unit.intelPower});
+            this.appendToAttributes({property: 'intel bonus: ' + unit.intelPower + ' (' + Math.floor(unit.intelPower / 2) + ' in reserve)'});
         }
         for (var i = 0; i < unit.properties.length; ++i) {
             this.appendToAttributes({property: unit.properties[i]});
