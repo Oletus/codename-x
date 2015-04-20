@@ -9,6 +9,7 @@ var SideBar = function() {
     this.singleUseElement = this.appendToThis('p');
     this.powerElement = this.appendToThis('p');
     this.attributesElement = this.appendToThis('div');
+    this.wikiLink = this.appendToThis('a');
     
     // Not shown, only here so functions can be reused:
     this.codeNameElement = document.createElement('p');
@@ -94,7 +95,15 @@ SideBar.prototype.setUnit = function(unit, extratext) {
                 this.appendToAttributes({property: prop, value: unit.against[prop]});
             }
         }
-
+        if (unit.wikipedia) {
+            this.wikiLink.href = unit.wikipedia;
+            this.wikiLink.target = '_blank';
+            this.wikiLink.textContent = 'Real-life history on Wikipedia';
+        } else {
+            this.wikiLink.href = '#';
+            this.wikiLink.textContent = '';
+        }
+        
         if (unit.blackIconSprite) {
             this.imgElement.src = unit.blackIconSprite.url();
             this.imgElement.style.display = 'block';

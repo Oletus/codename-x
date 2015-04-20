@@ -19,7 +19,8 @@ var Unit = function(options) {
         against: {},
         riskFactor: 0,
         exclusiveFaction: null,
-        icon: null
+        icon: null,
+        wikipedia: null
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -134,7 +135,8 @@ Unit.TypeData = [
         properties: ['animal', 'air'],
         riskFactor: 0.1,
         against: {'conventional': 1},
-        icon: 'batbomb'
+        icon: 'batbomb',
+        wikipedia: 'http://en.wikipedia.org/wiki/Bat_bomb'
     },
     {
         name: 'Anti-tank Dogs',
@@ -147,7 +149,8 @@ Unit.TypeData = [
         properties: ['animal', 'land'],
         riskFactor: 0.1,
         against: {'armor': 2},
-        icon: 'explodingdog'
+        icon: 'explodingdog',
+        wikipedia: 'http://en.wikipedia.org/wiki/Anti-tank_dog'
     },
     {
         name: 'Pigeon Guided Missiles',
@@ -159,7 +162,8 @@ Unit.TypeData = [
         singleUse: true,
         riskFactor: 0.1,
         properties: ['animal', 'air'],
-        icon: 'birdbrain'
+        icon: 'birdbrain',
+        wikipedia: 'http://en.wikipedia.org/wiki/Project_Pigeon'
     },
     {
         name: 'Malaria Mosquitoes',
@@ -170,7 +174,8 @@ Unit.TypeData = [
         properties: ['animal'],
         riskFactor: 0.1,
         against: {'infantry': 2, 'cold': -1},
-        icon: 'mosquitoe'
+        icon: 'mosquitoe',
+        wikipedia: 'http://en.wikipedia.org/wiki/Entomological_warfare'
     },
     {
         name: 'Flying Tanks',
@@ -183,7 +188,8 @@ Unit.TypeData = [
         riskFactor: 0.1,
         researchTime: 3,
         power: 2,
-        icon: 'flyingtank'
+        icon: 'flyingtank',
+        wikipedia: 'http://en.wikipedia.org/wiki/Winged_tank'
     },
     {
         name: 'Iceberg Ships',
@@ -194,7 +200,8 @@ Unit.TypeData = [
         scientist: 'Dr. Ayse Freese',
         properties: ['sea', 'cold'],
         researchTime: 1,
-        icon: 'iceboat'
+        icon: 'iceboat',
+        wikipedia: 'http://en.wikipedia.org/wiki/Project_Habakkuk'
     },
     {
         name: 'Meth-fueled Infantry',
@@ -218,7 +225,8 @@ Unit.TypeData = [
         intelPower: 2,
         riskFactor: 0.1,
         properties: ['land', 'animal'],
-        icon: 'cyborgcat'
+        icon: 'cyborgcat',
+        wikipedia: 'http://en.wikipedia.org/wiki/Acoustic_Kitty'
     },
     // TIER 2 UNITS
     {
@@ -233,7 +241,8 @@ Unit.TypeData = [
         properties: ['air', 'armor'],
         against: { 'air': 2 },
         exclusiveFaction: getFaction('axis'),
-        icon: 'flygel'
+        icon: 'flygel',
+        wikipedia: 'http://en.wikipedia.org/wiki/Focke-Wulf_Triebfl%C3%BCgel'
     },
     {
         name: 'Pheromone gas',
@@ -245,7 +254,8 @@ Unit.TypeData = [
         researchTime: 4,
         riskFactor: 0.1,
         against: {'animal': 2},
-        icon: 'sexwarrior'
+        icon: 'sexwarrior',
+        wikipedia: 'http://en.wikipedia.org/wiki/Gay_bomb'
     },
     {
         name: 'Panjandrum',
@@ -260,7 +270,8 @@ Unit.TypeData = [
         properties: ['land'],
         against: { 'land': 2 },
         exclusiveFaction: getFaction('allies'),
-        icon: 'panjandrum'
+        icon: 'panjandrum',
+        wikipedia: 'http://en.wikipedia.org/wiki/Panjandrum'
     },
     {
         name: 'Surveillance Dogs',
@@ -290,7 +301,8 @@ Unit.TypeData = [
         properties: ['animal', 'sea'],
         riskFactor: 0.1,
         against: {'land': -1, 'air': -1, 'sea': 1},
-        icon: 'flipper'
+        icon: 'flipper',
+        wikipedia: 'http://en.wikipedia.org/wiki/Animal-borne_bomb_attacks'
     },
     {
         name: 'Flaming Pigs',
@@ -317,7 +329,8 @@ Unit.TypeData = [
         researchTime: 4,
         riskFactor: 0.1,
         against: {'armor': 2, 'air': -2, 'animal': -2},
-        icon: 'poo'
+        icon: 'poo',
+        wikipedia: 'http://en.wikipedia.org/wiki/Who_Me'
     },
     {
         name: 'Soup Bowl War Ship',
@@ -330,7 +343,8 @@ Unit.TypeData = [
         researchTime: 4,
         riskFactor: 0.15,
         properties: ['sea', 'armor'],
-        icon: 'roundship'
+        icon: 'roundship',
+        wikipedia: 'http://en.wikipedia.org/wiki/Russian_monitor_Novgorod'
     },
     // TIER 3 SUPER UNITS
     {
@@ -346,7 +360,8 @@ Unit.TypeData = [
         researchTime: 8,
         riskFactor: 0.25,
         properties: ['space'],
-        icon: 'spacemirror'
+        icon: 'spacemirror',
+        wikipedia: 'http://en.wikipedia.org/wiki/Sun_gun'
     },
     {
         name: 'Chicken-warmed Nuclear Landmines',
@@ -359,7 +374,8 @@ Unit.TypeData = [
         perfectDefense: true,
         riskFactor: 0.25,
         properties: ['animal', 'land'],
-        icon: 'chickenmine'
+        icon: 'chickenmine',
+        wikipedia: 'http://en.wikipedia.org/wiki/Blue_Peacock'
     }
 ];
 

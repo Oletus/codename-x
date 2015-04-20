@@ -15,6 +15,7 @@ var ResearchProposal = function(index, select) {
     this.imgElement = this.appendToThis('img', 'icon');
     
     this.descriptionElement = document.createElement('p'); // Not shown
+    this.wikiLink = document.createElement('a'); // Not shown
 
     this.mainDiv.style.position = 'absolute';
     this.mainDiv.style.left = (index * 450 + 60) + 'px';
