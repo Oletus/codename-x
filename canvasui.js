@@ -4,9 +4,10 @@ var CanvasLabel = function(options) {
     var defaults = {
         label: 'Label',
         labelFunc: null,
-        x: 0,
-        y: 0,
-        active: true
+        centerX: 0,
+        centerY: 0,
+        active: true,
+        fontSize: 30
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -21,13 +22,13 @@ CanvasLabel.prototype.render = function(ctx) {
     if (this.active) {
         ctx.globalAlpha = 1.0;
         ctx.color = '#fff';
-        ctx.textAlign = 'left';
-        ctx.font = '30px special_eliteregular';
+        ctx.textAlign = 'center';
+        ctx.font = this.fontSize + 'px special_eliteregular';
         var label = this.label;
         if (this.labelFunc) {
             label = this.labelFunc();
         }
-        ctx.fillText(label, this.x, this.y);
+        ctx.fillText(label, this.centerX, this.centerY);
     }
 };
 

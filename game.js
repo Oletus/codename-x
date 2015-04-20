@@ -251,6 +251,15 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(muteButton);
     this.preTurnUI.push(muteButton);
     
+    var creditsLabel = new CanvasLabel({
+        label: 'By Olli Etuaho, Valtteri Heinonen, Charlie Hornsby, Sakari Leppä, Kimmo Keskinen, Anastasia Diatlova and Zachary Laster',
+        centerX: 1920 * 0.5,
+        centerY: 1000,
+        fontSize: 20
+    });
+    this.uiButtons.push(creditsLabel);
+    this.preTurnUI.push(creditsLabel);
+    
     var startTurnButton = new CanvasButton({
         label: 'Start Turn',
         centerX: 1920 * 0.5,
@@ -403,16 +412,16 @@ Game.prototype.createUI = function() {
             that.uiButtons.push(button);
             faction.addUI(button);
         }
-        var label = new CanvasLabel({
-            x: 838,
-            y: 882,
+        var intelLabel = new CanvasLabel({
+            centerX: 846,
+            centerY: 882,
             labelFunc: function() {
                 return faction.getCurrentIntelPower();
             },
             active: false
         });
-        that.uiButtons.push(label);
-        faction.addUI(label);
+        that.uiButtons.push(intelLabel);
+        faction.addUI(intelLabel);
     };
     for (var i = 0; i < this.factions.length; ++i) {
         addFactionUI(this.factions[i]);
