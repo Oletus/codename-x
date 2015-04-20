@@ -298,7 +298,8 @@ Unit.TypeData = [
         tier: 2,
         researchTime: 4,
         riskFactor: 0.1,
-        against: {'armor': 1, 'air': -1}
+        against: {'armor': 1, 'air': -1},
+        icon: 'poo'
     },
     {
         name: 'Surveillance Cats',
