@@ -600,6 +600,11 @@ Game.prototype.showResearchUI = function(show) {
         this.setUIActive(this.researchUI, false);
         this.setUIActive(this.playingUI, true);
         setPropertyInAll(this.reserveUI, 'draggable', true);
+        for (var i = 0; i < this.reserveUI.length; ++i) {
+            if (i >= this.currentFaction.reserve.length) {
+                this.reserveUI[i].draggable = false;
+            }
+        }
     }
 }
 
@@ -683,8 +688,8 @@ Game.prototype.nextPhase = function() {
         this.setUIActive(this.preTurnUI, false);
         
         // Get into the playing UI
-        var currentFaction = this.factions[this.currentTurnSide];
-        currentFaction.showUI(true);
+        this.currentFaction = this.factions[this.currentTurnSide];
+        this.currentFaction.showUI(true);
         for (var i = 0; i < this.connections.length; ++i) {
             this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
         }
@@ -806,6 +811,11 @@ Game.prototype.update = function(deltaTime) {
             }
         }
         setPropertyInAll(this.reserveUI, 'draggable', true);
+        for (var i = 0; i < this.reserveUI.length; ++i) {
+            if (i >= this.currentFaction.reserve.length) {
+                this.reserveUI[i].draggable = false;
+            }
+        }
     } else {
         setPropertyInAll(this.reserveUI, 'draggable', false);
     }
