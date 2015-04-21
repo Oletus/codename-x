@@ -122,8 +122,7 @@ Faction.prototype.updateIntel = function(opponentFaction) {
     this.accumulatedIntelPower += this.getCurrentIntelPower();
 
     var discoveredIndex = 0;
-    var opponentResearch = opponentFaction.currentResearch.slice(0);
-    shuffle(opponentResearch);
+    var opponentResearch = arrayUtil.shuffle(opponentFaction.currentResearch);
     while (this.accumulatedIntelPower > 4 && opponentResearch.length > discoveredIndex) {
         this.researchIntel.push(opponentResearch[discoveredIndex].unitType);
         this.accumulatedIntelPower -= 4;
@@ -263,7 +262,7 @@ Faction.prototype.getPotentialResearch = function() {
     for (var i = 0; i < this.currentResearch.length; ++i) {
         currentResearchUnits.push(this.currentResearch[i].unitType);
     }
-    filter(possibleResearch, currentResearchUnits);
+    possibleResearch = arrayUtil.filterArray(possibleResearch, currentResearchUnits);
     
     // Remove units found in completed projects
     // Single-use units might reappear unless they are in the reserve
@@ -277,8 +276,8 @@ Faction.prototype.getPotentialResearch = function() {
             completedResearchMultiUse.push(res);
         }
     }
-    filter(possibleResearch, completedResearchMultiUse);
-    filter(possibleResearch, completedResearchSingleUse);
+    possibleResearch = arrayUtil.filterArray(possibleResearch, completedResearchMultiUse);
+    possibleResearch = arrayUtil.filterArray(possibleResearch, completedResearchSingleUse);
 
     var singleUseProjectsLeft = 0;
     for (var i = 0; i < possibleResearch.length; ++i) {
@@ -289,8 +288,8 @@ Faction.prototype.getPotentialResearch = function() {
 
     if (this.completedResearch.length >= 3 && singleUseProjectsLeft < 3) {
         // Add some single-use projects back to potential research if they are not in the reserve
-        filter(completedResearchSingleUse, this.reserve);
-        shuffle(completedResearchSingleUse);
+        possibleResearch = arrayUtil.filterArray(completedResearchSingleUse, this.reserve);
+        completedResearchSingleUse = arrayUtil.shuffle(completedResearchSingleUse);
         var i = 0;
         while (i < completedResearchSingleUse.length && singleUseProjectsLeft + i < 3) {
             possibleResearch.push(completedResearchSingleUse[i]);
@@ -299,6 +298,5 @@ Faction.prototype.getPotentialResearch = function() {
     }
 
     // Randomize three projects from remaining set
-    shuffle(possibleResearch);
-    return possibleResearch.splice(0, 3);
+    return arrayUtil.randomSubset(possibleResearch, 3);
 };

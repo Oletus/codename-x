@@ -560,14 +560,14 @@ Game.prototype.render = function() {
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = '#fff';
         this.ctx.font = '40px special_eliteregular';
-        this.ctx.fillText(capitalizeFirstLetter(this.winner.name + ' powers are victorious!'), 720, 730);
+        this.ctx.fillText(stringUtil.capitalizeFirstLetter(this.winner.name + ' powers are victorious!'), 720, 730);
         this.ctx.restore();
     }
     
     var side = Side.Sides[this.currentTurnSide];
     if (this.state === Game.State.PRE_TURN) {
         this.ctx.globalAlpha = 1.0;
-        var header = capitalizeFirstLetter(side.name + ' powers official, get ready for turn #' + this.turnNumber + '.');
+        var header = stringUtil.capitalizeFirstLetter(side.name + ' powers official, get ready for turn #' + this.turnNumber + '.');
         this.ctx.textAlign = 'center';
         this.ctx.fillStyle = side.color;
         this.ctx.font = '30px special_eliteregular';
@@ -595,14 +595,14 @@ Game.prototype.showResearchUI = function(show) {
             }
             this.setUIActive(this.playingUI, false);
             this.setUIActive(this.researchUI, true);
-            setPropertyInAll(this.reserveUI, 'draggable', false);
+            arrayUtil.setPropertyInAll(this.reserveUI, 'draggable', false);
         }
     } else {
         this.state = Game.State.PLAYING;
         this.researchHTML.style.display = 'none';
         this.setUIActive(this.researchUI, false);
         this.setUIActive(this.playingUI, true);
-        setPropertyInAll(this.reserveUI, 'draggable', true);
+        arrayUtil.setPropertyInAll(this.reserveUI, 'draggable', true);
         for (var i = 0; i < this.reserveUI.length; ++i) {
             if (this.reserveUI[i].reserveIndex >= this.currentFaction.reserve.length) {
                 this.reserveUI[i].draggable = false;
@@ -813,14 +813,14 @@ Game.prototype.update = function(deltaTime) {
                 this.locations[i].button.draggable = true;
             }
         }
-        setPropertyInAll(this.reserveUI, 'draggable', true);
+        arrayUtil.setPropertyInAll(this.reserveUI, 'draggable', true);
         for (var i = 0; i < this.reserveUI.length; ++i) {
             if (this.reserveUI[i].reserveIndex >= this.currentFaction.reserve.length) {
                 this.reserveUI[i].draggable = false;
             }
         }
     } else {
-        setPropertyInAll(this.reserveUI, 'draggable', false);
+        arrayUtil.setPropertyInAll(this.reserveUI, 'draggable', false);
     }
     
     if (this.state === Game.State.PRE_TURN) {
