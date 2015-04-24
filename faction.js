@@ -5,13 +5,7 @@ var UnitInstance = function(options) {
         turnsResearched: 0,
         unitType: null
     };
-    for(var key in defaults) {
-        if (!options.hasOwnProperty(key)) {
-            this[key] = defaults[key];
-        } else {
-            this[key] = options[key];
-        }
-    }
+    objectUtil.initWithDefaults(this, defaults, options);
     this.animatedCompletion = 0;
 };
 
@@ -45,13 +39,8 @@ var Faction = function(options) {
         color: '#000',
         id: null
     };
-    for(var key in defaults) {
-        if (!options.hasOwnProperty(key)) {
-            this[key] = defaults[key];
-        } else {
-            this[key] = options[key];
-        }
-    }
+    objectUtil.initWithDefaults(this, defaults, options);
+
     this.ui = [];
     this.accumulatedIntelPower = 0;
     this.intelOnFaction = null;

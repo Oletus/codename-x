@@ -22,13 +22,7 @@ var Unit = function(options) {
         icon: null,
         wikipedia: null
     };
-    for(var key in defaults) {
-        if (!options.hasOwnProperty(key)) {
-            this[key] = defaults[key];
-        } else {
-            this[key] = options[key];
-        }
-    }
+    objectUtil.initWithDefaults(this, defaults, options);
 
     if (this.proposal === undefined) {
         this.proposal = this.description;

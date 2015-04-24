@@ -11,13 +11,8 @@ var Location = function(options) {
         x: 0,
         y: 0
     };
-    for (var key in defaults) {
-        if (!options.hasOwnProperty(key)) {
-            this[key] = defaults[key];
-        } else {
-            this[key] = options[key];
-        }
-    }
+    objectUtil.initWithDefaults(this, defaults, options);
+
     if (this.unit === null) {
         this.unit = new Unit(Unit.Types[0]);
     }
@@ -105,13 +100,8 @@ var Connection = function(options) {
         sideAAdvantage: undefined,
         steps: 10
     };
-    for (var key in defaults) {
-        if (!options.hasOwnProperty(key)) {
-            this[key] = defaults[key];
-        } else {
-            this[key] = options[key];
-        }
-    }
+    objectUtil.initWithDefaults(this, defaults, options);
+
     if (this.sideAAdvantage === undefined) {
         this.sideAAdvantage = Math.floor(this.steps / 2);
     }
