@@ -43,32 +43,26 @@ Game.prototype.restartGame = function() {
     this.locations = [];
     this.connections = [];
     this.factions = [];
-    for (var i = 0; i < Side.LocationParameters.length; ++i) {
-        this.locations.push(new Location(Side.LocationParameters[i]));
-    }
     this.time = 0;
-    for (var i = 0; i < Side.LocationParameters.length; i += 2) {
-        var steps = Side.LocationParameters[i].steps + Side.LocationParameters[i + 1].steps;
-        var a = this.locations[i];
-        var b = this.locations[i + 1];
-        this.connections.push(new Connection({locationA: a, locationB: b, steps: steps}));
-    }
-    for (var i = 0; i < Side.Sides.length; ++i) {
-        var factionLocations = [];
-        for (var j = 0; j < this.locations.length; ++j) {
-            if  (this.locations[j].side == Side.Sides[i]) {
-                factionLocations.push(this.locations[j]);
-            }
+    for (var i = 0; i < FactionData.length; ++i) {
+        this.factions.push(new Faction(FactionData[i]));
+        for (var j = 0; j < this.factions[i].locations.length; ++j) {
+            this.locations.push(this.factions[i].locations[j]);
         }
-        this.factions.push(new Faction({side: Side.Sides[i], locations: factionLocations}));
+    }
+    for (var i = 0; i < this.locations.length / 2; ++i) {
+        var steps = this.locations[i].steps + this.locations[i + 3].steps;
+        var a = this.locations[i];
+        var b = this.locations[i + 3];
+        this.connections.push(new Connection({locationA: a, locationB: b, steps: steps}));
     }
     
     this.turnNumber = 0; // How many turns have passed (for both players)
     this.preturnFade = 1;
     this.researchFade = 0;
     this.finishedAnimation = 0;
-    this.currentTurnSide = 0; // Index to Side.Sides
-    this.currentFaction = this.factions[this.currentTurnSide];
+    this.currentTurnIndex = 0; // Index to this.factions
+    this.currentFaction = this.factions[this.currentTurnIndex];
     this.state = Game.State.PRE_TURN;
     this.playingAgainstAI = false;
     
@@ -298,7 +292,7 @@ Game.prototype.createUI = function() {
         height: 70,
         clickCallback: function() {
             if (!that.playingAgainstAI) {
-                that.factions[that.currentTurnSide].aiControlled = true;
+                that.currentFaction.aiControlled = true;
                 that.playingAgainstAI = true;
                 that.aiTurn();
             }
@@ -504,13 +498,12 @@ Game.prototype.render = function() {
         this.ctx.fillText(stringUtil.capitalizeFirstLetter(this.winner.name + ' powers are victorious!'), 720, 730);
         this.ctx.restore();
     }
-    
-    var side = Side.Sides[this.currentTurnSide];
+
     if (this.state === Game.State.PRE_TURN) {
         this.ctx.globalAlpha = 1.0;
-        var header = stringUtil.capitalizeFirstLetter(side.name + ' powers official, get ready for turn #' + this.turnNumber + '.');
+        var header = stringUtil.capitalizeFirstLetter(this.currentFaction.name + ' powers official, get ready for turn #' + this.turnNumber + '.');
         this.ctx.textAlign = 'center';
-        this.ctx.fillStyle = side.color;
+        this.ctx.fillStyle = this.currentFaction.color;
         this.ctx.font = '30px special_eliteregular';
         this.ctx.fillText(header, this.ctx.canvas.width * 0.5, 450);
     }
@@ -554,7 +547,7 @@ Game.prototype.showResearchUI = function(show) {
 
 Game.prototype.approveResearch = function() {
     if (this.chosenResearch !== null) {    
-        this.factions[this.currentTurnSide].startResearch(this.chosenResearch);
+        this.currentFaction.startResearch(this.chosenResearch);
         this.potentialResearch = [];
         this.showResearchUI(false);
     }
@@ -562,9 +555,8 @@ Game.prototype.approveResearch = function() {
 
 Game.prototype.aiTurn = function() {
     this.nextPhase();
-    var currentFaction = this.factions[this.currentTurnSide];
     
-    currentFaction.update(undefined, this.state); // Make animations complete instantly.
+    this.currentFaction.update(undefined, this.state); // Make animations complete instantly.
     this.setPotentialResearch();
     
     if (this.potentialResearch.length > 0) {
@@ -573,11 +565,11 @@ Game.prototype.aiTurn = function() {
     }
     // swappinessFactor is the tendency to shuffle around same tier units
     var swappinessFactor = Math.random() * 0.1 * (Math.min(this.turnNumber, 10) - 1);
-    var moveRounds = Math.min(currentFaction.reserve.length, 3) + Math.floor(swappinessFactor * 2);
+    var moveRounds = Math.min(this.currentFaction.reserve.length, 3) + Math.floor(swappinessFactor * 2);
     var i = 0;
-    while (currentFaction.reserve.length > 0 && i < moveRounds) {
+    while (this.currentFaction.reserve.length > 0 && i < moveRounds) {
         // Choose the most valuable unit from the sorted reserve
-        var goodUnit = currentFaction.reserve[currentFaction.reserve.length - 1];
+        var goodUnit = this.currentFaction.reserve[this.currentFaction.reserve.length - 1];
 
         // Find a location where the unit could be placed
         var locIndex = Math.floor(Math.random() * this.locations.length);
@@ -588,7 +580,7 @@ Game.prototype.aiTurn = function() {
                 locIndex = 0;
             }
             --triesLeft;
-            if (this.locations[locIndex].side !== Side.Sides[this.currentTurnSide]) {
+            if (this.locations[locIndex].faction !== this.currentFaction) {
                 continue;
             }
             if (this.locations[locIndex].unit.tier < goodUnit.tier) {
@@ -632,10 +624,10 @@ Game.prototype.nextPhase = function() {
         this.setUIActive(this.preTurnUI, false);
         
         // Get into the playing UI
-        this.currentFaction = this.factions[this.currentTurnSide];
+        this.currentFaction = this.factions[this.currentTurnIndex];
         this.currentFaction.showUI(true);
-        for (var i = 0; i < this.connections.length; ++i) {
-            this.connections[i].setCurrentSide(Side.Sides[this.currentTurnSide]);
+        for (var i = 0; i < this.locations.length; ++i) {
+            this.locations[i].setCurrentFaction(this.currentFaction);
         }
         this.resetAnimations();
 
@@ -646,13 +638,13 @@ Game.prototype.nextPhase = function() {
         this.setUIActive(this.playingUI, true);
     } else if (this.state == Game.State.PLAYING) {
         if (this.potentialResearch.length == 0) {
-            this.factions[this.currentTurnSide].showUI(false);
-            ++this.currentTurnSide;
-            if (this.currentTurnSide === Side.Sides.length) {
-                this.currentTurnSide = 0;
+            this.currentFaction.showUI(false);
+            ++this.currentTurnIndex;
+            if (this.currentTurnIndex === this.factions.length) {
+                this.currentTurnIndex = 0;
                 this.resolveTurn();
             }
-            this.currentFaction = this.factions[this.currentTurnSide];
+            this.currentFaction = this.factions[this.currentTurnIndex];
             this.sidebar.setUnit(null);
             this.state = Game.State.PRE_TURN;
             this.setUIActive(this.playingUI, false);
@@ -675,15 +667,6 @@ Game.prototype.setUIActive = function(uiGroup, active) {
     }
 };
 
-Game.prototype.getFaction = function(side) {
-    for (var i = 0; i < this.factions.length; ++i) {
-        if (this.factions[i].side === side) {
-            return this.factions[i];
-        }
-    }
-    return null;
-};
-
 Game.prototype.resolveTurn = function() {
     ++this.turnNumber;
 
@@ -693,7 +676,7 @@ Game.prototype.resolveTurn = function() {
     for (var i = 0; i < this.locations.length; ++i) {
         // Assign conventional army to locations where single-use units were used.
         if (this.locations[i].unit.singleUse) {
-            var faction = this.getFaction(this.locations[i].side);
+            var faction = this.locations[i].faction;
             var unit = faction.getCheapestReserveUnit();
             faction.removeReserve(unit);
             this.locations[i].unit = unit;
@@ -713,7 +696,7 @@ Game.prototype.setGameOver = function() {
     var victories = [0, 0];
     for (var i = 0; i < this.connections.length; ++i) {
         if (this.connections[i].isBattleOver()) {
-            if (this.connections[i].locationA.side === Side.Sides[0]) {
+            if (this.connections[i].locationA.faction === this.factions[0]) {
                 victories[0]++;
             } else {
                 victories[1]++;
@@ -723,7 +706,7 @@ Game.prototype.setGameOver = function() {
     for (var i = 0; i < victories.length; ++i) {
         if (victories[i] >= 2) {
             this.isGameOver = true;
-            this.winner = Side.Sides[i];
+            this.winner = this.factions[i];
         }
     }
 };
@@ -735,7 +718,7 @@ Game.prototype.update = function(deltaTime) {
     for (var i = 0; i < this.uiButtons.length; ++i) {
         this.uiButtons[i].update(deltaTime);
     }
-    this.animationInProgress = this.factions[this.currentTurnSide].update(deltaTime, this.state);
+    this.animationInProgress = this.currentFaction.update(deltaTime, this.state);
     this.setPotentialResearch();
     for (var i = 0; i < this.connections.length; ++i) {
         if (!this.animationInProgress) {
@@ -750,7 +733,7 @@ Game.prototype.update = function(deltaTime) {
     }
     if (this.state === Game.State.PLAYING && !this.animationInProgress && !this.isGameOver) {
         for (var i = 0; i < this.locations.length; ++i) {
-            if (this.locations[i].side === Side.Sides[this.currentTurnSide]) {
+            if (this.locations[i].faction === this.currentFaction) {
                 this.locations[i].button.draggable = true;
             }
         }
@@ -795,9 +778,8 @@ Game.prototype.update = function(deltaTime) {
 };
 
 Game.prototype.setPotentialResearch = function() {
-    var currentFaction = this.factions[this.currentTurnSide];
-    if (currentFaction.researchSlotAvailable() && this.potentialResearch.length === 0) {
-        this.potentialResearch = currentFaction.getPotentialResearch();
+    if (this.currentFaction.researchSlotAvailable() && this.potentialResearch.length === 0) {
+        this.potentialResearch = this.currentFaction.getPotentialResearch();
     }
 };
 
@@ -819,10 +801,10 @@ Game.prototype.setCursorPosition = function(vec) {
 };
 
 Game.prototype.dragToLocation = function(location) {
-    if (location.side === Side.Sides[this.currentTurnSide] && this.downButton.draggedObject !== null) {
+    if (location.faction === this.currentFaction && this.downButton.draggedObject !== null) {
         var draggedObject = this.downButton.draggedObject();
         if (draggedObject instanceof Location) {
-            if (draggedObject.side === location.side) {
+            if (draggedObject.faction === location.faction) {
                 this.fromLocationToLocation(draggedObject, location);
             }
         } else {
@@ -832,8 +814,8 @@ Game.prototype.dragToLocation = function(location) {
 };
 
 Game.prototype.fromReserveToLocation = function(reserveUnit, location) {
-    this.factions[this.currentTurnSide].addToReserve(location.unit);
-    this.factions[this.currentTurnSide].removeReserve(reserveUnit);
+    this.currentFaction.addToReserve(location.unit);
+    this.currentFaction.removeReserve(reserveUnit);
     location.unit = reserveUnit;
 };
 

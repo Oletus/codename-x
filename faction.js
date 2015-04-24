@@ -32,7 +32,6 @@ UnitInstance.prototype.getTurnsLeft = function() {
 
 var Faction = function(options) {
     var defaults = {
-        side: null,
         currentResearch: [],   // Array of unit instances
         completedResearch: [], // Array of unit types that have been researched
         reserve: [],           // Array of unit types available for use
@@ -41,7 +40,10 @@ var Faction = function(options) {
         researchSlots: 2,
         messageLog: [],
         aiControlled: false,
-        locations: []
+        locations: [],
+        name: '',
+        color: '#000',
+        id: null
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
@@ -52,7 +54,11 @@ var Faction = function(options) {
     }
     this.ui = [];
     this.accumulatedIntelPower = 0;
-    this.intelOnSide = null;
+    this.intelOnFaction = null;
+    for (var i = 0; i < this.locations.length; ++i) {
+        this.locations[i] = new Location(this.locations[i]);
+        this.locations[i].setFaction(this);
+    }
 };
 
 Faction.prototype.startResearch = function(unitType) {
@@ -117,7 +123,7 @@ Faction.prototype.getCurrentIntelPower = function() {
 // Once per turn
 Faction.prototype.updateIntel = function(opponentFaction) {
     this.researchIntel = [];
-    this.intelOnSide = opponentFaction.side;
+    this.intelOnFaction = opponentFaction;
 
     this.accumulatedIntelPower += this.getCurrentIntelPower();
 
@@ -188,7 +194,7 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
     if (this.currentResearch.length > i) {
         var x = button.visualX();
         var y = button.visualY();
-        ctx.fillStyle = this.side.color;
+        ctx.fillStyle = this.color;
         var completion = this.currentResearch[i].animatedCompletion;
         var barWidth = 200;
         ctx.globalAlpha = 0.5;
@@ -201,19 +207,19 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
         ctx.font = '16px special_eliteregular';
         ctx.fillText('Turns left : ' + this.currentResearch[i].getTurnsLeft(), x + 50 + barWidth, y - 10);
 
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, x, y, this.currentResearch[i].unitType, button);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this, x, y, this.currentResearch[i].unitType, button);
     }
 };
 
 Faction.prototype.renderReserveButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.reserve.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.side, button.visualX(), button.visualY(), this.reserve[i], button);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this, button.visualX(), button.visualY(), this.reserve[i], button);
     }
 };
 
 Faction.prototype.renderIntelButton = function(ctx, cursorOn, buttonDown, i, button) {
     if (this.researchIntel.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.intelOnSide, button.visualX(), button.visualY(), this.researchIntel[i], button);
+        Unit.renderIcon(ctx, cursorOn, buttonDown, this.intelOnFaction, button.visualX(), button.visualY(), this.researchIntel[i], button);
     }
 };
 
@@ -249,7 +255,7 @@ Faction.prototype.getPotentialResearch = function() {
 
     // Filter out units exclusively defined for another faction.
     for ( var i = 0; i < possibleResearch.length; ) {
-        if ( possibleResearch[i].exclusiveFaction === null || possibleResearch[i].exclusiveFaction == this.side.id ) {
+        if ( possibleResearch[i].exclusiveFaction === null || possibleResearch[i].exclusiveFaction === this.id ) {
             i++;
         }
         else {

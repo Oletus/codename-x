@@ -6,8 +6,7 @@ var Location = function(options) {
         unit: null, // Unit object
         terrain: [], // an array of strings
         terrainAgainst: {},
-        side: null,
-        currentSide: null,
+        steps: 1,
         connections: [],
         x: 0,
         y: 0
@@ -24,14 +23,27 @@ var Location = function(options) {
     }
     this.lastTurnEffectiveness = 0;
     this.lastTurnUnit = this.unit;
-    this.lastTurnSide = this.side;
+    this.faction = null;
+    this.lastTurnFaction = null;
+    this.currentFaction = null; // faction which has the turn
     this.animationProgress = 0;
     this.messageLog = [];
 };
 
+Location.prototype.setFaction = function(faction) {
+    this.faction = faction;
+    if (this.lastTurnFaction === null) {
+        this.lastTurnFaction = faction;
+    }
+};
+
+Location.prototype.setCurrentFaction = function(currentFaction) {
+    this.currentFaction = currentFaction;
+};
+
 Location.prototype.getVisibleUnit = function() {
     if (!this.connections[0].animationInProgress && this.isAnimationComplete()) {
-        if (this.side === this.currentSide) {
+        if (this.faction === this.currentFaction) {
             return this.unit;
         } else {
             return Unit.Types[1]; // Unknown unit
@@ -41,11 +53,11 @@ Location.prototype.getVisibleUnit = function() {
     }
 };
 
-Location.prototype.getVisibleSide = function() {
+Location.prototype.getVisibleFaction = function() {
     if (!this.connections[0].animationInProgress && this.isAnimationComplete()) {
-        return this.side;
+        return this.faction;
     } else {
-        return this.lastTurnSide;
+        return this.lastTurnFaction;
     }
 };
 
@@ -64,7 +76,7 @@ Location.prototype.isAnimationComplete = function() {
 Location.prototype.render = function(ctx, cursorOn, buttonDown, button) {
     var x = button.visualX();
     var y = button.visualY();
-    Unit.renderIcon(ctx, cursorOn, buttonDown, this.getVisibleSide(), x, y, this.getVisibleUnit(), button);
+    Unit.renderIcon(ctx, cursorOn, buttonDown, this.getVisibleFaction(), x, y, this.getVisibleUnit(), button);
 
     var logIndex = Math.floor(this.animationProgress);
 
@@ -110,11 +122,6 @@ var Connection = function(options) {
     this.changeAnimation = 0;
 };
 
-Connection.prototype.setCurrentSide = function(faction) {
-    this.locationA.currentSide = faction;
-    this.locationB.currentSide = faction;
-};
-
 Connection.prototype.resolveCombat = function() {
     var locationA = this.locationA,
         locationB = this.locationB;
@@ -122,8 +129,8 @@ Connection.prototype.resolveCombat = function() {
     locationA.messageLog = [];
     locationB.messageLog = [];
     
-    locationA.lastTurnSide = locationA.side;
-    locationB.lastTurnSide = locationB.side;
+    locationA.lastTurnFaction = locationA.faction;
+    locationB.lastTurnFaction = locationB.faction;
     locationA.lastTurnUnit = locationA.unit;
     locationB.lastTurnUnit = locationB.unit;
     this.lastTurnAAdvantage = this.sideAAdvantage;
@@ -142,11 +149,11 @@ Connection.prototype.resolveCombat = function() {
     this.sideAAdvantage += sideAAdvances;
     if (this.sideAAdvantage <= 0) {
         this.sideAAdvantage = 0;
-        this.locationA.side = this.locationB.side;
+        this.locationA.faction = this.locationB.faction;
     }
     if (this.sideAAdvantage >= this.steps) {
         this.sideAAdvantage = this.steps;
-        this.locationB.side = this.locationA.side;
+        this.locationB.faction = this.locationA.faction;
     }
 };
 
@@ -187,7 +194,6 @@ Connection.prototype.update = function(deltaTime, state) {
 
 Connection.prototype.render = function(ctx) {
     ctx.save();
-    ctx.fillStyle = this.locationA.side.color;
 
     var locA = new Vec2(this.locationA.x, this.locationA.y);
     var locB = new Vec2(this.locationB.x, this.locationB.y);
@@ -210,9 +216,9 @@ Connection.prototype.render = function(ctx) {
         ctx.rotate(angle);
 
         if (i >= displayedAdvantage) {
-            ctx.fillStyle = this.locationB.getVisibleSide().color;
+            ctx.fillStyle = this.locationB.getVisibleFaction().color;
         } else {
-            ctx.fillStyle = this.locationA.getVisibleSide().color;
+            ctx.fillStyle = this.locationA.getVisibleFaction().color;
         }
         ctx.fillRect(-6, -6, 12, 12);
         

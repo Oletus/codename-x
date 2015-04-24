@@ -50,7 +50,7 @@ var Unit = function(options) {
     }
 };
 
-Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType, button) {
+Unit.renderIcon = function(ctx, cursorOn, buttonDown, faction, x, y, unitType, button) {
     
     ctx.beginPath();
     var radius;
@@ -69,7 +69,7 @@ Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType, butt
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     
     ctx.save();
-    ctx.fillStyle = side.color;
+    ctx.fillStyle = faction.color;
     ctx.globalAlpha = 1.0;
     ctx.shadowColor = '#000';
     ctx.shadowBlur = 7;
@@ -227,7 +227,7 @@ Unit.TypeData = [
         researchTime: 5,
         properties: ['air', 'armor'],
         against: { 'air': 2 },
-        exclusiveFaction: Side.Id.AXIS,
+        exclusiveFaction: FactionId.AXIS,
         icon: 'flygel',
         wikipedia: 'http://en.wikipedia.org/wiki/Focke-Wulf_Triebfl%C3%BCgel'
     },
@@ -256,7 +256,7 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['land'],
         against: { 'land': 2 },
-        exclusiveFaction: Side.Id.ALLIED,
+        exclusiveFaction: FactionId.ALLIED,
         icon: 'panjandrum',
         wikipedia: 'http://en.wikipedia.org/wiki/Panjandrum'
     },
