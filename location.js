@@ -19,6 +19,9 @@ var Location = function(options) {
             this[key] = options[key];
         }
     }
+    if (this.unit === null) {
+        this.unit = new Unit(Unit.Types[0]);
+    }
     this.lastTurnEffectiveness = 0;
     this.lastTurnUnit = this.unit;
     this.lastTurnSide = this.side;

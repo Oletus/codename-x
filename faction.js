@@ -249,7 +249,7 @@ Faction.prototype.getPotentialResearch = function() {
 
     // Filter out units exclusively defined for another faction.
     for ( var i = 0; i < possibleResearch.length; ) {
-        if ( possibleResearch[i].exclusiveFaction === null || possibleResearch[i].exclusiveFaction == this.side ) {
+        if ( possibleResearch[i].exclusiveFaction === null || possibleResearch[i].exclusiveFaction == this.side.id ) {
             i++;
         }
         else {

@@ -93,19 +93,6 @@ Unit.renderIcon = function(ctx, cursorOn, buttonDown, side, x, y, unitType, butt
     }
 };
 
-Unit.Properties = [
-    'air',
-    'land',
-    'sea',
-    'space',
-    'conventional',
-    'infantry',
-    'armor',
-    'animal',
-    'espionage'
-];
-
-
 Unit.TypeData = [
     {
         name: 'Conventional Army',
@@ -240,7 +227,7 @@ Unit.TypeData = [
         researchTime: 5,
         properties: ['air', 'armor'],
         against: { 'air': 2 },
-        exclusiveFaction: getFaction('axis'),
+        exclusiveFaction: Side.Id.AXIS,
         icon: 'flygel',
         wikipedia: 'http://en.wikipedia.org/wiki/Focke-Wulf_Triebfl%C3%BCgel'
     },
@@ -269,7 +256,7 @@ Unit.TypeData = [
         singleUse: true,
         properties: ['land'],
         against: { 'land': 2 },
-        exclusiveFaction: getFaction('allied'),
+        exclusiveFaction: Side.Id.ALLIED,
         icon: 'panjandrum',
         wikipedia: 'http://en.wikipedia.org/wiki/Panjandrum'
     },

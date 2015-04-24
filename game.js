@@ -43,12 +43,12 @@ Game.prototype.restartGame = function() {
     this.locations = [];
     this.connections = [];
     this.factions = [];
-    for (var i = 0; i < Game.LocationParameters.length; ++i) {
-        this.locations.push(new Location(Game.LocationParameters[i]));
+    for (var i = 0; i < Side.LocationParameters.length; ++i) {
+        this.locations.push(new Location(Side.LocationParameters[i]));
     }
     this.time = 0;
-    for (var i = 0; i < Game.LocationParameters.length; i += 2) {
-        var steps = Game.LocationParameters[i].steps + Game.LocationParameters[i + 1].steps;
+    for (var i = 0; i < Side.LocationParameters.length; i += 2) {
+        var steps = Side.LocationParameters[i].steps + Side.LocationParameters[i + 1].steps;
         var a = this.locations[i];
         var b = this.locations[i + 1];
         this.connections.push(new Connection({locationA: a, locationB: b, steps: steps}));
@@ -450,65 +450,6 @@ Game.prototype.createUI = function() {
     this.setUIActive(this.playingUI, false);
     this.setUIActive(this.victoryUI, false);
 };
-
-Game.LocationParameters = [
-{
-    name: 'Britain',
-    unit: new Unit(Unit.Types[0]),
-    x: 325,
-    y: 260,
-    side: Side.Sides[1],
-    terrain: ['wet'],
-    steps: 4,
-},
-{
-    name: 'Germany',
-    unit: new Unit(Unit.Types[0]),
-    x: 520,
-    y: 395,
-    side: Side.Sides[0],
-    terrain: ['wet'],
-    steps: 4,
-},
-{
-    name: 'Russia',
-    unit: new Unit(Unit.Types[0]),
-    x: 1095,
-    y: 100,
-    side: Side.Sides[1],
-    terrain: ['cold'],
-    terrainAgainst: {'sea': -2},
-    steps: 6,
-},
-{
-    name: 'Baltics',
-    unit: new Unit(Unit.Types[0]),
-    x: 860,
-    y: 210,
-    side: Side.Sides[0],
-    terrain: ['cold'],
-    terrainAgainst: {'sea': -2},
-    steps: 6,
-},
-{
-    name: 'Greece',
-    unit: new Unit(Unit.Types[0]),
-    x: 1095,
-    y: 580,
-    side: Side.Sides[1],
-    terrain: ['warm'],
-    steps: 5
-},
-{
-    name: 'Italy',
-    unit: new Unit(Unit.Types[0]),
-    x: 855,
-    y: 505,
-    side: Side.Sides[0],
-    terrain: ['warm'],
-    steps: 5
-}
-];
 
 Game.prototype.drawFader = function(fade) {
     if (fade > 0) {
