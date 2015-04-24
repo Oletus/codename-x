@@ -288,7 +288,7 @@ Faction.prototype.getPotentialResearch = function() {
 
     if (this.completedResearch.length >= 3 && singleUseProjectsLeft < 3) {
         // Add some single-use projects back to potential research if they are not in the reserve
-        possibleResearch = arrayUtil.filterArray(completedResearchSingleUse, this.reserve);
+        completedResearchSingleUse = arrayUtil.filterArray(completedResearchSingleUse, this.reserve);
         completedResearchSingleUse = arrayUtil.shuffle(completedResearchSingleUse);
         var i = 0;
         while (i < completedResearchSingleUse.length && singleUseProjectsLeft + i < 3) {
