@@ -29,10 +29,10 @@ var CanvasUI = function(options) {
             event.preventDefault();
         });
         this.element.addEventListener('mousedown', function(event) {
-            that.click(that.getCanvasPositionFromEvent(event));
+            that.down(that.getCanvasPositionFromEvent(event));
         });
         this.element.addEventListener('touchstart', function(event) {
-            that.click(that.getCanvasPositionFromEvent(event));
+            that.down(that.getCanvasPositionFromEvent(event));
             event.preventDefault();
         });
         this.element.addEventListener('mouseup', function(event) {
@@ -45,12 +45,20 @@ var CanvasUI = function(options) {
     }
 };
 
+/**
+ * Update UI element state and animations.
+ * @param {number} deltaTime Time passed since the last update in seconds.
+ */
 CanvasUI.prototype.update = function(deltaTime) {
     for (var i = 0; i < this.uiElements.length; ++i) {
         this.uiElements[i].update(deltaTime);
     }
 };
 
+/**
+ * Render the UI.
+ * @param {CanvasRenderingContext2D} ctx The canvas rendering context to use.
+ */
 CanvasUI.prototype.render = function(ctx) {
     var draggedElements = [];
     var i;
@@ -64,9 +72,11 @@ CanvasUI.prototype.render = function(ctx) {
     for (i = 0; i < draggedElements.length; ++i) {
         draggedElements[i].render(ctx, this.cursorX, this.cursorY);
     }
-    return ctx;
 };
 
+/**
+ * Clear the UI from all elements.
+ */
 CanvasUI.prototype.clear = function() {
     this.uiElements = [];
     this.cursorX = 0;
@@ -74,6 +84,11 @@ CanvasUI.prototype.clear = function() {
     this.downButton = null;
 };
 
+/**
+ * Set the cursor position.
+ * @param {Object|Vec2} vec New position to set. Needs to have x and y coordinates. Relative to the canvas coordinate
+ * space.
+ */
 CanvasUI.prototype.setCursorPosition = function(vec) {
     this.cursorX = vec.x;
     this.cursorY = vec.y;
@@ -83,7 +98,12 @@ CanvasUI.prototype.setCursorPosition = function(vec) {
     }
 };
 
-CanvasUI.prototype.click = function(vec) {
+/**
+ * Handle a mouse / touch down event.
+ * @param {Object|Vec2} vec New position to set. Needs to have x and y coordinates. Relative to the canvas coordinate
+ * space.
+ */
+CanvasUI.prototype.down = function(vec) {
     this.setCursorPosition(vec);
     for (var i = 0; i < this.uiElements.length; ++i) {
         if (this.uiElements[i].active && this.uiElements[i].hitTest(this.cursorX, this.cursorY)) {
