@@ -7,7 +7,7 @@ var Game = function(canvas) {
     this.infoPanelsSprite = new Sprite('info_panels.png');
     this.turnPanelSprite = new Sprite('turn_panel.png');
     this.redGlowSprite = new Sprite('red_glow.png');
-    this.blueGlowSprite = new Sprite('red_glow.png', '#ff8');
+    this.yellowGlowSprite = new Sprite('red_glow.png', '#ff8');
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
     
@@ -134,7 +134,7 @@ Game.prototype.createUI = function() {
             var glowAmount = that.researchGlowAmount;
             if (glowAmount > 0) {
                 ctx.globalAlpha = glowAmount;
-                that.blueGlowSprite.drawRotated(ctx, button.visualX(), button.visualY());
+                that.yellowGlowSprite.drawRotated(ctx, button.visualX(), button.visualY());
             }
         }
     }));
