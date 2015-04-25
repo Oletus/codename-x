@@ -11,30 +11,14 @@ var Game = function(canvas) {
     
     this.sidebar = new SideBar();
 
-    this.restartGame();
+    this.canvasUI = new CanvasUI({
+        element: this.canvas,
+        getCanvasPositionFromEvent: function(event) {
+            return resizer.getCanvasPosition(event);
+        }
+    });
 
-    var that = this;
-    this.canvas.addEventListener('mousemove', function(event) {
-        that.canvasUI.setCursorPosition(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchmove', function(event) {
-        that.canvasUI.setCursorPosition(resizer.getCanvasPosition(event));
-        event.preventDefault();
-    });
-    this.canvas.addEventListener('mousedown', function(event) {
-        that.canvasUI.click(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchstart', function(event) {
-        that.canvasUI.click(resizer.getCanvasPosition(event));
-        event.preventDefault();
-    });
-    this.canvas.addEventListener('mouseup', function(event) {
-        that.canvasUI.release(resizer.getCanvasPosition(event));
-    });
-    this.canvas.addEventListener('touchend', function(event) {
-        that.canvasUI.release(undefined);
-        event.preventDefault();
-    });
+    this.restartGame();
 };
 
 Game.prototype.restartGame = function() {
@@ -86,7 +70,7 @@ Game.BackgroundMusic = new Audio('Codename_X_theme');
 Game.VictoryMusic = new Audio('Victory_fanfare');
 
 Game.prototype.createUI = function() {
-    this.canvasUI = new CanvasUI();
+    this.canvasUI.clear();
     this.preTurnUI = []; // Contains those buttons that are only visible during the "PRE_TURN" stage.
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.

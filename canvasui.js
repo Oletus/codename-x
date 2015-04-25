@@ -1,10 +1,45 @@
 'use strict';
 
-var CanvasUI = function() {
-    this.uiElements = [];
-    this.cursorX = 0;
-    this.cursorY = 0;
-    this.downButton = null;
+// Requires util2d.js
+
+var CanvasUI = function(options) {
+    var defaults = {
+        element: null,
+        getCanvasPositionFromEvent: null
+    };
+    for(var key in defaults) {
+        if (!options.hasOwnProperty(key)) {
+            this[key] = defaults[key];
+        } else {
+            this[key] = options[key];
+        }
+    }
+    this.clear();
+    
+    if (this.element !== null && this.getCanvasPositionFromEvent !== null) {
+        var that = this;
+        this.element.addEventListener('mousemove', function(event) {
+            that.setCursorPosition(that.getCanvasPositionFromEvent(event));
+        });
+        this.element.addEventListener('touchmove', function(event) {
+            that.setCursorPosition(that.getCanvasPositionFromEvent(event));
+            event.preventDefault();
+        });
+        this.element.addEventListener('mousedown', function(event) {
+            that.click(that.getCanvasPositionFromEvent(event));
+        });
+        this.element.addEventListener('touchstart', function(event) {
+            that.click(that.getCanvasPositionFromEvent(event));
+            event.preventDefault();
+        });
+        this.element.addEventListener('mouseup', function(event) {
+            that.release(that.getCanvasPositionFromEvent(event));
+        });
+        this.element.addEventListener('touchend', function(event) {
+            that.release(undefined);
+            event.preventDefault();
+        });
+    }
 };
 
 CanvasUI.prototype.update = function(deltaTime) {
@@ -18,6 +53,13 @@ CanvasUI.prototype.render = function(ctx) {
         this.uiElements[i].render(ctx, this.cursorX, this.cursorY);
     }
     return ctx;
+};
+
+CanvasUI.prototype.clear = function() {
+    this.uiElements = [];
+    this.cursorX = 0;
+    this.cursorY = 0;
+    this.downButton = null;
 };
 
 CanvasUI.prototype.setCursorPosition = function(vec) {
