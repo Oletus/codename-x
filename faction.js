@@ -126,7 +126,7 @@ Faction.prototype.updateIntel = function(opponentFaction) {
 };
 
 Faction.prototype.sortReserve = function() {
-    this.reserve.sort(function(a, b) {
+    arrayUtil.stableSort(this.reserve, function(a, b) {
         if (a.tier < b.tier) {
             return -1;
         } else if (a.tier > b.tier) {
