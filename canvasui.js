@@ -4,18 +4,18 @@ var CanvasUIElement = function(options) {
     var defaults = {
         label: 'Button',
         labelFunc: null,
+        renderFunc: null,
         centerX: 0,
         centerY: 0,
         width: 100,
         height: 50,
         clickCallback: null,
-        renderFunc: null,
-        dragTargetFunc: null,
-        draggedObject: null,
+        dragTargetCallback: null, // Called when something is dragged onto this object, with the dragged object as parameter.
+        draggedObjectFunc: null,
         active: true,
         draggable: false,
         fontSize: 20,
-        appearance: undefined
+        appearance: undefined // One of CanvasUIElement.Appearance. By default the appearance is determined based on callbacks.
     };
     for(var key in defaults) {
         if (!options.hasOwnProperty(key)) {
