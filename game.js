@@ -119,7 +119,7 @@ Game.prototype.createUI = function() {
         this.researchProposals.push(proposal);
         this.researchHTML.appendChild(proposal.mainDiv);
     }
-    var approveResearchButton = new CanvasButton({
+    var approveResearchButton = new CanvasUIElement({
         labelFunc: function() {
             return 'Approve Research for Lab ' + (that.currentFaction.currentResearch.length + 1) + ' / ' + that.currentFaction.researchSlots;
         },
@@ -137,7 +137,7 @@ Game.prototype.createUI = function() {
     Game.BackgroundMusic.playSingular(true);
 
     // research toggle button
-    this.uiButtons.push(new CanvasButton({
+    this.uiButtons.push(new CanvasUIElement({
         label: '',
         centerX: 1457,
         centerY: 1013,
@@ -156,7 +156,7 @@ Game.prototype.createUI = function() {
     }));
     
     // next turn button
-    this.uiButtons.push(new CanvasButton({
+    this.uiButtons.push(new CanvasUIElement({
         label: '',
         centerX: 1838,
         centerY: 968,
@@ -176,7 +176,7 @@ Game.prototype.createUI = function() {
         }
     }));
     
-    var replayButton = new CanvasButton({
+    var replayButton = new CanvasUIElement({
         labelFunc: function() {
             if (that.animationInProgress) {
                 return 'Skip combat animation';
@@ -201,7 +201,7 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(replayButton);
     this.playingUI.push(replayButton);
     
-    var resetGameButton = new CanvasButton({
+    var resetGameButton = new CanvasUIElement({
         label: 'Restart game',
         centerX: 1270,
         centerY: 720,
@@ -220,7 +220,7 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(resetGameButton);
     this.victoryUI.push(resetGameButton);
     
-    var fsButton = new CanvasButton({
+    var fsButton = new CanvasUIElement({
         label: 'Go Fullscreen',
         centerX: 1920 * 0.8,
         centerY: 800,
@@ -232,7 +232,7 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(fsButton);
     this.preTurnUI.push(fsButton);
-    var muteButton = new CanvasButton({
+    var muteButton = new CanvasUIElement({
         labelFunc: function() {
             return Audio.allMuted ? 'Unmute audio' : 'Mute audio';
         },
@@ -247,7 +247,7 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(muteButton);
     this.preTurnUI.push(muteButton);
     
-    var nameLabel = new CanvasLabel({
+    var nameLabel = new CanvasUIElement({
         label: 'Panjandrum vs. Triebflügel',
         centerX: 1920 * 0.5,
         centerY: 250,
@@ -255,7 +255,7 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(nameLabel);
     this.preTurnUI.push(nameLabel);
-    var creditsLabel = new CanvasLabel({
+    var creditsLabel = new CanvasUIElement({
         label: 'LUDUM DARE #32 JAM GAME',
         centerX: 1920 * 0.5,
         centerY: 960,
@@ -263,7 +263,7 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(creditsLabel);
     this.preTurnUI.push(creditsLabel);
-    var creditsLabel2 = new CanvasLabel({
+    var creditsLabel2 = new CanvasUIElement({
         label: 'By Olli Etuaho, Valtteri Heinonen, Charlie Hornsby, Sakari Leppä, Kimmo Keskinen, Anastasia Diatlova and Zachary Laster',
         centerX: 1920 * 0.5,
         centerY: 1000,
@@ -272,7 +272,7 @@ Game.prototype.createUI = function() {
     this.uiButtons.push(creditsLabel2);
     this.preTurnUI.push(creditsLabel2);
     
-    var startTurnButton = new CanvasButton({
+    var startTurnButton = new CanvasUIElement({
         label: 'Start Turn',
         centerX: 1920 * 0.5,
         centerY: 540,
@@ -284,7 +284,7 @@ Game.prototype.createUI = function() {
     });
     this.uiButtons.push(startTurnButton);
     this.preTurnUI.push(startTurnButton);
-    this.aiPlayerButton = new CanvasButton({
+    this.aiPlayerButton = new CanvasUIElement({
         label: 'Let AI Control This Faction',
         centerX: 1920 * 0.5,
         centerY: 700,
@@ -302,7 +302,7 @@ Game.prototype.createUI = function() {
     this.preTurnUI.push(this.aiPlayerButton);
 
     if (DEV_MODE) {
-        var aiTurnButton = new CanvasButton({
+        var aiTurnButton = new CanvasUIElement({
             label: 'Let AI Play This Turn',
             centerX: 1920 * 0.5,
             centerY: 900,
@@ -317,7 +317,7 @@ Game.prototype.createUI = function() {
     }
 
     var addLocationUI = function(location) {
-        var button = new CanvasButton({
+        var button = new CanvasUIElement({
             label: location.name,
             centerX: location.x,
             centerY: location.y,
@@ -350,7 +350,7 @@ Game.prototype.createUI = function() {
         var y = 942;
         for (var i = 0; i < faction.researchSlots; ++i) {
             var button = (function(j) {
-                return new CanvasButton({
+                return new CanvasUIElement({
                     label: 'research ' + j,
                     centerX: x,
                     centerY: y + j * 80,
@@ -374,7 +374,7 @@ Game.prototype.createUI = function() {
         var perRow = 9;
         for (var i = 0; i < Unit.Types.length; ++i) {
             var button = (function(j) {
-                return new CanvasButton({
+                return new CanvasUIElement({
                     label: 'reserve ' + j,
                     centerX: x + (j % perRow) * 73,
                     centerY: y + Math.floor(j / perRow) * 80 + ((j % perRow) % 2) * 34 - 15,
@@ -404,7 +404,7 @@ Game.prototype.createUI = function() {
         x = 780;
         for (var i = 0; i < faction.researchSlots; ++i) {
             var button = (function(j) {
-                return new CanvasButton({
+                return new CanvasUIElement({
                     label: 'opponent research ' + j,
                     centerX: x,
                     centerY: y + j * 80,
@@ -425,13 +425,14 @@ Game.prototype.createUI = function() {
             that.uiButtons.push(button);
             faction.addUI(button);
         }
-        var intelLabel = new CanvasLabel({
+        var intelLabel = new CanvasUIElement({
             centerX: 846,
             centerY: 882,
             labelFunc: function() {
                 return faction.getCurrentIntelPower();
             },
-            active: false
+            active: false,
+            fontSize: 30
         });
         that.uiButtons.push(intelLabel);
         faction.addUI(intelLabel);
