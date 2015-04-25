@@ -44,22 +44,14 @@ var Unit = function(options) {
     }
 };
 
-Unit.renderIcon = function(ctx, cursorOn, buttonDown, faction, x, y, unitType, button) {
-    
-    ctx.beginPath();
-    var radius;
-    var lineWidth;
-    var shadowOffset = 3;
-    if ((cursorOn || button.dragged) || buttonDown) {
-        if (buttonDown) {
-            shadowOffset = 0;
-        }
-        radius = 31;
-        lineWidth = 5;
-    } else {
-        radius = 32;
-        lineWidth = 3;
+Unit.renderIcon = function(ctx, cursorOn, pressedExtent, faction, x, y, unitType, button) {
+    var radius = 32;
+    var lineWidth = 3;
+    var shadowOffset = 4;
+    if (pressedExtent > 0) {
+        shadowOffset = (1 - pressedExtent) * 4;
     }
+    ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     
     ctx.save();
@@ -72,6 +64,12 @@ Unit.renderIcon = function(ctx, cursorOn, buttonDown, faction, x, y, unitType, b
     ctx.fill();
     ctx.restore();
     
+    if ((cursorOn || button.dragged) || pressedExtent == 1) {
+        radius = 31;
+        lineWidth = 5;
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = '#fff';
     ctx.globalAlpha = 1.0;

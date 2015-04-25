@@ -108,32 +108,38 @@ CanvasUI.prototype.down = function(vec) {
     for (var i = 0; i < this.uiElements.length; ++i) {
         if (this.uiElements[i].active && this.uiElements[i].hitTest(this.cursorX, this.cursorY)) {
             this.downButton = this.uiElements[i];
+            this.downButton.down();
             if (this.uiElements[i].draggable) {
                 this.downButton.dragged = true;
                 this.dragStartX = this.cursorX;
                 this.dragStartY = this.cursorY;
-            } else {
-                this.uiElements[i].click();
             }
         }
     }
     this.setCursorPosition(vec);
 };
 
+/**
+ * Handle a mouse / touch up event.
+ * @param {Object|Vec2=} vec New position to set. Needs to have x and y coordinates. Relative to the canvas coordinate
+ * space. May be undefined, in which case the last known position will be used to evaluate the effects.
+ */
 CanvasUI.prototype.release = function(vec) {
     if (vec !== undefined) {
         this.setCursorPosition(vec);
     }
     if (this.downButton !== null) {
+        var clicked = false;
         for (var i = 0; i < this.uiElements.length; ++i) {
             if (this.uiElements[i].active && this.uiElements[i].hitTest(this.cursorX, this.cursorY)) {
                 if (this.downButton === this.uiElements[i]) {
-                    this.uiElements[i].click();
-                } else if (this.uiElements[i].dragTargetCallback !== null && this.downButton.draggable) {
+                    clicked = true;
+                } else if (this.uiElements[i].dragTargetCallback !== null && this.downButton.dragged) {
                     this.uiElements[i].dragTargetCallback(this.downButton.draggedObjectFunc());
                 }
             }
         }
+        this.downButton.release(clicked);
         this.downButton.dragged = false;
         this.downButton = null;
     }
@@ -144,6 +150,11 @@ CanvasUI.prototype.release = function(vec) {
  * The default font for UI elements.
  */
 CanvasUI.defaultFont = 'sans-serif';
+
+/**
+ * Minimum interval between clicks on the same button in seconds.
+ */
+CanvasUI.minimumClickInterval = 0.5;
 
 var CanvasUIElement = function(options) {
     var defaults = {
@@ -174,6 +185,7 @@ var CanvasUIElement = function(options) {
     this.draggedY = this.centerY;
     this.dragged = false;
     this.time = 0.5;
+    this.isDown = false;
     this.lastClick = 0;
     if (this.appearance === undefined) {
         if (this.clickCallback !== null) {
@@ -197,28 +209,32 @@ CanvasUIElement.prototype.render = function(ctx, cursorX, cursorY) {
     if (!this.active) {
         return;
     }
-    var drawAsDown = this.isDown();
+    var pressedExtent = this.isDown ? (this.time - this.lastDownTime) * 8.0 : 1.0 - (this.time - this.lastUpTime) * 3.0;
+    pressedExtent = mathUtil.clamp(0, 1, pressedExtent);
     var cursorOn = this.hitTest(cursorX, cursorY);
 
     if (this.renderFunc !== null) {
-        this.renderFunc(ctx, cursorOn, drawAsDown, this);
+        this.renderFunc(ctx, cursorOn, pressedExtent, this);
         return;
     }
 
     if (this.appearance === CanvasUIElement.Appearance.BUTTON) {
         var rect = this.getRect();
         ctx.fillStyle = '#000';
-        if (cursorOn && !drawAsDown) {
+        if (pressedExtent > 0) {
+            ctx.globalAlpha = 1.0 - pressedExtent * 0.2;
+        } else if (cursorOn) {
             ctx.globalAlpha = 1.0;
         } else {
             ctx.globalAlpha = 0.5;
         }
         ctx.fillRect(rect.left, rect.top, rect.width(), rect.height());
-        if (!drawAsDown) {
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#fff';
-            ctx.strokeRect(rect.left, rect.top, rect.width(), rect.height());
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#fff';
+        if (!this.canClick()) {
+            ctx.globalAlpha *= 0.6;
         }
+        ctx.strokeRect(rect.left, rect.top, rect.width(), rect.height());
     }
     ctx.globalAlpha = 1.0;
     ctx.textAlign = 'center';
@@ -254,9 +270,9 @@ CanvasUIElement.prototype.hitTest = function(x, y) {
     return false;
 };
 
-CanvasUIElement.prototype.isDown = function() {
+CanvasUIElement.prototype.canClick = function() {
     var sinceClicked = this.time - this.lastClick;
-    return sinceClicked < 0.5;
+    return sinceClicked >= CanvasUI.minimumClickInterval;
 };
 
 CanvasUIElement.prototype.getRect = function() {
@@ -268,8 +284,15 @@ CanvasUIElement.prototype.getRect = function() {
     );
 };
 
-CanvasUIElement.prototype.click = function() {
-    if (this.isDown()) {
+CanvasUIElement.prototype.down = function() {
+    this.isDown = true;
+    this.lastDownTime = this.time;
+};
+
+CanvasUIElement.prototype.release = function(clicked) {
+    this.isDown = false;
+    this.lastUpTime = this.time;
+    if (!clicked || !this.canClick()) {
         return;
     }
     this.lastClick = this.time;

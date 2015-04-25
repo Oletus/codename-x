@@ -179,7 +179,7 @@ Faction.prototype.update = function(deltaTime, state) {
     return animationsInProgress;
 };
 
-Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, button) {
+Faction.prototype.renderResearchButton = function(ctx, cursorOn, pressedExtent, i, button) {
     if (this.currentResearch.length > i) {
         var x = button.visualX();
         var y = button.visualY();
@@ -196,19 +196,19 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, buttonDown, i, 
         ctx.font = '16px special_eliteregular';
         ctx.fillText('Turns left : ' + this.currentResearch[i].getTurnsLeft(), x + 50 + barWidth, y - 10);
 
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this, x, y, this.currentResearch[i].unitType, button);
+        Unit.renderIcon(ctx, cursorOn, pressedExtent, this, x, y, this.currentResearch[i].unitType, button);
     }
 };
 
-Faction.prototype.renderReserveButton = function(ctx, cursorOn, buttonDown, i, button) {
+Faction.prototype.renderReserveButton = function(ctx, cursorOn, pressedExtent, i, button) {
     if (this.reserve.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this, button.visualX(), button.visualY(), this.reserve[i], button);
+        Unit.renderIcon(ctx, cursorOn, pressedExtent, this, button.visualX(), button.visualY(), this.reserve[i], button);
     }
 };
 
-Faction.prototype.renderIntelButton = function(ctx, cursorOn, buttonDown, i, button) {
+Faction.prototype.renderIntelButton = function(ctx, cursorOn, pressedExtent, i, button) {
     if (this.researchIntel.length > i) {
-        Unit.renderIcon(ctx, cursorOn, buttonDown, this.intelOnFaction, button.visualX(), button.visualY(), this.researchIntel[i], button);
+        Unit.renderIcon(ctx, cursorOn, pressedExtent, this.intelOnFaction, button.visualX(), button.visualY(), this.researchIntel[i], button);
     }
 };
 

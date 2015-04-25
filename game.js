@@ -130,7 +130,7 @@ Game.prototype.createUI = function() {
         clickCallback: function() {
             that.showResearchUI(that.state === Game.State.PLAYING);
         },
-        renderFunc: function(ctx, cursorOn, buttonDown, button) {
+        renderFunc: function(ctx, cursorOn, pressedExtent, button) {
             var glowAmount = that.researchGlowAmount;
             if (glowAmount > 0) {
                 ctx.globalAlpha = glowAmount;
@@ -151,7 +151,7 @@ Game.prototype.createUI = function() {
                 that.nextPhase();
             }
         },
-        renderFunc: function(ctx, cursorOn, buttonDown, button) {
+        renderFunc: function(ctx, cursorOn, pressedExtent, button) {
             var glowAmount = that.nextPhaseGlowAmount();
             if (glowAmount > 0) {
                 ctx.globalAlpha = glowAmount;
@@ -310,8 +310,8 @@ Game.prototype.createUI = function() {
             dragTargetCallback: function(draggedObject) {
                 that.dragToLocation(draggedObject, location);
             },
-            renderFunc: function(ctx, cursorOn, buttonDown, button) {
-                location.render(ctx, cursorOn, buttonDown, button);
+            renderFunc: function(ctx, cursorOn, pressedExtent, button) {
+                location.render(ctx, cursorOn, pressedExtent, button);
             },
             clickCallback: function() {
                 that.sidebar.setUnit(location.getVisibleUnit());
@@ -341,8 +341,8 @@ Game.prototype.createUI = function() {
                     width: 75,
                     height: 75,
                     active: false,
-                    renderFunc: function(ctx, cursorOn, buttonDown, button) {
-                        faction.renderResearchButton(ctx, cursorOn, buttonDown, j, button);
+                    renderFunc: function(ctx, cursorOn, pressedExtent, button) {
+                        faction.renderResearchButton(ctx, cursorOn, pressedExtent, j, button);
                     },
                     clickCallback: function() {
                         if (j < faction.currentResearch.length) {
@@ -366,8 +366,8 @@ Game.prototype.createUI = function() {
                     height: 73,
                     active: false,
                     draggable: true,
-                    renderFunc: function(ctx, cursorOn, buttonDown, button) {
-                        faction.renderReserveButton(ctx, cursorOn, buttonDown, j, button);
+                    renderFunc: function(ctx, cursorOn, pressedExtent, button) {
+                        faction.renderReserveButton(ctx, cursorOn, pressedExtent, j, button);
                     },
                     clickCallback: function() {
                         if (j < faction.reserve.length) {
@@ -396,8 +396,8 @@ Game.prototype.createUI = function() {
                     height: 75,
                     active: false,
                     draggable: false,
-                    renderFunc: function(ctx, cursorOn, buttonDown, button) {
-                        faction.renderIntelButton(ctx, cursorOn, buttonDown, j, button);
+                    renderFunc: function(ctx, cursorOn, pressedExtent, button) {
+                        faction.renderIntelButton(ctx, cursorOn, pressedExtent, j, button);
                     },
                     clickCallback: function() {
                         if (j < faction.researchIntel.length) {
