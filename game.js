@@ -1,5 +1,7 @@
 'use strict';
 
+ CanvasUI.defaultFont = 'special_eliteregular';
+
 var Game = function(canvas) {
     this.bgSprite = new Sprite('background.jpg');
     this.infoPanelsSprite = new Sprite('info_panels.png');

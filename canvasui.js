@@ -2,6 +2,9 @@
 
 // Requires util2d.js
 
+/**
+ * Class for rendering and interacting with UI elements on a canvas.
+ */
 var CanvasUI = function(options) {
     var defaults = {
         element: null,
@@ -49,8 +52,17 @@ CanvasUI.prototype.update = function(deltaTime) {
 };
 
 CanvasUI.prototype.render = function(ctx) {
-    for (var i = 0; i < this.uiElements.length; ++i) {
-        this.uiElements[i].render(ctx, this.cursorX, this.cursorY);
+    var draggedElements = [];
+    var i;
+    for (i = 0; i < this.uiElements.length; ++i) {
+        if (!this.uiElements[i].dragged) {
+            this.uiElements[i].render(ctx, this.cursorX, this.cursorY);
+        } else {
+            draggedElements.push(this.uiElements[i]);
+        }
+    }
+    for (i = 0; i < draggedElements.length; ++i) {
+        draggedElements[i].render(ctx, this.cursorX, this.cursorY);
     }
     return ctx;
 };
@@ -108,6 +120,11 @@ CanvasUI.prototype.release = function(vec) {
     console.log(this.cursorX, this.cursorY);
 };
 
+/**
+ * The default font for UI elements.
+ */
+CanvasUI.defaultFont = 'sans-serif';
+
 var CanvasUIElement = function(options) {
     var defaults = {
         label: 'Button',
@@ -120,9 +137,10 @@ var CanvasUIElement = function(options) {
         clickCallback: null,
         dragTargetCallback: null, // Called when something is dragged onto this object, with the dragged object as parameter.
         draggedObjectFunc: null,
-        active: true,
+        active: true, // Active elements are visible and can be interacted with. Inactive elements can't be interacted with.
         draggable: false,
-        fontSize: 20,
+        fontSize: 20, // In pixels
+        font: CanvasUI.defaultFont,
         appearance: undefined // One of CanvasUIElement.Appearance. By default the appearance is determined based on callbacks.
     };
     for(var key in defaults) {
@@ -185,7 +203,7 @@ CanvasUIElement.prototype.render = function(ctx, cursorX, cursorY) {
     ctx.globalAlpha = 1.0;
     ctx.textAlign = 'center';
     ctx.fillStyle = '#fff';
-    ctx.font = this.fontSize + 'px special_eliteregular';
+    ctx.font = this.fontSize + 'px ' + this.font;
     var label = this.label;
     if (this.labelFunc) {
         label = this.labelFunc();
