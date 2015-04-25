@@ -15,27 +15,26 @@ var Game = function(canvas) {
 
     var that = this;
     this.canvas.addEventListener('mousemove', function(event) {
-        that.setCursorPosition(resizer.getCanvasPosition(event));
+        that.canvasUI.setCursorPosition(resizer.getCanvasPosition(event));
     });
     this.canvas.addEventListener('touchmove', function(event) {
-        that.setCursorPosition(resizer.getCanvasPosition(event));
+        that.canvasUI.setCursorPosition(resizer.getCanvasPosition(event));
         event.preventDefault();
     });
     this.canvas.addEventListener('mousedown', function(event) {
-        that.click(resizer.getCanvasPosition(event));
+        that.canvasUI.click(resizer.getCanvasPosition(event));
     });
     this.canvas.addEventListener('touchstart', function(event) {
-        that.click(resizer.getCanvasPosition(event));
+        that.canvasUI.click(resizer.getCanvasPosition(event));
         event.preventDefault();
     });
     this.canvas.addEventListener('mouseup', function(event) {
-        that.release(resizer.getCanvasPosition(event));
+        that.canvasUI.release(resizer.getCanvasPosition(event));
     });
     this.canvas.addEventListener('touchend', function(event) {
-        that.release(new Vec2(that.cursorX, that.cursorY));
+        that.canvasUI.release(undefined);
         event.preventDefault();
     });
-    this.setCursorPosition({x: 0, y: 0});
 };
 
 Game.prototype.restartGame = function() {
@@ -70,7 +69,6 @@ Game.prototype.restartGame = function() {
     this.chosenResearch = null;
     this.researchGlowAmount = 0; // visual glow for the research button.
 
-    this.downButton = null;
     this.createUI();
     this.sidebar.setUnit(null);
 
@@ -88,7 +86,7 @@ Game.BackgroundMusic = new Audio('Codename_X_theme');
 Game.VictoryMusic = new Audio('Victory_fanfare');
 
 Game.prototype.createUI = function() {
-    this.uiElements = [];
+    this.canvasUI = new CanvasUI();
     this.preTurnUI = []; // Contains those buttons that are only visible during the "PRE_TURN" stage.
     this.playingUI = []; // Contains those buttons that are only visible during the "PLAYING" stage.
     this.researchUI = []; // Contains those buttons that are only visible during the "RESEARCH_PROPOSALS" stage.
@@ -131,13 +129,13 @@ Game.prototype.createUI = function() {
             that.approveResearch();
         }
     });
-    this.uiElements.push(approveResearchButton);
+    this.canvasUI.uiElements.push(approveResearchButton);
     this.researchUI.push(approveResearchButton);
 
     Game.BackgroundMusic.playSingular(true);
 
     // research toggle button
-    this.uiElements.push(new CanvasUIElement({
+    this.canvasUI.uiElements.push(new CanvasUIElement({
         label: '',
         centerX: 1457,
         centerY: 1013,
@@ -156,7 +154,7 @@ Game.prototype.createUI = function() {
     }));
     
     // next turn button
-    this.uiElements.push(new CanvasUIElement({
+    this.canvasUI.uiElements.push(new CanvasUIElement({
         label: '',
         centerX: 1838,
         centerY: 968,
@@ -198,7 +196,7 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.uiElements.push(replayButton);
+    this.canvasUI.uiElements.push(replayButton);
     this.playingUI.push(replayButton);
     
     var resetGameButton = new CanvasUIElement({
@@ -217,7 +215,7 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.uiElements.push(resetGameButton);
+    this.canvasUI.uiElements.push(resetGameButton);
     this.victoryUI.push(resetGameButton);
     
     var fsButton = new CanvasUIElement({
@@ -230,7 +228,7 @@ Game.prototype.createUI = function() {
             requestFullscreen(document.body);
         }
     });
-    this.uiElements.push(fsButton);
+    this.canvasUI.uiElements.push(fsButton);
     this.preTurnUI.push(fsButton);
     var muteButton = new CanvasUIElement({
         labelFunc: function() {
@@ -244,7 +242,7 @@ Game.prototype.createUI = function() {
             Audio.muteAll(!Audio.allMuted);
         }
     });
-    this.uiElements.push(muteButton);
+    this.canvasUI.uiElements.push(muteButton);
     this.preTurnUI.push(muteButton);
     
     var nameLabel = new CanvasUIElement({
@@ -253,7 +251,7 @@ Game.prototype.createUI = function() {
         centerY: 250,
         fontSize: 60
     });
-    this.uiElements.push(nameLabel);
+    this.canvasUI.uiElements.push(nameLabel);
     this.preTurnUI.push(nameLabel);
     var creditsLabel = new CanvasUIElement({
         label: 'LUDUM DARE #32 JAM GAME',
@@ -261,7 +259,7 @@ Game.prototype.createUI = function() {
         centerY: 960,
         fontSize: 20
     });
-    this.uiElements.push(creditsLabel);
+    this.canvasUI.uiElements.push(creditsLabel);
     this.preTurnUI.push(creditsLabel);
     var creditsLabel2 = new CanvasUIElement({
         label: 'By Olli Etuaho, Valtteri Heinonen, Charlie Hornsby, Sakari Leppä, Kimmo Keskinen, Anastasia Diatlova and Zachary Laster',
@@ -269,7 +267,7 @@ Game.prototype.createUI = function() {
         centerY: 1000,
         fontSize: 20
     });
-    this.uiElements.push(creditsLabel2);
+    this.canvasUI.uiElements.push(creditsLabel2);
     this.preTurnUI.push(creditsLabel2);
     
     var startTurnButton = new CanvasUIElement({
@@ -282,7 +280,7 @@ Game.prototype.createUI = function() {
             that.nextPhase();
         }
     });
-    this.uiElements.push(startTurnButton);
+    this.canvasUI.uiElements.push(startTurnButton);
     this.preTurnUI.push(startTurnButton);
     this.aiPlayerButton = new CanvasUIElement({
         label: 'Let AI Control This Faction',
@@ -298,7 +296,7 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.uiElements.push(this.aiPlayerButton);
+    this.canvasUI.uiElements.push(this.aiPlayerButton);
     this.preTurnUI.push(this.aiPlayerButton);
 
     if (DEV_MODE) {
@@ -312,7 +310,7 @@ Game.prototype.createUI = function() {
                 that.aiTurn();
             }
         });
-        this.uiElements.push(aiTurnButton);
+        this.canvasUI.uiElements.push(aiTurnButton);
         this.preTurnUI.push(aiTurnButton);
     }
 
@@ -337,7 +335,7 @@ Game.prototype.createUI = function() {
                 return location;
             }
         });
-        that.uiElements.push(button);
+        that.canvasUI.uiElements.push(button);
         location.button = button;
         that.playingUI.push(button);
     };
@@ -367,7 +365,7 @@ Game.prototype.createUI = function() {
                     }
                 });
             })(i);
-            that.uiElements.push(button);
+            that.canvasUI.uiElements.push(button);
             faction.addUI(button);
         }
         x = 50;
@@ -395,7 +393,7 @@ Game.prototype.createUI = function() {
                     }
                 });
             })(i);
-            that.uiElements.push(button);
+            that.canvasUI.uiElements.push(button);
             that.reserveUI.push(button);
             faction.addUI(button);
             button.reserveIndex = i; // TODO: clean up this hack...
@@ -422,7 +420,7 @@ Game.prototype.createUI = function() {
                     }
                 });
             })(i);
-            that.uiElements.push(button);
+            that.canvasUI.uiElements.push(button);
             faction.addUI(button);
         }
         var intelLabel = new CanvasUIElement({
@@ -434,7 +432,7 @@ Game.prototype.createUI = function() {
             active: false,
             fontSize: 30
         });
-        that.uiElements.push(intelLabel);
+        that.canvasUI.uiElements.push(intelLabel);
         faction.addUI(intelLabel);
     };
     for (var i = 0; i < this.factions.length; ++i) {
@@ -482,9 +480,7 @@ Game.prototype.render = function() {
     
     this.drawFader(this.preturnFade);
 
-    for (var i = 0; i < this.uiElements.length; ++i) {
-        this.uiElements[i].render(this.ctx, this.cursorX, this.cursorY);
-    }
+    this.canvasUI.render(this.ctx);
     
     if (this.finishedAnimation > 0) {
         this.ctx.save();
@@ -716,9 +712,7 @@ Game.prototype.update = function(deltaTime) {
     this.time += deltaTime;
 
     this.animationInProgress = false;
-    for (var i = 0; i < this.uiElements.length; ++i) {
-        this.uiElements[i].update(deltaTime);
-    }
+    this.canvasUI.update(deltaTime);
     this.animationInProgress = this.currentFaction.update(deltaTime, this.state);
     this.setPotentialResearch();
     for (var i = 0; i < this.connections.length; ++i) {
@@ -792,15 +786,6 @@ Game.prototype.nextPhaseGlowAmount = function() {
     }
 };
 
-Game.prototype.setCursorPosition = function(vec) {
-    this.cursorX = vec.x;
-    this.cursorY = vec.y;
-    if (this.downButton !== null && this.downButton.draggable) {
-        this.downButton.draggedX = this.downButton.centerX + (this.cursorX - this.dragStartX);
-        this.downButton.draggedY = this.downButton.centerY + (this.cursorY - this.dragStartY);
-    }
-};
-
 Game.prototype.dragToLocation = function(draggedObject, location) {
     if (location.faction === this.currentFaction) {
         if (draggedObject instanceof Location) {
@@ -823,41 +808,4 @@ Game.prototype.fromLocationToLocation = function(locA, locB) {
     var temp = locA.unit;
     locA.unit = locB.unit;
     locB.unit = temp;
-};
-
-Game.prototype.click = function(vec) {
-    this.setCursorPosition(vec);
-    for (var i = 0; i < this.uiElements.length; ++i) {
-        if (this.uiElements[i].active && this.uiElements[i].hitTest(this.cursorX, this.cursorY)) {
-            this.downButton = this.uiElements[i];
-            if (this.uiElements[i].draggable) {
-                this.downButton.dragged = true;
-                this.dragStartX = this.cursorX;
-                this.dragStartY = this.cursorY;
-            } else {
-                this.uiElements[i].click();
-            }
-        }
-    }
-    this.setCursorPosition(vec);
-};
-
-Game.prototype.release = function(vec) {
-    if (vec !== undefined) {
-        this.setCursorPosition(vec);
-    }
-    if (this.downButton !== null) {
-        for (var i = 0; i < this.uiElements.length; ++i) {
-            if (this.uiElements[i].active && this.uiElements[i].hitTest(this.cursorX, this.cursorY)) {
-                if (this.downButton === this.uiElements[i]) {
-                    this.uiElements[i].click();
-                } else if (this.uiElements[i].dragTargetCallback !== null && this.downButton.draggable) {
-                    this.uiElements[i].dragTargetCallback(this.downButton.draggedObjectFunc());
-                }
-            }
-        }
-        this.downButton.dragged = false;
-        this.downButton = null;
-    }
-    console.log(this.cursorX, this.cursorY);
 };
