@@ -411,7 +411,7 @@ Game.prototype.createUI = function() {
         }
         var intelLabel = new CanvasUIElement({
             centerX: 846,
-            centerY: 882,
+            centerY: 876,
             labelFunc: function() {
                 return faction.getCurrentIntelPower();
             },
