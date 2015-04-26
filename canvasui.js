@@ -299,7 +299,7 @@ CanvasUIElement.prototype.isDragged = function() {
  */
 CanvasUIElement.prototype.hitTest = function(x, y) {
     if (this.clickCallback !== null) {
-        return this.getRect().mightIntersectCircleRoundedOut(x, y, 1);
+        return this.getRect().containsRoundedOut(new Vec2(x, y));
     }
     return false;
 };
