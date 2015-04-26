@@ -64,7 +64,7 @@ Unit.renderIcon = function(ctx, cursorOn, pressedExtent, faction, x, y, unitType
     ctx.fill();
     ctx.restore();
     
-    if ((cursorOn || button.dragged) || pressedExtent == 1) {
+    if ((cursorOn || button.isDragged()) || pressedExtent == 1) {
         radius = 31;
         lineWidth = 5;
     }

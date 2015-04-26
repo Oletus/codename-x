@@ -286,6 +286,13 @@ CanvasUIElement.prototype.visualY = function() {
 };
 
 /**
+ * @return {boolean} True when the element is being dragged.
+ */
+CanvasUIElement.prototype.isDragged = function() {
+    return this.dragged;
+};
+
+/**
  * @param {number} x Horizontal coordinate to test.
  * @param {number} y Vertical coordinate to test.
  * @return {boolean} Whether the coordinate is within the area of the element.
