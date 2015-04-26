@@ -146,6 +146,10 @@ CanvasUI.prototype.release = function(vec) {
     console.log(this.cursorX, this.cursorY);
 };
 
+CanvasUI.prototype.addElement = function(element) {
+    this.uiElements.push(element);
+};
+
 /**
  * The default font for UI elements.
  */

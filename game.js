@@ -115,13 +115,13 @@ Game.prototype.createUI = function() {
             that.approveResearch();
         }
     });
-    this.canvasUI.uiElements.push(approveResearchButton);
+    this.canvasUI.addElement(approveResearchButton);
     this.researchUI.push(approveResearchButton);
 
     Game.BackgroundMusic.playSingular(true);
 
     // research toggle button
-    this.canvasUI.uiElements.push(new CanvasUIElement({
+    this.canvasUI.addElement(new CanvasUIElement({
         label: '',
         centerX: 1457,
         centerY: 1013,
@@ -140,7 +140,7 @@ Game.prototype.createUI = function() {
     }));
     
     // next turn button
-    this.canvasUI.uiElements.push(new CanvasUIElement({
+    this.canvasUI.addElement(new CanvasUIElement({
         label: '',
         centerX: 1838,
         centerY: 968,
@@ -182,7 +182,7 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.canvasUI.uiElements.push(replayButton);
+    this.canvasUI.addElement(replayButton);
     this.playingUI.push(replayButton);
     
     var resetGameButton = new CanvasUIElement({
@@ -201,7 +201,7 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.canvasUI.uiElements.push(resetGameButton);
+    this.canvasUI.addElement(resetGameButton);
     this.victoryUI.push(resetGameButton);
     
     var fsButton = new CanvasUIElement({
@@ -214,7 +214,7 @@ Game.prototype.createUI = function() {
             requestFullscreen(document.body);
         }
     });
-    this.canvasUI.uiElements.push(fsButton);
+    this.canvasUI.addElement(fsButton);
     this.preTurnUI.push(fsButton);
     var muteButton = new CanvasUIElement({
         labelFunc: function() {
@@ -228,7 +228,7 @@ Game.prototype.createUI = function() {
             Audio.muteAll(!Audio.allMuted);
         }
     });
-    this.canvasUI.uiElements.push(muteButton);
+    this.canvasUI.addElement(muteButton);
     this.preTurnUI.push(muteButton);
     
     var nameLabel = new CanvasUIElement({
@@ -237,7 +237,7 @@ Game.prototype.createUI = function() {
         centerY: 250,
         fontSize: 60
     });
-    this.canvasUI.uiElements.push(nameLabel);
+    this.canvasUI.addElement(nameLabel);
     this.preTurnUI.push(nameLabel);
     var creditsLabel = new CanvasUIElement({
         label: 'LUDUM DARE #32 JAM GAME',
@@ -245,7 +245,7 @@ Game.prototype.createUI = function() {
         centerY: 960,
         fontSize: 20
     });
-    this.canvasUI.uiElements.push(creditsLabel);
+    this.canvasUI.addElement(creditsLabel);
     this.preTurnUI.push(creditsLabel);
     var creditsLabel2 = new CanvasUIElement({
         label: 'By Olli Etuaho, Valtteri Heinonen, Charlie Hornsby, Sakari Leppä, Kimmo Keskinen, Anastasia Diatlova and Zachary Laster',
@@ -253,7 +253,7 @@ Game.prototype.createUI = function() {
         centerY: 1000,
         fontSize: 20
     });
-    this.canvasUI.uiElements.push(creditsLabel2);
+    this.canvasUI.addElement(creditsLabel2);
     this.preTurnUI.push(creditsLabel2);
     
     var startTurnButton = new CanvasUIElement({
@@ -266,7 +266,7 @@ Game.prototype.createUI = function() {
             that.nextPhase();
         }
     });
-    this.canvasUI.uiElements.push(startTurnButton);
+    this.canvasUI.addElement(startTurnButton);
     this.preTurnUI.push(startTurnButton);
     this.aiPlayerButton = new CanvasUIElement({
         label: 'Let AI Control This Faction',
@@ -282,7 +282,7 @@ Game.prototype.createUI = function() {
             }
         }
     });
-    this.canvasUI.uiElements.push(this.aiPlayerButton);
+    this.canvasUI.addElement(this.aiPlayerButton);
     this.preTurnUI.push(this.aiPlayerButton);
 
     if (DEV_MODE) {
@@ -296,7 +296,7 @@ Game.prototype.createUI = function() {
                 that.aiTurn();
             }
         });
-        this.canvasUI.uiElements.push(aiTurnButton);
+        this.canvasUI.addElement(aiTurnButton);
         this.preTurnUI.push(aiTurnButton);
     }
 
@@ -321,7 +321,7 @@ Game.prototype.createUI = function() {
                 return location;
             }
         });
-        that.canvasUI.uiElements.push(button);
+        that.canvasUI.addElement(button);
         location.button = button;
         that.playingUI.push(button);
     };
@@ -351,7 +351,7 @@ Game.prototype.createUI = function() {
                     }
                 });
             })(i);
-            that.canvasUI.uiElements.push(button);
+            that.canvasUI.addElement(button);
             faction.addUI(button);
         }
         x = 50;
@@ -379,7 +379,7 @@ Game.prototype.createUI = function() {
                     }
                 });
             })(i);
-            that.canvasUI.uiElements.push(button);
+            that.canvasUI.addElement(button);
             that.reserveUI.push(button);
             faction.addUI(button);
             button.reserveIndex = i; // TODO: clean up this hack...
@@ -406,7 +406,7 @@ Game.prototype.createUI = function() {
                     }
                 });
             })(i);
-            that.canvasUI.uiElements.push(button);
+            that.canvasUI.addElement(button);
             faction.addUI(button);
         }
         var intelLabel = new CanvasUIElement({
@@ -418,7 +418,7 @@ Game.prototype.createUI = function() {
             active: false,
             fontSize: 30
         });
-        that.canvasUI.uiElements.push(intelLabel);
+        that.canvasUI.addElement(intelLabel);
         faction.addUI(intelLabel);
     };
     for (var i = 0; i < this.factions.length; ++i) {
