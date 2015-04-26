@@ -179,7 +179,7 @@ Faction.prototype.update = function(deltaTime, state) {
     return animationsInProgress;
 };
 
-Faction.prototype.renderResearchButton = function(ctx, cursorOn, pressedExtent, i, button) {
+Faction.prototype.renderResearchButton = function(ctx, button, cursorOn, pressedExtent, i) {
     if (this.currentResearch.length > i) {
         var x = button.visualX();
         var y = button.visualY();
@@ -200,13 +200,13 @@ Faction.prototype.renderResearchButton = function(ctx, cursorOn, pressedExtent, 
     }
 };
 
-Faction.prototype.renderReserveButton = function(ctx, cursorOn, pressedExtent, i, button) {
+Faction.prototype.renderReserveButton = function(ctx, button, cursorOn, pressedExtent, i) {
     if (this.reserve.length > i) {
         Unit.renderIcon(ctx, cursorOn, pressedExtent, this, button.visualX(), button.visualY(), this.reserve[i], button);
     }
 };
 
-Faction.prototype.renderIntelButton = function(ctx, cursorOn, pressedExtent, i, button) {
+Faction.prototype.renderIntelButton = function(ctx, button, cursorOn, pressedExtent, i) {
     if (this.researchIntel.length > i) {
         Unit.renderIcon(ctx, cursorOn, pressedExtent, this.intelOnFaction, button.visualX(), button.visualY(), this.researchIntel[i], button);
     }

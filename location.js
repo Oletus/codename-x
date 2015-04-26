@@ -68,7 +68,7 @@ Location.prototype.isAnimationComplete = function() {
     return this.animationProgress >= this.messageLog.length;
 };
 
-Location.prototype.render = function(ctx, cursorOn, pressedExtent, button) {
+Location.prototype.render = function(ctx, button, cursorOn, pressedExtent) {
     var x = button.visualX();
     var y = button.visualY();
     Unit.renderIcon(ctx, cursorOn, pressedExtent, this.getVisibleFaction(), x, y, this.getVisibleUnit(), button);

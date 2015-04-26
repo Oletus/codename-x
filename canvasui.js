@@ -156,10 +156,14 @@ CanvasUI.defaultFont = 'sans-serif';
  */
 CanvasUI.minimumClickInterval = 0.5;
 
+/**
+ * A single UI element to draw on a canvas, typically either a button or a label.
+ * Will be rendered with text by default, but can also be drawn with a custom rendering function renderFunc.
+ */
 var CanvasUIElement = function(options) {
     var defaults = {
         label: 'Button',
-        labelFunc: null,
+        labelFunc: null, // Function that returns the current text to draw on the element. Overrides label if set.
         renderFunc: null,
         centerX: 0,
         centerY: 0,
@@ -201,10 +205,20 @@ CanvasUIElement.Appearance = {
     LABEL: 1
 };
 
+/**
+ * Update UI element state and animations.
+ * @param {number} deltaTime Time passed since the last update in seconds.
+ */
 CanvasUIElement.prototype.update = function(deltaTime) {
     this.time += deltaTime;
 };
 
+/**
+ * Render the element. Will call renderFunc if it is defined.
+ * @param {CanvasRenderingContext2D} ctx Context to render to.
+ * @param {number} cursorX Cursor horizontal coordinate in the canvas coordinate system.
+ * @param {number} cursorY Cursor vertical coordinate in the canvas coordinate system.
+ */
 CanvasUIElement.prototype.render = function(ctx, cursorX, cursorY) {
     if (!this.active) {
         return;
@@ -214,7 +228,7 @@ CanvasUIElement.prototype.render = function(ctx, cursorX, cursorY) {
     var cursorOn = this.hitTest(cursorX, cursorY);
 
     if (this.renderFunc !== null) {
-        this.renderFunc(ctx, cursorOn, pressedExtent, this);
+        this.renderFunc(ctx, this, cursorOn, pressedExtent);
         return;
     }
 
@@ -247,6 +261,10 @@ CanvasUIElement.prototype.render = function(ctx, cursorX, cursorY) {
     ctx.fillText(label, this.centerX, this.centerY + 7);
 };
 
+/**
+ * @return {number} The horizontal position to draw the element at. May be different from the logical position if the
+ * element is being dragged.
+ */
 CanvasUIElement.prototype.visualX = function() {
     if (this.dragged) {
         return this.draggedX;
@@ -255,6 +273,10 @@ CanvasUIElement.prototype.visualX = function() {
     }
 };
 
+/**
+ * @return {number} The vertical position to draw the element at. May be different from the logical position if the
+ * element is being dragged.
+ */
 CanvasUIElement.prototype.visualY = function() {
     if (this.dragged) {
         return this.draggedY;
@@ -263,6 +285,11 @@ CanvasUIElement.prototype.visualY = function() {
     }
 };
 
+/**
+ * @param {number} x Horizontal coordinate to test.
+ * @param {number} y Vertical coordinate to test.
+ * @return {boolean} Whether the coordinate is within the area of the element.
+ */
 CanvasUIElement.prototype.hitTest = function(x, y) {
     if (this.clickCallback !== null) {
         return this.getRect().mightIntersectCircleRoundedOut(x, y, 1);
@@ -270,6 +297,10 @@ CanvasUIElement.prototype.hitTest = function(x, y) {
     return false;
 };
 
+/**
+ * @return boolean True if the element can generate click events right now. False if the click cooldown hasn't
+ * completed.
+ */
 CanvasUIElement.prototype.canClick = function() {
     var sinceClicked = this.time - this.lastClick;
     return sinceClicked >= CanvasUI.minimumClickInterval;
@@ -284,11 +315,18 @@ CanvasUIElement.prototype.getRect = function() {
     );
 };
 
+/**
+ * Mark the element as down, for visual purposes only.
+ */
 CanvasUIElement.prototype.down = function() {
     this.isDown = true;
     this.lastDownTime = this.time;
 };
 
+/**
+ * Mark the element as up. Will generate a click event if clicked is true.
+ * @param {boolean} clicked True when clicked, false when the cursor position has left the area of the element.
+ */
 CanvasUIElement.prototype.release = function(clicked) {
     this.isDown = false;
     this.lastUpTime = this.time;
