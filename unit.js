@@ -49,7 +49,7 @@ Unit.renderIcon = function(ctx, cursorOn, pressedExtent, faction, x, y, unitType
     var lineWidth = 3;
     var shadowOffset = 4;
     if (pressedExtent > 0) {
-        shadowOffset = (1 - pressedExtent) * 4;
+        shadowOffset = (1 - pressedExtent * 0.6) * 4;
     }
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
